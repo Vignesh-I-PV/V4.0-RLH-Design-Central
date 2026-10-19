@@ -3746,6 +3746,33 @@ RNG-based approximation. Read the method's own comment block first; the short ve
     shows 25 / 20 / 35 at their hours; view-only opener (Design Creation path) shows the resolved
     hours; Sep 2026 opens view-only without Quick apply and Save is refused. Earlier suites pass.
 
+- **2026-10-15 (later) — Speed Profile Quick apply made static; Configurations L1s made static.**
+  *(V3.0 entry, copied verbatim; ported into V4.0 on 2026-10-19 — see that entry.)*
+  1. **Speed Profile Quick apply** — no dropdowns any more: Speed + three switches (All day, All
+     vehicle types, Zone specific) + Apply, so the bar never changes shape. The switches scope
+     relative to the grid cell last clicked (the "selected cell", outlined teal, shown in the
+     sentence under the bar): All day off = from that cell's hour onward; All vehicle types off =
+     that cell's vehicle only; Zone specific on = that cell's zone only. Default selected cell =
+     first row, 00:00. (`speedQA.anchor`, set by `onFocusCell` on every grid cell.)
+  2. **Configurations → Reason Buckets**: L1s are fixed per module (`defaultAppConfig`, enforced by
+     `cfgStaticL1s` on every read — saved configs keep their L2s under the matching fixed L1):
+     Route Planner = Vehicle Change, DC Movement, Route Order Change, Distance Change, New Route /
+     Split, DC Location; Route Scheduler = Cutoff Change, TAT Change, Landing Time Change. Only L2s
+     are added / renamed / deleted; the Add form's L1 is a fixed select; an L1 with no L2 stays
+     (placeholder row; flag modals then offer only "Others"). Starter L2s carried over from the old
+     buckets (Route Scheduler SC/LH/LM buckets merged by field).
+  - **Flag modals**: the L1 is fixed by what was changed (`reasonPickerFor` offers just that L1;
+    select disabled). Route Planner's change detection (`rpNcCategories`) now yields the six
+    categories — vehicle type → Vehicle Change; DC moved to another existing route → DC Movement;
+    touch-point → Route Order Change; distance → Distance Change; split / new route → New Route /
+    Split; lat/lng → DC Location — one L2 per category flagged, as before. Route Scheduler keys
+    (SC_cutoff, LH_tat, LM_landing …) map on the field → Cutoff / TAT / Landing Time Change.
+  - **Verification**: jsdom — Quick apply bar has 0 dropdowns; selected-cell scoping (vehicle from
+    08:00; all Non-Local rows all day) applied correctly; Configurations show the fixed L1s, add
+    (TAT Change → Rain / Weather), rename an L2, delete DC Location's last L2 (L1 kept); pickers map
+    every key to its fixed L1; category detection for vehicle / order / dist / split / location.
+    Earlier suites pass.
+
 - **2026-10-16 — V4.0 repo created (no feature changes).**
   - **Rename**: `v3.0-rlh-design-base.jsx` → `v4.0-rlh-design-base.jsx` (file content unchanged,
     byte for byte). `index.html` now loads the new name; `engine.js` header and this file's
@@ -3766,3 +3793,34 @@ RNG-based approximation. Read the method's own comment block first; the short ve
     re-insertion.
   - **Files changed**: `index.html`, `engine.js` (header comment only), `context.md`, the favicon
     set; `v4.0-rlh-design-base.jsx` renamed only.
+
+- **2026-10-19 — V4.0: two V3.0 features ported (Configurations static L1s, Speed Profile quick apply).**
+  - **Source**: V3.0 `v3.0-rlh-design-base.jsx` as of its 2026-10-19 commit. Only the change blocks
+    for these two features were applied (41 blocks), each matched against V4.0's text before
+    replacing. Everything else in V4.0 is untouched.
+  - **Configurations / Ops Alignment**: fixed L1s (Route Planner 6, Route Scheduler 3),
+    `cfgStaticL1s()` migration of saved configs, L2-only add / rename / delete, empty-L1 placeholder,
+    `reasonPickerFor()` single fixed L1, `rpNcCategories()` six categories, CAT / NC labels, disabled
+    L1 selects in both flag modals. Full detail in the 2026-10-15 (later) entry above.
+  - **Speed Profile quick apply**: anchor-cell model (`speedQA.anchor`, `onFocusCell`, outlined
+    cell, "Selected cell" label); hour / vehicle / zone dropdowns removed.
+  - **Deliberately NOT ported**:
+    - V3.0's 2026-10-19 production month model (Target Month, All-months filter, Cycle Pick and
+      freeze removal). V4.0 keeps the global design cycle.
+    - Its two performance fixes (`genDcRows()` LMDC cache, memoised `computeSchedulerMetricsFor()`
+      and `_spVer`). They were only needed once every month's plans load together.
+    - V3.0's 2026-10-15 (later) SC Master AutoDML / readiness work. That jsx reads
+      `store.autodmlSc`, `source`, `scTypeSet` and `volCapUser` from `engine.js`, but the
+      `engine.js` in the V3.0 repo (and the copy shared for V4.0) is the old one, with none of
+      those. Ported as-is, every active SC would read "SC Type missing". On hold until the real
+      `engine.js` is found.
+  - **Verification**: compile clean; boots to landing with 0 errors. jsdom:
+    - fixed L1s for both modules; a legacy saved config migrates and keeps its custom L2;
+    - all 9 picker keys map to one fixed L1 with "Others" last; detection of vehicle / order /
+      dist / split / location / DC move;
+    - add L2 under TAT Change; deleting DC Location's last L2 keeps the L1, shows the
+      placeholder row and leaves only "Others";
+    - quick-apply bar has 0 selects and 3 switches; anchored apply touches only the selected
+      vehicle / zone from the selected hour;
+    - 0 runtime errors; no `\u` escapes in JSX text.
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
