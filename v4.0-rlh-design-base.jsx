@@ -1646,8 +1646,8 @@ All modules
 </div>
 </>) : (r.editing) ? (<>
 <div style={css(`display:grid; grid-template-columns:1fr 1.6fr 104px; align-items:center; border-top:${__iCr === 0 ? 'none' : '1px solid #EEF1F6'}; background:#FAFBFD;`)}>
-<div style={css(`padding:7px 8px 7px 18px;`)}><input autoFocus list={'cfg-l1-' + cm.m} value={r.editL1} onInput={r.onEditL1} onKeyDown={r.onEditKey} title={"Pick an existing L1 to move this row there, or type a new one"} style={css(`height:30px; padding:0 9px; border:1px solid #C3C9D4; border-radius:6px; font-family:inherit; font-size:12.5px; color:#14171F; outline:none; background:#fff; box-sizing:border-box; width:100%;`)} /></div>
-<div style={css(`padding:7px 8px;`)}><input value={r.editL2} onInput={r.onEditL2} onKeyDown={r.onEditKey} style={css(`height:30px; padding:0 9px; border:1px solid #C3C9D4; border-radius:6px; font-family:inherit; font-size:12.5px; color:#14171F; outline:none; background:#fff; box-sizing:border-box; width:100%;`)} /></div>
+<div style={css(`padding:10px 18px; font-size:12.5px; color:#5A5E66;`)} title={"L1 categories are fixed"}>{r.l1}</div>
+<div style={css(`padding:7px 8px;`)}><input autoFocus value={r.editL2} onInput={r.onEditL2} onKeyDown={r.onEditKey} style={css(`height:30px; padding:0 9px; border:1px solid #C3C9D4; border-radius:6px; font-family:inherit; font-size:12.5px; color:#14171F; outline:none; background:#fff; box-sizing:border-box; width:100%;`)} /></div>
 <div style={css(`padding:7px 18px 7px 4px; display:flex; gap:5px; justify-content:flex-end;`)}>
 <button onClick={r.onSave} title={"Save"} style={css(`height:28px; padding:0 11px; border-radius:6px; font-family:inherit; font-size:11.5px; font-weight:600; cursor:pointer; padding:0 9px; border:none; background:#003F98; color:#fff;`)}>Save</button>
 <button onClick={r.onCancel} title={"Cancel"} style={css(`height:28px; padding:0 11px; border-radius:6px; font-family:inherit; font-size:11.5px; font-weight:600; cursor:pointer; padding:0 7px; border:1px solid #E6EBF2; background:#fff; color:#5A5E66;`)}>✕</button>
@@ -1656,11 +1656,11 @@ All modules
 </>) : (<>
 <div style={css(`display:grid; grid-template-columns:1fr 1.6fr 104px; align-items:center; border-top:${__iCr === 0 ? 'none' : '1px solid #EEF1F6'};`)}>
 <div style={css(`padding:10px 18px; font-size:12.5px; color:#14171F;`)}>{r.l1}</div>
-<div style={css(`padding:10px 14px; font-size:12.5px; color:#14171F;`)}>{r.l2}</div>
-<div style={css(`padding:6px 18px; display:flex; gap:5px; justify-content:flex-end;`)}>
+<div style={css(`padding:10px 14px; font-size:12.5px; color:${r.empty ? '#8E96A3' : '#14171F'}; font-style:${r.empty ? 'italic' : 'normal'};`)}>{r.l2}</div>
+{(r.empty) ? (<><div /></>) : (<><div style={css(`padding:6px 18px; display:flex; gap:5px; justify-content:flex-end;`)}>
 <button onClick={r.onEdit} disabled={cm.readOnly} title={cm.readOnly ? 'Past cycle — read-only' : 'Edit'} aria-label={"Edit reason"} style={css(`width:28px; height:28px; border:1px solid #E6EBF2; background:#fff; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; opacity:${cm.readOnly ? '0.4' : '1'}; cursor:${cm.readOnly ? 'not-allowed' : 'pointer'};`)}><svg width={"13"} height={"13"} viewBox={"0 0 24 24"} fill={"none"} stroke={"#5A5E66"} strokeWidth={"1.8"}><path d={"M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg></button>
 <button onClick={r.onDelAsk} disabled={cm.readOnly} title={cm.readOnly ? 'Past cycle — read-only' : 'Delete'} aria-label={"Delete reason"} style={css(`width:28px; height:28px; border:1px solid #E6EBF2; background:#fff; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; opacity:${cm.readOnly ? '0.4' : '1'}; cursor:${cm.readOnly ? 'not-allowed' : 'pointer'};`)}><svg width={"13"} height={"13"} viewBox={"0 0 24 24"} fill={"none"} stroke={"#D14B4B"} strokeWidth={"1.8"}><path d={"M5 7h14M9 7V5h6v2M6 7l1 13h10l1-13"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg></button>
-</div>
+</div></>)}
 </div>
 </>)}
 </React.Fragment>))}
@@ -1715,9 +1715,8 @@ All modules
 </div>
 <div style={css(`padding:18px 20px; display:flex; flex-direction:column; gap:14px;`)}>
 <div>
-<div style={css(`font-size:11px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; margin-bottom:6px;`)}>L1 — REASON CATEGORY <span style={css(`color:#D14B4B;`)}>*</span></div>
-<input autoFocus list={"cfg-add-l1"} value={cfgAdd.l1} onInput={cfgAdd.onL1} onKeyDown={cfgAdd.onKey} placeholder={"Pick an existing L1 or type a new one"} style={css(`height:30px; padding:0 9px; border:1px solid #C3C9D4; border-radius:6px; font-family:inherit; font-size:12.5px; color:#14171F; outline:none; background:#fff; box-sizing:border-box; width:100%; height:36px;`)} />
-<datalist id={"cfg-add-l1"}>{(cfgAdd.l1List || []).map((n, __iAdl) => (<React.Fragment key={__iAdl}><option value={n} /></React.Fragment>))}</datalist>
+<div style={css(`font-size:11px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; margin-bottom:6px;`)}>L1 — REASON CATEGORY <span style={css(`font-weight:500; letter-spacing:0; color:#8E96A3;`)}>· fixed list</span></div>
+<select autoFocus value={cfgAdd.l1} onChange={cfgAdd.onL1} style={css(`width:100%; height:36px; padding:0 9px; border:1px solid #C3C9D4; border-radius:6px; font-family:inherit; font-size:12.5px; color:#14171F; outline:none; background:#fff; box-sizing:border-box;`)}>{(cfgAdd.l1List || []).map((n, __iAdl) => (<React.Fragment key={__iAdl}><option value={n}>{n}</option></React.Fragment>))}</select>
 {(cfgAdd.l1IsNew) ? (<><div style={css(`font-size:11px; color:#2F4FC6; margin-top:5px;`)}>New L1 — it will be created with this reason under it.</div></>) : null}
 </div>
 <div>
@@ -5601,7 +5600,7 @@ NLH cycle: {schedNlhMonthLabel}
 {(ncReasonRows || []).map((rr, __iNcRr) => (<React.Fragment key={__iNcRr}>
 <div style={css(`display:grid; grid-template-columns:0.9fr 1fr 1.3fr; align-items:center; border-top:${__iNcRr === 0 ? 'none' : '1px solid #EEF1F6'};`)}>
 <div style={css(`padding:8px 12px; font-size:12.5px; font-weight:600; color:#14171F;`)}>{rr.label}</div>
-<div style={css(`padding:6px 8px;`)}><select value={rr.l1Val} onChange={rr.onL1} style={css(`height:34px; padding:0 9px; border-radius:7px; font-family:inherit; font-size:12px; background:#fff; outline:none; width:100%; box-sizing:border-box; border:1px solid #E6EBF2; color:#14171F;`)}>{(rr.l1Options || []).map((o, __iNcL1) => (<React.Fragment key={__iNcL1}><option value={o.value}>{o.label}</option></React.Fragment>))}</select></div>
+<div style={css(`padding:6px 8px;`)}><select value={rr.l1Val} onChange={rr.onL1} disabled={(rr.l1Options || []).length <= 1} title={"Reason category \u2014 fixed by the change type"} style={css(`height:34px; padding:0 9px; border-radius:7px; font-family:inherit; font-size:12px; background:#fff; outline:none; width:100%; box-sizing:border-box; border:1px solid #E6EBF2; color:#14171F;`)}>{(rr.l1Options || []).map((o, __iNcL1) => (<React.Fragment key={__iNcL1}><option value={o.value}>{o.label}</option></React.Fragment>))}</select></div>
 <div style={css(`padding:6px 8px;`)}><select value={rr.l2Val} onChange={rr.onL2} style={css(`height:34px; padding:0 9px; border-radius:7px; font-family:inherit; font-size:12px; background:#fff; outline:none; width:100%; box-sizing:border-box; border:1px solid ${rr.l2Missing ? '#EDD9AF' : '#E6EBF2'}; color:${rr.l2Val ? '#14171F' : '#8E96A3'};`)}><option value={""}>Select a reason…</option>{(rr.l2Options || []).map((o, __iNcL2) => (<React.Fragment key={__iNcL2}><option value={o}>{o}</option></React.Fragment>))}</select></div>
 </div>
 </React.Fragment>))}
@@ -5742,7 +5741,7 @@ NLH cycle: {schedNlhMonthLabel}
 </select>
 </>)}
 {/* 2026-09-29 — L1 (reason category) → L2 (reason), from Design Inputs → Configurations */}
-<select value={f.l1Val} onChange={f.onL1} title={"Reason category (L1)"} style={css(`width:100%; height:34px; padding:0 9px; border:1px solid #E6EBF2; border-radius:7px; font-family:inherit; font-size:12px; color:#14171F; outline:none; background:#fff; box-sizing:border-box;`)}>
+<select value={f.l1Val} onChange={f.onL1} disabled={(f.l1Options || []).length <= 1} title={"Reason category (L1) \u2014 fixed by the field changed"} style={css(`width:100%; height:34px; padding:0 9px; border:1px solid #E6EBF2; border-radius:7px; font-family:inherit; font-size:12px; color:#14171F; outline:none; background:#fff; box-sizing:border-box;`)}>
 {(f.l1Options || []).map((o, __iSL1) => (<React.Fragment key={__iSL1}><option value={o.value}>{o.label}</option></React.Fragment>))}
 </select>
 <select value={f.reasonVal} onChange={f.onReason} title={"Reason (L2) \u2014 required"} style={css(`width:100%; height:34px; padding:0 9px; border:1px solid #C77B00; border-radius:7px; font-family:inherit; font-size:12px; color:${f.reasonVal ? '#14171F' : '#8E96A3'}; outline:none; background:#fff; box-sizing:border-box;`)}>
@@ -6650,15 +6649,12 @@ NLH cycle: {schedNlhMonthLabel}
 <div style={css(`font-size:11px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; margin-bottom:8px;`)}>QUICK APPLY</div>
 <div style={css(`display:flex; align-items:center; gap:8px; flex-wrap:wrap;`)}>
 <label style={css(`display:flex; align-items:center; gap:6px; font-size:12px; color:#5A5E66;`)}>Speed <input type={"number"} min={"1"} step={"1"} value={speedProfileModal.qa.speed} onInput={speedProfileModal.qa.onSpeed} placeholder={"km/h"} style={css(`width:70px; height:30px; padding:0 8px; border:1px solid #C3C9D4; border-radius:7px; font-family:inherit; font-size:12.5px; text-align:center; box-sizing:border-box;`)} /> km/h</label>
-<button onClick={speedProfileModal.qa.onToggleAllDay} aria-pressed={speedProfileModal.qa.allDay} title={"On: the whole day from 00:00. Off: from the hour you pick, until the next hour you have entered."} style={css(`height:30px; padding:0 11px; border-radius:7px; font-family:inherit; font-size:12px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:6px; border:1px solid ${speedProfileModal.qa.allDay ? '#0D7377' : '#C3C9D4'}; background:${speedProfileModal.qa.allDay ? '#E7F4F4' : '#fff'}; color:${speedProfileModal.qa.allDay ? '#0D7377' : '#5A5E66'};`)}>{speedProfileModal.qa.allDay ? '✓ ' : ''}All day</button>
-{(!speedProfileModal.qa.allDay) ? (<><select value={speedProfileModal.qa.hourIdx} onChange={speedProfileModal.qa.onHour} style={css(`height:30px; padding:0 8px; border:1px solid #C3C9D4; border-radius:7px; font-family:inherit; font-size:12px; background:#fff;`)}>{(speedProfileModal.qa.hourOptions || []).map((o, __iQh) => (<React.Fragment key={__iQh}><option value={o.value}>{o.label}</option></React.Fragment>))}</select></>) : null}
-<button onClick={speedProfileModal.qa.onToggleAllVeh} aria-pressed={speedProfileModal.qa.allVeh} title={"On: every vehicle type at this SC. Off: pick one."} style={css(`height:30px; padding:0 11px; border-radius:7px; font-family:inherit; font-size:12px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:6px; border:1px solid ${speedProfileModal.qa.allVeh ? '#0D7377' : '#C3C9D4'}; background:${speedProfileModal.qa.allVeh ? '#E7F4F4' : '#fff'}; color:${speedProfileModal.qa.allVeh ? '#0D7377' : '#5A5E66'};`)}>{speedProfileModal.qa.allVeh ? '✓ ' : ''}All vehicle types</button>
-{(!speedProfileModal.qa.allVeh) ? (<><select value={speedProfileModal.qa.veh} onChange={speedProfileModal.qa.onVeh} style={css(`height:30px; padding:0 8px; border:1px solid #C3C9D4; border-radius:7px; font-family:inherit; font-size:12px; background:#fff;`)}>{(speedProfileModal.qa.vehOptions || []).map((o, __iQv) => (<React.Fragment key={__iQv}><option value={o}>{o}</option></React.Fragment>))}</select></>) : null}
-<button onClick={speedProfileModal.qa.onToggleZone} aria-pressed={speedProfileModal.qa.zoneSpecific} title={"Off: every zone the vehicle runs. On: Local or Non-Local only."} style={css(`height:30px; padding:0 11px; border-radius:7px; font-family:inherit; font-size:12px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:6px; border:1px solid ${speedProfileModal.qa.zoneSpecific ? '#0D7377' : '#C3C9D4'}; background:${speedProfileModal.qa.zoneSpecific ? '#E7F4F4' : '#fff'}; color:${speedProfileModal.qa.zoneSpecific ? '#0D7377' : '#5A5E66'};`)}>{speedProfileModal.qa.zoneSpecific ? '✓ ' : ''}Zone specific</button>
-{(speedProfileModal.qa.zoneSpecific) ? (<><select value={speedProfileModal.qa.zone} onChange={speedProfileModal.qa.onZone} style={css(`height:30px; padding:0 8px; border:1px solid #C3C9D4; border-radius:7px; font-family:inherit; font-size:12px; background:#fff;`)}>{(speedProfileModal.qa.zoneOptions || []).map((o, __iQz) => (<React.Fragment key={__iQz}><option value={o.value}>{o.label}</option></React.Fragment>))}</select></>) : null}
+<button onClick={speedProfileModal.qa.onToggleAllDay} aria-pressed={speedProfileModal.qa.allDay} title={"On: the whole day from 00:00. Off: from the selected cell\u2019s hour onward."} style={css(`height:30px; padding:0 11px; border-radius:7px; font-family:inherit; font-size:12px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:6px; border:1px solid ${speedProfileModal.qa.allDay ? '#0D7377' : '#C3C9D4'}; background:${speedProfileModal.qa.allDay ? '#E7F4F4' : '#fff'}; color:${speedProfileModal.qa.allDay ? '#0D7377' : '#5A5E66'};`)}>{speedProfileModal.qa.allDay ? '✓ ' : ''}All day</button>
+<button onClick={speedProfileModal.qa.onToggleAllVeh} aria-pressed={speedProfileModal.qa.allVeh} title={"On: every vehicle type at this SC. Off: only the selected cell\u2019s vehicle type."} style={css(`height:30px; padding:0 11px; border-radius:7px; font-family:inherit; font-size:12px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:6px; border:1px solid ${speedProfileModal.qa.allVeh ? '#0D7377' : '#C3C9D4'}; background:${speedProfileModal.qa.allVeh ? '#E7F4F4' : '#fff'}; color:${speedProfileModal.qa.allVeh ? '#0D7377' : '#5A5E66'};`)}>{speedProfileModal.qa.allVeh ? '✓ ' : ''}All vehicle types</button>
+<button onClick={speedProfileModal.qa.onToggleZone} aria-pressed={speedProfileModal.qa.zoneSpecific} title={"Off: every zone the vehicle runs. On: only the selected cell\u2019s zone."} style={css(`height:30px; padding:0 11px; border-radius:7px; font-family:inherit; font-size:12px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:6px; border:1px solid ${speedProfileModal.qa.zoneSpecific ? '#0D7377' : '#C3C9D4'}; background:${speedProfileModal.qa.zoneSpecific ? '#E7F4F4' : '#fff'}; color:${speedProfileModal.qa.zoneSpecific ? '#0D7377' : '#5A5E66'};`)}>{speedProfileModal.qa.zoneSpecific ? '✓ ' : ''}Zone specific</button>
 <button onClick={speedProfileModal.qa.onApply} style={css(`margin-left:auto; height:30px; padding:0 16px; border:none; background:#0D7377; color:#fff; font-family:inherit; font-size:12px; font-weight:600; border-radius:7px; cursor:pointer;`)}>Apply</button>
 </div>
-<div style={css(`font-size:11.5px; color:#8E96A3; margin-top:7px;`)}>{speedProfileModal.qa.desc}</div>
+<div style={css(`font-size:11.5px; color:#8E96A3; margin-top:7px;`)}>{speedProfileModal.qa.desc} <span style={css(`color:#0D7377; font-weight:600;`)}>Selected cell: {speedProfileModal.qa.anchorLabel}</span></div>
 </div>
 </>) : null}
 <div style={css(`border:1px solid #E6EBF2; border-radius:9px; overflow:hidden;`)}>
@@ -6672,7 +6668,7 @@ NLH cycle: {schedNlhMonthLabel}
 <div style={css(`display:grid; grid-template-columns:170px repeat(24,54px); gap:0; align-items:center; border-top:1px solid #EEF1F6;`)}>
 <div style={css(`padding:8px 12px; font-size:12px; font-weight:600; color:#14171F; position:sticky; left:0; background:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;`)}>{r.rowLabel}</div>
 {(r.cells || []).map((c, __iSpc) => (<React.Fragment key={__iSpc}>
-{(speedProfileModal.readOnly || speedProfileModal.reviewMode) ? (<><div style={css(`padding:6px 4px; font-size:11.5px; text-align:center; color:${c.value === '' ? '#C3C9D4' : '#14171F'}; font-variant-numeric:tabular-nums;`)}>{c.value === '' ? '\u2014' : c.value}</div></>) : (<><div style={css(`padding:3px;`)}><input value={c.value} onChange={(e) => c.onChange(e.target.value)} type={"number"} min={"0"} placeholder={c.inherited === '' ? '' : String(c.inherited)} title={c.required ? 'Required \u2014 every row needs a 00:00 speed' : (c.value === '' && c.inherited !== '') ? ('Inherited from an earlier hour: ' + c.inherited + ' km/h') : ''} aria-label={r.rowLabel + ' ' + c.label} style={css(`width:100%; height:28px; padding:0 3px; text-align:center; border:1px solid ${c.required ? '#D14B4B' : (c.value === '' ? '#E6EBF2' : '#C3C9D4')}; background:${c.required ? '#FBEAEA' : (c.value === '' ? '#F7F9FC' : '#fff')}; color:#14171F; border-radius:5px; font-family:inherit; font-size:11px; box-sizing:border-box;`)} /></div></>) }
+{(speedProfileModal.readOnly || speedProfileModal.reviewMode) ? (<><div style={css(`padding:6px 4px; font-size:11.5px; text-align:center; color:${c.value === '' ? '#C3C9D4' : '#14171F'}; font-variant-numeric:tabular-nums;`)}>{c.value === '' ? '\u2014' : c.value}</div></>) : (<><div style={css(`padding:3px;`)}><input value={c.value} onChange={(e) => c.onChange(e.target.value)} onFocus={c.onFocusCell} type={"number"} min={"0"} placeholder={c.inherited === '' ? '' : String(c.inherited)} title={c.required ? 'Required \u2014 every row needs a 00:00 speed' : (c.value === '' && c.inherited !== '') ? ('Inherited from an earlier hour: ' + c.inherited + ' km/h') : ''} aria-label={r.rowLabel + ' ' + c.label} style={css(`width:100%; height:28px; padding:0 3px; text-align:center; border:1px solid ${c.required ? '#D14B4B' : (c.value === '' ? '#E6EBF2' : '#C3C9D4')}; background:${c.required ? '#FBEAEA' : (c.value === '' ? '#F7F9FC' : '#fff')}; color:#14171F; border-radius:5px; font-family:inherit; font-size:11px; box-sizing:border-box; box-shadow:${c.anchored ? '0 0 0 2px #0D7377' : 'none'};`)} /></div></>) }
 </React.Fragment>))}
 </div>
 </React.Fragment>))}
@@ -8451,7 +8447,7 @@ class NDCApp extends React.Component {
     });
     this.setState({
       speedProfileSC: scCode, speedProfileVehicleTypes: vehicleTypeNames, speedProfileVehicleZones: vehicleZones, speedProfileReadOnly: !!readOnly || this.isRlhCyclePast(), // past cycles open view-only (2026-10-15)
-      speedQA: { speed: '', allDay: true, hourIdx: 0, allVeh: true, veh: vehicleTypeNames[0] || '', zoneSpecific: false, zone: 'local' },
+      speedQA: { speed: '', allDay: true, allVeh: true, zoneSpecific: false, anchor: { vt: vehicleTypeNames[0] || '', zone: (vehicleZones[vehicleTypeNames[0]] || {}).local === false ? 'zonal' : 'local', hourIdx: 0 } },
       speedProfileDraft: { bandStarts, vehicles },
       speedProfileReviewMode: false, speedProfileErrors: [],
     });
@@ -8733,14 +8729,14 @@ class NDCApp extends React.Component {
   backToEditSpeedProfile() {
     this.setState({ speedProfileReviewMode: false });
   }
-  // Speed Profile quick apply (2026-10-15) — one speed, scoped by three switches: All day (on = the
-  // whole day: the row restarts from 00:00 with this speed and everything after it inherits; off =
-  // from a chosen hour, inheriting forward until the next entered hour), All vehicle types (off = one
-  // vehicle type), Zone specific (on = Local or Non-Local only; off = every zone the vehicle runs).
+  // Speed Profile quick apply (2026-10-15, static bar) — Speed + three switches, no dropdowns. The
+  // switches scope relative to the grid cell last clicked (the anchor, outlined): All day (on = whole
+  // day from 00:00; off = from the anchor's hour onward, inheriting until the next entered hour), All
+  // vehicle types (off = the anchor's vehicle only), Zone specific (on = the anchor's zone only).
   // Replaces the old per-row "Apply all-day / to all vehicles / across zones" buttons.
   setSpeedQA(patch) { this.setState({ speedQA: Object.assign({}, this.state.speedQA || {}, patch) }); }
   applySpeedQuick() {
-    const q = this.state.speedQA || {}, draft = this.state.speedProfileDraft;
+    const q = this.state.speedQA || {}, draft = this.state.speedProfileDraft; const an = q.anchor || { vt: '', zone: 'local', hourIdx: 0 };
     if (!draft) return;
     const sp = Math.round(Number(q.speed));
     if (!(sp > 0)) { this.showToast('Enter a speed (km/h) to apply', '#C77B00'); return; }
@@ -8748,22 +8744,22 @@ class NDCApp extends React.Component {
     const vehicles = Object.assign({}, draft.vehicles);
     let touched = 0;
     (this.state.speedProfileVehicleTypes || []).forEach(vt => {
-      if (!q.allVeh && vt !== q.veh) return;
+      if (!q.allVeh && vt !== an.vt) return;
       const vz = zones[vt] || { local: true, zonal: true };
       const e = Object.assign({}, vehicles[vt] || { local: draft.bandStarts.map(() => ''), zonal: draft.bandStarts.map(() => '') });
       ['local', 'zonal'].forEach(z => {
         if (!vz[z]) return;
-        if (q.zoneSpecific && q.zone !== z) return;
+        if (q.zoneSpecific && an.zone !== z) return;
         let arr = (e[z] || draft.bandStarts.map(() => '')).slice();
         if (q.allDay) arr = draft.bandStarts.map((_, i) => (i === 0 ? sp : ''));
-        else arr[q.hourIdx || 0] = sp;
+        else arr[an.hourIdx || 0] = sp;
         e[z] = arr; touched++;
       });
       vehicles[vt] = e;
     });
     if (!touched) { this.showToast('No vehicle \u00d7 zone rows match that selection', '#C77B00'); return; }
     this.setState({ speedProfileDraft: Object.assign({}, draft, { vehicles }), speedProfileErrors: [] });
-    this.showToast(sp + ' km/h applied to ' + touched + ' row' + (touched === 1 ? '' : 's') + (q.allDay ? ', all day' : ' from ' + draft.bandStarts[q.hourIdx || 0]), '#128A3E');
+    this.showToast(sp + ' km/h applied to ' + touched + ' row' + (touched === 1 ? '' : 's') + (q.allDay ? ', all day' : ' from ' + draft.bandStarts[an.hourIdx || 0]), '#128A3E');
   }
   saveSpeedProfileModal() {
     if (this.isRlhCyclePast()) { this.showToast('This cycle is in the past \u2014 Design Inputs are read-only.', '#C77B00'); return; }
@@ -8978,7 +8974,7 @@ class NDCApp extends React.Component {
     const mkModule = (m, title, info) => {
       const bk = cfg.buckets[m];
       const rows = [];
-      bk.forEach(g => g.l2.forEach(l2 => {
+      bk.forEach(g => { if (!g.l2.length) rows.push({ l1: g.name, l2: 'No L2 yet \u2014 flag modals show only \u201cOthers\u201d', empty: true, editing: false, confirmDel: false }); g.l2.forEach(l2 => {
         const editing = !!(E && E.m === m && E.l1Id === g.id && E.l2Id === l2.id);
         rows.push({
           l1: g.name, l2: l2.name, editing,
@@ -8992,10 +8988,10 @@ class NDCApp extends React.Component {
           onDelAsk: () => this.setState({ cfgConfirmDel: { m, l1Id: g.id, l2Id: l2.id }, cfgRowEdit: null }),
           onDelConfirm: () => this.cfgDeleteRow(m, g.id, l2.id), onDelCancel: () => this.setState({ cfgConfirmDel: null }),
         });
-      }));
-      return { m, title, info: info + ' L2 is mandatory when flagging; remarks are optional unless the L2 is \u201cOthers\u201d, which is added automatically under every L1 (not listed here). ' + cycleNote,
+      }); });
+      return { m, title, info: info + ' L1 categories are fixed (one per change type); add, rename or delete the L2 reasons under them. L2 is mandatory when flagging; remarks are optional unless the L2 is \u201cOthers\u201d, which is added automatically under every L1 (not listed here). ' + cycleNote,
         readOnly, rows, hasRows: rows.length > 0, l1List: bk.map(g => g.name),
-        onAdd: () => this.setState({ cfgAddOpen: { m, l1: '', l2: '' }, cfgRowEdit: null, cfgConfirmDel: null }) };
+        onAdd: () => this.setState({ cfgAddOpen: { m, l1: bk[0] ? bk[0].name : '', l2: '' }, cfgRowEdit: null, cfgConfirmDel: null }) };
     };
     const A = st.cfgAddOpen;
     // Route Planner defaults — two-column parameter list, applied on Save (whole numbers only).
@@ -9033,7 +9029,7 @@ class NDCApp extends React.Component {
       // Add reason form (modal)
       cfgAdd: A ? { open: true, title: 'Add reason \u2014 ' + (A.m === 'rp' ? 'Route Planner' : 'Route Scheduler'), l1: A.l1, l2: A.l2,
         l1List: cfg.buckets[A.m].map(g => g.name),
-        l1IsNew: !!String(A.l1 || '').trim() && !cfg.buckets[A.m].some(g => g.name.trim().toLowerCase() === String(A.l1).trim().toLowerCase()),
+        l1IsNew: false,
         onL1: (ev) => this.setState({ cfgAddOpen: Object.assign({}, this.state.cfgAddOpen, { l1: ev.target.value }) }),
         onL2: (ev) => this.setState({ cfgAddOpen: Object.assign({}, this.state.cfgAddOpen, { l2: ev.target.value }) }),
         onKey: (ev) => { if (ev.key === 'Enter') this.cfgAddPair(); if (ev.key === 'Escape') this.setState({ cfgAddOpen: null }); },
@@ -9044,17 +9040,20 @@ class NDCApp extends React.Component {
     const l2 = (pfx, names) => names.map((n, i) => ({ id: pfx + '-' + (i + 1), name: n }));
     return {
       buckets: {
+        // 2026-10-15 — L1s are STATIC (REASON_L1S): the change categories each Ops Alignment flow
+        // shows. Only L2s vary with user input. Starter L2s carried over from the earlier buckets.
         rp: [
-          { id: 'rp-veh', key: 'vehicle', name: 'Vehicle Change', l2: l2('rp-veh', ['Mapping of Local & Non-Local DCs in Same Lane']) },
-          { id: 'rp-tp', key: 'tp', name: 'TP Change', l2: l2('rp-tp', ['Geo-Constraints (Road Closure/Block)', 'Reduced Round Trip Distance']) },
-          { id: 'rp-route', key: 'route', name: 'Route Change', l2: l2('rp-route', ['Cross-State Route', 'Geo-Constraints (Road Closure/Block)', 'Vehicle Cannot Reach DC', 'Vehicle Not Available', 'Wrong DC Location']) },
+          { id: 'rp-vehicle', key: 'vehicle', name: 'Vehicle Change', l2: l2('rp-vehicle', ['Mapping of Local & Non-Local DCs in Same Lane', 'Vehicle Not Available']) },
+          { id: 'rp-dcMove', key: 'dcMove', name: 'DC Movement', l2: l2('rp-dcMove', ['Cross-State Route', 'Vehicle Cannot Reach DC']) },
+          { id: 'rp-order', key: 'order', name: 'Route Order Change', l2: l2('rp-order', ['Geo-Constraints (Road Closure/Block)', 'Reduced Round Trip Distance']) },
+          { id: 'rp-dist', key: 'dist', name: 'Distance Change', l2: l2('rp-dist', ['Geo-Constraints (Road Closure/Block)', 'Reduced Round Trip Distance']) },
+          { id: 'rp-split', key: 'split', name: 'New Route / Split', l2: l2('rp-split', ['Vehicle Not Available', 'Vehicle Cannot Reach DC']) },
+          { id: 'rp-location', key: 'location', name: 'DC Location', l2: l2('rp-location', ['Wrong DC Location']) },
         ],
         rs: [
-          { id: 'rs-sc-cut', key: 'SC_cutoff', name: 'SC \u00b7 Dispatch Cutoff', l2: l2('rs-sc-cut', ['Dock Constraints - Manpower Limitation', 'Dock Constraints - Dock Reserved for NLH', 'Processing Time - Additional Time Needed', 'Delay Departure - Shift Changes/Break Time']) },
-          { id: 'rs-sc-tat', key: 'SC_tat', name: 'SC \u00b7 TAT', l2: l2('rs-sc-tat', ['Processing Time - Additional Time Needed', 'Handling Delay at Dock', 'Under-estimated Load/Unload Time']) },
-          { id: 'rs-lh-cut', key: 'LH_cutoff', name: 'LH \u00b7 Dispatch Cutoff', l2: l2('rs-lh-cut', ['Vendor not aligned - Due to Traffic', 'DC Not open to receive load']) },
-          { id: 'rs-lh-tat', key: 'LH_tat', name: 'LH \u00b7 TAT', l2: l2('rs-lh-tat', ['Due to Traffic', 'Geographical constraints']) },
-          { id: 'rs-lm-land', key: 'LM_landing', name: 'LM \u00b7 Landing Time', l2: l2('rs-lm-land', ['Processing Feasibility', 'DC not open during suggested landing time', 'DC opening early']) },
+          { id: 'rs-cutoff', key: 'cutoff', name: 'Cutoff Change', l2: l2('rs-cutoff', ['Dock Constraints - Manpower Limitation', 'Dock Constraints - Dock Reserved for NLH', 'Processing Time - Additional Time Needed', 'Delay Departure - Shift Changes/Break Time', 'Vendor not aligned - Due to Traffic', 'DC Not open to receive load']) },
+          { id: 'rs-tat', key: 'tat', name: 'TAT Change', l2: l2('rs-tat', ['Processing Time - Additional Time Needed', 'Handling Delay at Dock', 'Under-estimated Load/Unload Time', 'Due to Traffic', 'Geographical constraints']) },
+          { id: 'rs-landing', key: 'landing', name: 'Landing Time Change', l2: l2('rs-landing', ['Processing Feasibility', 'DC not open during suggested landing time', 'DC opening early']) },
         ],
       },
       rpDefaults: { speedMode: true, wave: true, hold: true, k: 1, j: 1, objectiveTime: 100 },
@@ -9068,7 +9067,22 @@ class NDCApp extends React.Component {
   }
   configFor(cycle) {
     const src = this.configSourceFor(cycle);
-    return src ? this.state.configByCycle[src] : this.defaultAppConfig();
+    return this.cfgStaticL1s(src ? this.state.configByCycle[src] : this.defaultAppConfig());
+  }
+  // cfgStaticL1s(cfg) (2026-10-15) — L1s are fixed per module; a saved config keeps its L2s for each
+  // fixed L1 (matched by key, then name), anything else is dropped. Empty L1s stay (flag modals then
+  // offer only "Others").
+  cfgStaticL1s(cfg) {
+    const def = this.defaultAppConfig();
+    const out = JSON.parse(JSON.stringify(cfg || def));
+    ['rp', 'rs'].forEach(m => {
+      const saved = (out.buckets && out.buckets[m]) || [];
+      const isStatic = saved.length === def.buckets[m].length && saved.every((g, i) => g.key === def.buckets[m][i].key);
+      if (isStatic) return;
+      out.buckets = out.buckets || {};
+      out.buckets[m] = def.buckets[m].map(d => { const g = saved.find(x => x.key === d.key) || saved.find(x => String(x.name).trim().toLowerCase() === d.name.toLowerCase()); return g ? Object.assign({}, d, { l2: g.l2 || [] }) : d; });
+    });
+    return out;
   }
   activeConfig() { return this.configFor((this.state.activeCycleMonth || {}).rlh); }
   updateConfig(mutator) {
@@ -9103,14 +9117,14 @@ class NDCApp extends React.Component {
   cfgAddPair() {
     const f = this.state.cfgAddOpen; if (!f) return;
     const m = f.m, l1Name = String(f.l1 || '').trim(), l2Name = String(f.l2 || '').trim();
-    const e1 = this.cfgL1Error(l1Name); if (e1) { this.showToast(e1, '#C77B00'); return; }
+    if (!this.activeConfig().buckets[m].some(x => x.name.trim().toLowerCase() === l1Name.toLowerCase())) { this.showToast('Pick one of the listed L1 categories', '#C77B00'); return; }
     const bk = this.activeConfig().buckets[m];
     const target = bk.find(x => x.name.trim().toLowerCase() === l1Name.toLowerCase());
     const e2 = this.cfgNameError(l2Name, target ? target.l2 : [], null); if (e2) { this.showToast(e2.replace('Name', 'L2'), '#C77B00'); return; }
     if (this.updateConfig(cfg => {
       const b = cfg.buckets[m];
       let t = b.find(x => x.name.trim().toLowerCase() === l1Name.toLowerCase());
-      if (!t) { t = { id: this.cfgUid(m), key: null, name: l1Name, l2: [] }; b.push(t); }
+      if (!t) return false;
       t.l2.push({ id: this.cfgUid(t.id), name: l2Name });
     })) {
       this.setState({ cfgAddOpen: null });
@@ -9119,30 +9133,12 @@ class NDCApp extends React.Component {
   }
   cfgSaveRowEdit() {
     const e = this.state.cfgRowEdit; if (!e) return;
-    const l1Name = String(e.l1 || '').trim(), l2Name = String(e.l2 || '').trim();
-    const e1 = this.cfgL1Error(l1Name); if (e1) { this.showToast(e1, '#C77B00'); return; }
-    const bk = this.activeConfig().buckets[e.m];
-    const from = bk.find(x => x.id === e.l1Id); if (!from) { this.setState({ cfgRowEdit: null }); return; }
-    const sameGroup = from.name.trim().toLowerCase() === l1Name.toLowerCase();
-    const existing = sameGroup ? from : bk.find(x => x.name.trim().toLowerCase() === l1Name.toLowerCase());
-    // L2 must be unique within the L1 it ends up under (ignoring this row itself).
-    const siblings = existing ? existing.l2 : (from.l2.length === 1 ? from.l2 : []);
-    const e2 = this.cfgNameError(l2Name, siblings, e.l2Id); if (e2) { this.showToast(e2.replace('Name', 'L2'), '#C77B00'); return; }
+    const l2Name = String(e.l2 || '').trim();
+    const g = this.activeConfig().buckets[e.m].find(x => x.id === e.l1Id); if (!g) { this.setState({ cfgRowEdit: null }); return; }
+    const e2 = this.cfgNameError(l2Name, g.l2, e.l2Id); if (e2) { this.showToast(e2.replace('Name', 'L2'), '#C77B00'); return; }
     if (this.updateConfig(cfg => {
-      const b = cfg.buckets[e.m];
-      const src = b.find(x => x.id === e.l1Id); const item = src.l2.find(x => x.id === e.l2Id); if (!item) return false;
-      item.name = l2Name;
-      if (src.name.trim().toLowerCase() === l1Name.toLowerCase()) { src.name = l1Name; return; }
-      const tgt = b.find(x => x.id !== src.id && x.name.trim().toLowerCase() === l1Name.toLowerCase());
-      if (tgt) {
-        src.l2 = src.l2.filter(x => x.id !== item.id); tgt.l2.push(item);
-        if (!src.l2.length) cfg.buckets[e.m] = b.filter(x => x.id !== src.id);
-      } else if (src.l2.length === 1) {
-        src.name = l1Name; // last row → rename the L1 itself, keeping its suggestion key
-      } else {
-        src.l2 = src.l2.filter(x => x.id !== item.id);
-        b.splice(b.indexOf(src) + 1, 0, { id: this.cfgUid(e.m), key: null, name: l1Name, l2: [item] });
-      }
+      const src = cfg.buckets[e.m].find(x => x.id === e.l1Id); const item = src && src.l2.find(x => x.id === e.l2Id); if (!item) return false;
+      item.name = l2Name; // L1s are static (2026-10-15) — a row can't move between them
     })) this.setState({ cfgRowEdit: null });
   }
   // Hard delete (per product decision). Submitted feedback keeps its reason text snapshot.
@@ -9150,18 +9146,21 @@ class NDCApp extends React.Component {
     if (this.updateConfig(cfg => {
       const b = cfg.buckets[m]; const g = b.find(x => x.id === l1Id); if (!g) return false;
       g.l2 = g.l2.filter(x => x.id !== l2Id);
-      if (!g.l2.length) cfg.buckets[m] = b.filter(x => x.id !== l1Id);
+      // L1s are static (2026-10-15): an L1 stays even after its last L2 is deleted.
     })) { this.setState({ cfgConfirmDel: null }); this.showToast('Reason deleted', '#D14B4B'); }
   }
   // Reason picker data for a flag modal: L1 options (falls back to a single "General" L1 if a
   // planner has deleted every L1, so flagging never dead-ends), and the chosen L1's L2 list with
   // "Others" always appended last.
+  // 2026-10-15 — L1s are static, one per change category, so the L1 is fixed by what was changed:
+  // Route Planner keys (vehicle / dcMove / order / dist / split / location) map 1:1; Route Scheduler
+  // keys arrive as persona_field (e.g. 'LH_cutoff') and map on the field (cutoff / tat / landing).
+  // Only that one L1 is offered; L2s come from Configurations with "Others" always last.
   reasonPickerFor(m, chosenL1Id, suggestKey) {
     const bk = this.activeConfig().buckets[m] || [];
-    const l1s = bk.length ? bk : [{ id: '__general', key: null, name: 'General', l2: [] }];
-    const suggested = (suggestKey && l1s.find(x => x.key === suggestKey)) || l1s[0];
-    const l1 = (chosenL1Id && l1s.find(x => x.id === chosenL1Id)) || suggested;
-    return { l1Options: l1s.map(x => ({ value: x.id, label: x.name })), l1Id: l1.id, l1Name: l1.name, l2Options: l1.l2.map(x => x.name).concat(['Others']) };
+    const key = (m === 'rs' && suggestKey && String(suggestKey).indexOf('_') >= 0) ? String(suggestKey).split('_').pop() : suggestKey;
+    const l1 = (key && bk.find(x => x.key === key)) || (chosenL1Id && bk.find(x => x.id === chosenL1Id)) || bk[0] || { id: '__general', key: null, name: 'General', l2: [] };
+    return { l1Options: [{ value: l1.id, label: l1.name }], l1Id: l1.id, l1Name: l1.name, l2Options: l1.l2.map(x => x.name).concat(['Others']) };
   }
   // localThresholdFor(scCode) / dcIsLocal(dc) (2026-09-28) — Local vs Non-Local used to be decided
   // ONCE at seed time with a hardcoded 100 km and stored as dc.isLocal, so no setting could ever
@@ -11614,6 +11613,8 @@ class NDCApp extends React.Component {
           hasOtherZone,
           cells: draft.bandStarts.map((b, i) => ({
             idx: i, label: b, value: arr[i] != null ? arr[i] : '', inherited: (arr[i] === '' || arr[i] == null) ? inh[i] : '', required: i === 0 && (arr[i] === '' || arr[i] == null),
+            anchored: !!(st.speedQA && st.speedQA.anchor && st.speedQA.anchor.vt === vt && st.speedQA.anchor.zone === zoneKey && st.speedQA.anchor.hourIdx === i),
+            onFocusCell: () => this.setSpeedQA({ anchor: { vt, zone: zoneKey, hourIdx: i } }),
             onChange: (v) => this.setSpeedCell(vt, zoneKey, i, v === '' ? '' : Number(v)),
           })),
           onFillAllDay: () => this.speedFillSameAllDay(vt, zoneKey),
@@ -11631,20 +11632,15 @@ class NDCApp extends React.Component {
       onBackToEdit: () => this.backToEditSpeedProfile(),
       onSave: () => this.saveSpeedProfileModal(),
       // Quick apply (2026-10-15)
-      qa: (() => { const q = st.speedQA || {}; return {
+      qa: (() => { const q = st.speedQA || {}; const an = q.anchor || { vt: '', zone: 'local', hourIdx: 0 }; const zl = an.zone === 'zonal' ? 'Non-Local' : 'Local'; return {
         speed: q.speed == null ? '' : q.speed, allDay: q.allDay !== false, allVeh: q.allVeh !== false, zoneSpecific: !!q.zoneSpecific,
-        hourIdx: String(q.hourIdx || 0), veh: q.veh || '', zone: q.zone || 'local',
-        hourOptions: draft.bandStarts.map((b, i) => ({ value: String(i), label: 'From ' + b })),
-        vehOptions: vehicleTypeNames, zoneOptions: [{ value: 'local', label: 'Local' }, { value: 'zonal', label: 'Non-Local' }],
+        anchorLabel: (an.vt || '\u2014') + ' \u00b7 ' + zl + ' \u00b7 ' + (draft.bandStarts[an.hourIdx || 0] || '00:00'),
         onSpeed: (e) => this.setSpeedQA({ speed: e.target.value }),
         onToggleAllDay: () => this.setSpeedQA({ allDay: !(q.allDay !== false) }),
         onToggleAllVeh: () => this.setSpeedQA({ allVeh: !(q.allVeh !== false) }),
         onToggleZone: () => this.setSpeedQA({ zoneSpecific: !q.zoneSpecific }),
-        onHour: (e) => this.setSpeedQA({ hourIdx: Number(e.target.value) }),
-        onVeh: (e) => this.setSpeedQA({ veh: e.target.value }),
-        onZone: (e) => this.setSpeedQA({ zone: e.target.value }),
         onApply: () => this.applySpeedQuick(),
-        desc: 'Sets ' + (Number(q.speed) > 0 ? Math.round(Number(q.speed)) : '\u2014') + ' km/h for ' + (q.allVeh !== false ? 'every vehicle type' : (q.veh || '\u2014')) + ', ' + (q.zoneSpecific ? ((q.zone === 'zonal' ? 'Non-Local' : 'Local') + ' only') : 'all zones') + ', ' + (q.allDay !== false ? 'all day (00:00 onward)' : ('from ' + (draft.bandStarts[q.hourIdx || 0] || '00:00') + ' until the next entered hour')) + '.',
+        desc: 'Sets ' + (Number(q.speed) > 0 ? Math.round(Number(q.speed)) : '\u2014') + ' km/h for ' + (q.allVeh !== false ? 'every vehicle type' : an.vt) + ', ' + (q.zoneSpecific ? (zl + ' only') : 'all zones') + ', ' + (q.allDay !== false ? 'all day (00:00 onward)' : ('from ' + (draft.bandStarts[an.hourIdx || 0] || '00:00') + ' until the next entered hour')) + '.' + ((q.allVeh === false || q.zoneSpecific || q.allDay === false) ? ' Click a cell in the grid to change the vehicle, zone or hour this uses.' : ''),
       }; })(),
     };
   }
@@ -15968,13 +15964,20 @@ class NDCApp extends React.Component {
   // any DC's Route Code (move / split), Lat/Lng or Distance — Lat/Lng and Distance aren't named
   // in the product's 3 categories, so they're grouped under Route Change ("Wrong DC Location"
   // is literally the lat/lng correction case).
+  // 2026-10-15 — the six change categories Ops Alignment shows (and the static L1s): Vehicle Change,
+  // DC Movement (DC moved to another existing route), Route Order Change (touch-point order), Distance
+  // Change, New Route / Split (DC peeled onto a new route), DC Location (lat / lng).
   rpNcCategories(flags, dcMap) {
     const cats = [];
-    if ((flags || {}).vehicleType) cats.push('vehicle');
     const vals = Object.keys(dcMap || {}).map(k => dcMap[k] || {});
     const has = (v) => v !== '' && v != null;
-    if (vals.some(v => has(v.tp))) cats.push('tp');
-    if (vals.some(v => has(v.routeCode) || has(v.lat) || has(v.lng) || has(v.distance))) cats.push('route');
+    const existing = new Set((((this.state.data || {}).plans || []).find(p => p.id === (this.state.alignPlanId || this.state.opsPlanId)) || { routes: [] }).routes.map(r => r.code || r.routeCode));
+    if ((flags || {}).vehicleType) cats.push('vehicle');
+    if (vals.some(v => has(v.routeCode) && v.routeCode !== '__SPLIT__' && (existing.size === 0 || existing.has(v.routeCode)))) cats.push('dcMove');
+    if (vals.some(v => has(v.tp))) cats.push('order');
+    if (vals.some(v => has(v.distance))) cats.push('dist');
+    if (vals.some(v => has(v.routeCode) && (v.routeCode === '__SPLIT__' || (existing.size > 0 && !existing.has(v.routeCode))))) cats.push('split');
+    if (vals.some(v => has(v.lat) || has(v.lng))) cats.push('location');
     return cats;
   }
   setNc(field, val) { const c = Object.assign({}, this.state.ncCells); c[field] = val; this.setState({ ncCells: c }); }
@@ -16045,7 +16048,7 @@ class NDCApp extends React.Component {
     // change + a TP change logs two reasons. Each type's L1 pre-selects the matching bucket from
     // Configurations (still changeable, since L1s are editable). L2 mandatory for every type;
     // remark mandatory only if any L2 is "Others". Enforced here, not only on the button.
-    const CAT_LABEL = { vehicle: 'Vehicle Change', tp: 'TP Change', route: 'Route Change' };
+    const CAT_LABEL = { vehicle: 'Vehicle Change', dcMove: 'DC Movement', order: 'Route Order Change', dist: 'Distance Change', split: 'New Route / Split', location: 'DC Location' };
     const cats = this.rpNcCategories(flags, dcMap);
     if (cats.length === 0) { this.showToast('Flag at least one change before submitting', '#C77B00'); return; }
     const pairs = st.ncReasonPairs || {};
@@ -16452,7 +16455,7 @@ class NDCApp extends React.Component {
     }
     const ncHasFail = ncWarn.some(w => w.fail);
     // 2026-09-30 — one reason row per change type flagged (Vehicle / TP / Route).
-    const NC_CAT_LABEL = { vehicle: 'Vehicle Change', tp: 'TP Change', route: 'Route Change' };
+    const NC_CAT_LABEL = { vehicle: 'Vehicle Change', dcMove: 'DC Movement', order: 'Route Order Change', dist: 'Distance Change', split: 'New Route / Split', location: 'DC Location' };
     const ncCats = this.rpNcCategories(ncFlags, st.ncDcCells || {});
     const ncNothingFlagged = ncCats.length === 0;
     const ncPairs = st.ncReasonPairs || {};
