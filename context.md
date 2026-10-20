@@ -1,12 +1,18 @@
 # context.md — Network Design Central (RLH Design Central), v4.0
 
-> **V4.0 (2026-10-16).** Forked from the V3.0 repo as of its last changelog entry (2026-10-15,
-> "Speed Profile editor simplified"). V4.0 scope: restore SC-DC Mapping + SC Rate Card + LMDC
-> Pincodes from the 2026-10-14 archive, and build the Ops Alignment › Node Mapping tier. **None of
-> that is in the code yet** — the app is V3.0 as built, with the main file renamed to
-> `v4.0-rlh-design-base.jsx` and a new magenta "N4" favicon set. Node Mapping still lands on "SC-DC
-> Mapping · COMING SOON". Archive spec and code live in the Claude project
-> (`07_SC-DC_Mapping_Archive.md`, `archive_code.md`), not in this repo.
+> **V4.0 (started 2026-10-16; this note updated 2026-10-19).**
+> - **Origin:** forked from the V3.0 repo. V3.0 is now nearly done: later V3.0 changes, if any,
+>   arrive as jsx and are replicated here.
+> - **V4.0 scope:**
+>   - the **global month cycle** concept (V4.0 keeps the global design cycle; V3.0's production
+>     month model is deliberately not ported);
+>   - the **SC-DC Mapping** build: restore SC-DC Mapping + SC Rate Card + LMDC Pincodes from the
+>     2026-10-14 archive, and build the Ops Alignment › Node Mapping tier. **Not started.**
+> - **Already in V4.0 from V3.0 (see the 2026-10-19 entries):** Configurations static L1s, Speed
+>   Profile quick apply, SC Master AutoDML / readiness (with its `engine.js`).
+> - **Today:** Node Mapping still lands on "SC-DC Mapping · COMING SOON". The archive spec and code
+>   live in the Claude project (`07_SC-DC_Mapping_Archive.md`, `archive_code.md`), not in this
+>   repo.
 
 This file is the one place to read before changing anything — either
 yourself, or by pasting this whole file to an AI assistant along with your
@@ -3746,6 +3752,47 @@ RNG-based approximation. Read the method's own comment block first; the short ve
     shows 25 / 20 / 35 at their hours; view-only opener (Design Creation path) shows the resolved
     hours; Sep 2026 opens view-only without Quick apply and Save is refused. Earlier suites pass.
 
+- **2026-10-15 (later) — SC Master: AutoDML vs user-input fields; SC list = AutoDML ∪ platform.**
+  *(V3.0 entry, copied verbatim; ported into V4.0 on 2026-10-19 — see the V4.0 SC Master port entry.)*
+  - **engine.js**: new `store.autodmlSc` (AutoDML's view per SC: lat, lng, volCap, active) and
+    `ingestAutodmlScFeed(store, feed, month)` — what a backend sync would call. New codes are added
+    with only the AutoDML facts; coordinates always follow AutoDML; AutoDML `active: false`
+    deactivates (and `true` reactivates). `materializeRLHScs()`: lat/lng from AutoDML when known;
+    **SC Capacity (Volume) = user value (`volCapUser`, Class D) if entered, else AutoDML's, else the
+    legacy Class B value** — a user value is kept even if AutoDML later changes; `source`
+    (AutoDML | Manual); `scTypeSet` (SC Type was really set — `dispatchRoleType` still defaults to
+    LMSC for display); `name` falls back to the code. Demo seed: every generated SC (incl. MDC
+    nodes) is in the feed; UJN2 (an FMSC) is deactivated on AutoDML; **BBSS, DHNS, GHYS** are new
+    from AutoDML with nothing configured.
+  - **Readiness** (`scMissingFields`): an active, non-MDC SC needs action if it lacks Coordinates,
+    SC Capacity, Sort Capacity, SC Type, Zone, RLH Docks, Local / Non-Local TP Limit, or any of the
+    4 mandatory POCs. Defaults (Local Distance Threshold, Max Hold, NLH Docks, Operating Hours)
+    never count.
+  - **SC Master table**: columns now SC Code → Status → SC Coordinates → SC Capacity → SC Name →
+    rest (header + body reordered together; tracks and min-width follow). Rows needing action
+    sort first, tinted red with a red left edge, "Needs action" chip (tooltip lists the fields),
+    missing cells show red "Missing"; then Active, then Deactivated. Red banner shows only the
+    count ("3 SCs need action"). Status is locked (lock icon) for AutoDML SCs — it follows the
+    backend; Manual SCs keep the toggle; label "Deactivated". Manual SCs get a "Manual" chip.
+  - **Edit / Add SC form**: same order; Code and Coordinates locked for AutoDML SCs; SC Capacity
+    pre-filled (AutoDML default) and editable — stored as the user's value only if it differs
+    from AutoDML (or the SC already has one / is Manual). SC Type and Zone have no default
+    ("Select…"); save blocked until Capacity, Sort Capacity, Type, Zone, RLH Docks, both TP
+    limits (and Coordinates for a Manual SC) are filled, plus the mandatory POCs.
+  - **Uploads**: Volume Capacity → the user value (same rule); Latitude / Longitude and STATUS are
+    ignored for AutoDML SCs (applied for Manual ones). Template descriptions updated.
+  - **Design Creation**: Route Planner Step 1's existing "SC Master details missing" strip (with
+    Fix in SC Master) is now driven by real readiness and names the missing fields — it was
+    hard-coded to GGNS as a demo. SCs without a Zone appear in a trailing "Zone not set" group
+    instead of being hidden.
+  - **Verification**: jsdom — banner "3 SCs need action"; BBSS / DHNS / GHYS first and red;
+    header order; DELS status locked; UJN2 Deactivated last; BBSS edit blocked until filled, then
+    ready; DELS capacity 70,000 kept after AutoDML sent 99,999, GHYS took AutoDML's new 41,000;
+    AutoDML `active:false` deactivates AGRS; Manual SC requires coordinates, saves as Manual;
+    Route Planner Step 1 shows the 3 SCs under "Zone not set" with their missing fields;
+    selecting an incomplete SC through Steps 2–4, Route Scheduler, SC Vehicle Availability,
+    export and Network Map — zero runtime errors. Earlier suites pass.
+
 - **2026-10-15 (later) — Speed Profile Quick apply made static; Configurations L1s made static.**
   *(V3.0 entry, copied verbatim; ported into V4.0 on 2026-10-19 — see that entry.)*
   1. **Speed Profile Quick apply** — no dropdowns any more: Speed + three switches (All day, All
@@ -3824,3 +3871,61 @@ RNG-based approximation. Read the method's own comment block first; the short ve
       vehicle / zone from the selected hour;
     - 0 runtime errors; no `\u` escapes in JSX text.
   - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
+
+- **2026-10-19 (later) — SC Master edit-form highlights; source chip; old-engine guard.**
+  *(V3.0 entry, copied verbatim; ported into V4.0 on 2026-10-19 — see the V4.0 SC Master port entry.)*
+  - **Reported "edits don't show / 80 SCs need action"**: reproduced with the new
+    `v3.0-rlh-design-base.jsx` running against the PREVIOUS `engine.js` (pre-AutoDML), which has no
+    `scTypeSet` — every SC read as "SC Type missing", and a saved SC Type could never clear it.
+    With the matching engine only BBSS / DHNS / GHYS need action and edits show immediately
+    (DELS → FMSC, capacity 64,000 verified). Hardening: `scTypeSet === false` is now required to
+    flag SC Type (undefined = older engine → not flagged), and SC Master shows an amber warning
+    when `engine.js` is older than the app (`ingestAutodmlScFeed` / `scSourceOf` missing).
+  - **Edit / Add SC form**: every mandatory field that's blank is outlined red with "Required",
+    live as the form is filled — core (Code, Coordinates for Manual SCs, SC Capacity, SC Type,
+    Zone, Sort Capacity), RLH section (RLH Docks, Local / Non-Local TP Limit) and the 4 mandatory
+    POCs. (`missing` on the `txt` / `sel` descriptors.)
+  - **SC Master table**: the "Needs action" chip is gone; every row shows its source chip —
+    **AutoDML** (blue) or **Manual** (amber). Red row tint, red "Missing" cells, ordering and the
+    count banner are unchanged.
+
+- **2026-10-19 (later) — V4.0: SC Master AutoDML / readiness ported; version direction set.**
+  - **Direction (product owner, 2026-10-19):**
+    - **V3.0 is nearly done.** No major changes are planned there. If V3.0 gets more changes, the
+      jsx is shared and the code is replicated into V4.0.
+    - **V4.0 carries two things:** the global month cycle concept (V4.0 keeps the global design
+      cycle, so V3.0's 2026-10-19 production month model is NOT ported), and the SC-DC Mapping
+      build (handed over; not started).
+  - **Source**: V3.0's 2026-10-19 (later) `v3.0-rlh-design-base.jsx` and `engine.js`.
+  - **engine.js**: replaced with V3.0's (AutoDML SC feed: `store.autodmlSc`,
+    `ingestAutodmlScFeed()`, `scSourceOf()`, `materializeRLHScs()` coordinates / `volCapUser`
+    / `source` / `scTypeSet`, demo feed with UJN2 deactivated and BBSS / DHNS / GHYS new). Header
+    renamed to v4.0; no other difference.
+  - **jsx**: 47 change blocks for SC Master readiness and AutoDML, as described in the two V3.0
+    entries above (2026-10-15 later, 2026-10-19 later):
+    - `scMissingFields()` (only that part of V3.0's block; the month helpers next to it are
+      skipped);
+    - needs-action ordering, banner, Missing cells and source chip;
+    - AutoDML locks;
+    - the form's order, "Required" outlines and save checks;
+    - upload rules and the template;
+    - Route Planner "Zone not set" group and real missing-details strip;
+    - old-engine guard and warning.
+    - One V4.0 edit: the warning names `v4.0-rlh-design-base.jsx`.
+  - **Still not ported (by decision)**: the production month model (Target Month, All-months
+    filter, Cycle Pick / freeze removal) and its two performance fixes.
+  - **Verification**:
+    - Compile clean; boots with 0 errors. Re-deriving the two earlier ports from the same diff
+      reproduced the previous V4.0 file exactly.
+    - jsdom with the new engine:
+      - needs action = BBSS, DHNS, GHYS only; "3 SCs need action"; those three are the first
+        rows; UJN2 deactivated and last (86 SCs, paged);
+      - DELS AutoDML-sourced; BBSS save blocked with 7 blanks and "Required" shown;
+      - DELS keeps user capacity 70,000 after AutoDML sent 99,999; GHYS takes AutoDML's 41,000;
+        an SC Type edit shows immediately;
+      - Route Planner Step 1 "Zone not set" lists BBSS / DHNS / GHYS with their missing fields;
+        no outdated-engine warning.
+    - With the old engine: nothing falsely flagged, and the warning shows.
+    - Configurations / Speed Profile suite: 23 / 23 pass. 0 runtime errors.
+  - **Files changed**: `engine.js`, `v4.0-rlh-design-base.jsx`, `context.md`. **Deploy `engine.js`
+    and the jsx together.**
