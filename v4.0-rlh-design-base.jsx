@@ -3152,7 +3152,6 @@ NLH cycle: {schedNlhMonthLabel}
 <div style={css(`height:1px; background:#E6EBF2; margin:8px 0 18px;`)} />
 <div style={css(`font-size:15px; font-weight:700; color:#14171F;`)}>Select sort centres</div>
 <div style={css(`font-size:12px; color:#5A5E66; margin:2px 0 14px;`)}>Pick at least 2 SCs to include in this joint-solve run. No distance guidance is shown here — pick freely.</div>
-<input value={mapDraftName} onInput={onMapSetName} placeholder={"Cluster / run name (optional)"} style={css(`width:100%; max-width:360px; height:36px; border:1px solid #E6EBF2; border-radius:8px; padding:0 12px; font-family:inherit; font-size:12.5px; margin-bottom:14px; box-sizing:border-box;`)} />
 <div style={css(`display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px;`)}>
 <div style={css(`display:flex; align-items:center; gap:7px; height:36px; padding:0 11px; border:1px solid #E6EBF2; border-radius:8px; background:#fff;`)}>
 <svg width={"15"} height={"15"} viewBox={"0 0 24 24"} fill={"none"} stroke={"#5A5E66"} strokeWidth={"1.8"}><path d={"M11 4a7 7 0 105 12 7 7 0 00-5-12zM21 21l-4.5-4.5"} strokeLinecap={"round"} /></svg>
@@ -3167,6 +3166,7 @@ NLH cycle: {schedNlhMonthLabel}
 <span style={css(`font-size:12px; color:#5A5E66;`)}>Minimum 2 needed to trigger a joint solve.</span>
 {(mapHasDcUniverse) ? (<>
 <span style={css(`margin-left:auto; font-size:12px; color:#14171F; font-weight:600; font-variant-numeric:tabular-nums;`)}>{mapDcSelCount} of {mapDcUniverseCount} DCs selected</span>
+<button onClick={onMapDownloadZeroVol} title={"Download DCs with zero planned volume across all selected SCs, as CSV"} style={css(`display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 11px; border:1px solid #E6EBF2; background:#fff; color:#5A5E66; font-family:inherit; font-size:11.5px; font-weight:600; border-radius:6px; cursor:pointer;`)}><svg width={"13"} height={"13"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"}><path d={"M12 4v12M7 11l5 5 5-5M5 20h14"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg>Download Zero-Volume DCs</button>
 <button onClick={onMapSelectAllDcs} style={css(`height:28px; padding:0 11px; border:1px solid ${mapAccent}; background:#fff; color:${mapAccent}; font-family:inherit; font-size:11.5px; font-weight:600; border-radius:6px; cursor:pointer;`)}>Select all DCs</button>
 <button onClick={onMapClearAllDcs} style={css(`height:28px; padding:0 11px; border:1px solid #E6EBF2; background:#fff; color:#5A5E66; font-family:inherit; font-size:11.5px; font-weight:600; border-radius:6px; cursor:pointer;`)}>Clear all</button>
 </>) : null}
@@ -3224,17 +3224,26 @@ NLH cycle: {schedNlhMonthLabel}
 <div style={css(`margin-top:18px;`)}>
 <div style={css(`font-size:11px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; margin-bottom:8px;`)}>UNMAPPED DCs — {mapUnmappedDcCount}</div>
 <div style={css(`border:1px solid #E6EBF2; border-radius:8px; overflow:hidden;`)}>
-<div style={css(`display:grid; grid-template-columns:30px 1fr 1.3fr 1fr 90px 100px; background:#F7F9FC; padding:8px 12px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; align-items:center;`)}>
-<div>{(mapUnmappedDcCount > 0) ? (<><button onClick={onMapToggleAllUnmapped} role={"checkbox"} aria-checked={mapUnmappedAllIncluded ? 'true' : 'false'} aria-label={"All unmapped DCs"} style={css(`width:18px; height:18px; border-radius:5px; border:2px solid ${mapUnmappedAllIncluded || false ? mapAccent : '#C3C9D4'}; background:${mapUnmappedAllIncluded ? mapAccent : '#fff'}; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;`)}>{(mapUnmappedAllIncluded) ? (<><svg width={"11"} height={"11"} viewBox={"0 0 24 24"} fill={"none"} stroke={"#fff"} strokeWidth={"3.4"}><path d={"M20 6L9 17l-5-5"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg></>) : null}{(false) ? (<><span style={css(`width:8px; height:2px; background:${mapAccent}; border-radius:1px;`)} /></>) : null}</button></>) : null}</div><div>DC CODE</div><div>NAME</div><div>ZONE</div><div style={css(`text-align:right;`)}>CAPACITY</div><div>VOL FLAG</div>
+<div style={css(`display:grid; grid-template-columns:34px 1fr 1.5fr 0.9fr 0.9fr 0.9fr 0.9fr 1.1fr; align-items:center;`)}>
+<div style={css(`padding:5px 8px; background:#F2F5FA; display:flex; align-items:center; align-self:stretch;`)}>{(mapUnmappedDcCount > 0) ? (<><button onClick={onMapToggleAllUnmapped} role={"checkbox"} aria-checked={mapUnmappedAllIncluded ? 'true' : 'false'} aria-label={"All unmapped DCs"} style={css(`width:18px; height:18px; border-radius:5px; border:2px solid ${mapUnmappedAllIncluded || false ? mapAccent : '#C3C9D4'}; background:${mapUnmappedAllIncluded ? mapAccent : '#fff'}; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;`)}>{(mapUnmappedAllIncluded) ? (<><svg width={"11"} height={"11"} viewBox={"0 0 24 24"} fill={"none"} stroke={"#fff"} strokeWidth={"3.4"}><path d={"M20 6L9 17l-5-5"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg></>) : null}{(false) ? (<><span style={css(`width:8px; height:2px; background:${mapAccent}; border-radius:1px;`)} /></>) : null}</button></>) : null}</div>
+<div style={css(`padding:7px 11px; font-size:10px; font-weight:700; color:#5A5E66; background:#F2F5FA;`)}>DC CODE</div>
+<div style={css(`padding:7px 11px; font-size:10px; font-weight:700; color:#5A5E66; background:#F2F5FA;`)}>NAME</div>
+<div style={css(`padding:7px 11px; font-size:10px; font-weight:700; color:#5A5E66; background:#F2F5FA; text-align:right;`)}>VOLUME</div>
+<div style={css(`padding:7px 11px; font-size:10px; font-weight:700; color:#5A5E66; background:#F2F5FA; text-align:right;`)}>CAPACITY</div>
+<div style={css(`padding:7px 11px; font-size:10px; font-weight:700; color:#5A5E66; background:#F2F5FA;`)}>VOL FLAG</div>
+<div style={css(`padding:7px 11px; font-size:10px; font-weight:700; color:#5A5E66; background:#F2F5FA;`)}>SOURCE</div>
+<div style={css(`padding:7px 11px; font-size:10px; font-weight:700; color:#5A5E66; background:#F2F5FA;`)}>PINCODES</div>
 </div>
 {(mapUnmappedDcList || []).map((dc, __iMu) => (<React.Fragment key={__iMu}>
-<div style={css(`display:grid; grid-template-columns:30px 1fr 1.3fr 1fr 90px 100px; padding:9px 12px; border-top:1px solid #EEF1F6; align-items:center;`)}>
-<div><button onClick={dc.onToggleInclude} role={"checkbox"} aria-checked={dc.included ? 'true' : 'false'} aria-label={"Include " + dc.code + " in this run"} style={css(`width:18px; height:18px; border-radius:5px; border:2px solid ${dc.included || false ? mapAccent : '#C3C9D4'}; background:${dc.included ? mapAccent : '#fff'}; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;`)}>{(dc.included) ? (<><svg width={"11"} height={"11"} viewBox={"0 0 24 24"} fill={"none"} stroke={"#fff"} strokeWidth={"3.4"}><path d={"M20 6L9 17l-5-5"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg></>) : null}{(false) ? (<><span style={css(`width:8px; height:2px; background:${mapAccent}; border-radius:1px;`)} /></>) : null}</button></div>
-<div style={css(`font-size:12.5px; font-weight:600; color:${dc.included ? mapAccent : '#A5ABB5'}; text-decoration:${dc.included ? 'none' : 'line-through'};`)}>{dc.code}</div>
-<div style={css(`font-size:12px; color:#14171F; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;`)}>{dc.name}</div>
-<div style={css(`font-size:11.5px; color:#5A5E66;`)}>{dc.zone}</div>
-<div style={css(`font-size:12px; text-align:right; color:#14171F; font-variant-numeric:tabular-nums;`)}>{dc.capacity}</div>
-<div><span style={css(`padding:1px 7px; border-radius:999px; font-size:10px; font-weight:600; background:${dc.volFlagBg}; color:${dc.volFlagFg};`)}>{dc.volFlag}</span></div>
+<div style={css(`display:grid; grid-template-columns:34px 1fr 1.5fr 0.9fr 0.9fr 0.9fr 0.9fr 1.1fr; align-items:center; border-top:1px solid #F2F5FA;`)}>
+<div style={css(`padding:5px 8px; display:flex; align-items:center;`)}><button onClick={dc.onToggleInclude} role={"checkbox"} aria-checked={dc.included ? 'true' : 'false'} aria-label={"Include " + dc.code + " in this run"} style={css(`width:18px; height:18px; border-radius:5px; border:2px solid ${dc.included || false ? mapAccent : '#C3C9D4'}; background:${dc.included ? mapAccent : '#fff'}; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;`)}>{(dc.included) ? (<><svg width={"11"} height={"11"} viewBox={"0 0 24 24"} fill={"none"} stroke={"#fff"} strokeWidth={"3.4"}><path d={"M20 6L9 17l-5-5"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg></>) : null}{(false) ? (<><span style={css(`width:8px; height:2px; background:${mapAccent}; border-radius:1px;`)} /></>) : null}</button></div>
+<div style={css(`padding:7px 11px; font-size:12px; font-weight:600; color:${dc.included ? mapAccent : '#A5ABB5'}; text-decoration:${dc.included ? 'none' : 'line-through'};`)}>{dc.code}</div>
+<div style={css(`padding:7px 11px; font-size:12px; color:#14171F; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;`)} title={dc.zone + ' zone'}>{dc.name}</div>
+<div style={css(`padding:7px 11px; font-size:12px; color:${dc.volFg}; text-align:right; font-variant-numeric:tabular-nums; font-weight:${dc.volWeight};`)}>{dc.vol}</div>
+<div style={css(`padding:7px 11px; font-size:12px; color:#14171F; text-align:right; font-variant-numeric:tabular-nums;`)}>{dc.capacity}</div>
+<div style={css(`padding:7px 11px;`)}><span style={css(`padding:1px 7px; border-radius:999px; font-size:10px; font-weight:600; background:${dc.volFlagBg}; color:${dc.volFlagFg};`)}>{dc.volFlag}</span></div>
+<div style={css(`padding:7px 11px;`)}><span style={css(`padding:1px 7px; border-radius:999px; font-size:10px; font-weight:600; background:#EAEEFB; color:#2F4FC6;`)}>Addition</span></div>
+<div style={css(`padding:7px 11px; font-size:11.5px; color:#5A5E66; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;`)} title={dc.pinsTitle}>{dc.pinsLabel}</div>
 </div>
 </React.Fragment>))}
 {((mapUnmappedDcList || []).length === 0) ? (<><div style={css(`padding:16px; text-align:center; color:#8E96A3; font-size:12px;`)}>No unmapped DCs right now — nothing waiting on an initial SC assignment.</div></>) : null}
@@ -3284,7 +3293,10 @@ NLH cycle: {schedNlhMonthLabel}
 </div>
 </div>
 
-<div style={css(`font-size:11px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; margin-bottom:8px;`)}>SELECTED SCs — {mapScCount}</div>
+<div style={css(`display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px;`)}>
+<div style={css(`font-size:11px; font-weight:700; color:#5A5E66; letter-spacing:0.04em;`)}>SELECTED SCs — {mapScCount}</div>
+<button onClick={onMapOpenMapView} title={"Map of the selected SCs, their DCs and unmapped DCs"} aria-label={"Open map view"} style={css(`display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 11px; border:1px solid ${mapAccent}; background:#fff; color:${mapAccent}; font-family:inherit; font-size:11.5px; font-weight:600; border-radius:6px; cursor:pointer;`)}><svg width={"14"} height={"14"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"}><path d={"M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg>Map view</button>
+</div>
 <div style={css(`font-size:11.5px; color:#8E96A3; margin-bottom:10px; line-height:1.5;`)}>Volume Utilisation and Max Sort Capacity Utilisation are set per SC below; Rate Card is view-only here (edit in SC Master). Use a column header's own {"−"} / + to apply that value to every selected SC at once.</div>
 <div style={css(`border:1px solid #E6EBF2; border-radius:8px; overflow-x:auto; margin-bottom:10px;`)}>
 <div style={css(`min-width:920px;`)}>
@@ -7192,6 +7204,32 @@ No changes ({c.noChangeCount}) {c.expanded ? '(hide)' : '(show)'}
 </div>
 </div>
 </>) : null}
+{(mapViewOpen) ? (<>
+<div style={css(`position:fixed; inset:0; z-index:95; background:rgba(11,20,48,0.5); display:flex; align-items:center; justify-content:center; padding:24px;`)} onClick={onMapCloseMapView}>
+<div style={css(`background:#fff; border-radius:14px; padding:20px 22px; width:100%; max-width:980px; max-height:92vh; overflow:auto; box-shadow:0 20px 60px rgba(11,20,48,0.3);`)} onClick={(e) => e.stopPropagation()}>
+<div style={css(`display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:6px;`)}>
+<div style={css(`font-size:16px; font-weight:700; color:#14171F;`)}>Map view — {mapScCount} SC{mapScCount === 1 ? '' : 's'}</div>
+<button onClick={onMapCloseMapView} aria-label={"Close"} style={css(`width:30px; height:30px; border:1px solid #E6EBF2; border-radius:8px; background:#fff; cursor:pointer; color:#5A5E66; font-size:14px;`)}>✕</button>
+</div>
+<div style={css(`font-size:12px; color:#5A5E66; margin-bottom:12px;`)}>{mapViewSummary}</div>
+<div style={css(`border:1px solid #E6EBF2; border-radius:10px; background:#F7F9FC; overflow:hidden;`)}>
+<svg viewBox={"0 0 " + mapViewW + " " + mapViewH} style={css(`width:100%; height:auto; display:block;`)} role={"img"} aria-label={"Selected SCs with mapped DCs as lines and unmapped DCs as points"}>
+{(mapViewLines || []).map((ln, __iMvl) => (<React.Fragment key={__iMvl}><line x1={ln.x1} y1={ln.y1} x2={ln.x2} y2={ln.y2} stroke={ln.stroke} strokeWidth={"0.8"} strokeOpacity={"0.45"} /></React.Fragment>))}
+{(mapViewDcs || []).map((p, __iMvd) => (<React.Fragment key={__iMvd}><circle cx={p.x} cy={p.y} r={"2.4"} fill={p.fill}><title>{p.title}</title></circle></React.Fragment>))}
+{(mapViewUnmapped || []).map((p, __iMvu) => (<React.Fragment key={__iMvu}><rect x={p.x - 5} y={p.y - 5} width={"10"} height={"10"} transform={"rotate(45 " + p.x + " " + p.y + ")"} fill={"#FFF6E5"} stroke={"#C77B00"} strokeWidth={"2"}><title>{p.title}</title></rect></React.Fragment>))}
+{(mapViewScs || []).map((p, __iMvs) => (<React.Fragment key={__iMvs}><circle cx={p.x} cy={p.y} r={"9"} fill={"#fff"} stroke={p.stroke} strokeWidth={"3.5"}><title>{p.title}</title></circle><text x={p.x} y={p.y - 14} textAnchor={"middle"} fontSize={"12"} fontWeight={"700"} fill={"#14171F"} stroke={"#fff"} strokeWidth={"3"} paintOrder={"stroke"}>{p.code}</text></React.Fragment>))}
+<line x1={mapViewW - 24 - mapViewScalePx} y1={mapViewH - 18} x2={mapViewW - 24} y2={mapViewH - 18} stroke={"#5A5E66"} strokeWidth={"2"} />
+<text x={mapViewW - 24 - mapViewScalePx / 2} y={mapViewH - 24} textAnchor={"middle"} fontSize={"11"} fill={"#5A5E66"}>{mapViewScaleLabel}</text>
+</svg>
+</div>
+<div style={css(`display:flex; flex-wrap:wrap; align-items:center; gap:8px 18px; margin-top:12px; font-size:12px; color:#14171F;`)}>
+{(mapViewLegend || []).map((lg, __iMvg) => (<React.Fragment key={__iMvg}><span style={css(`display:inline-flex; align-items:center; gap:6px;`)}><span style={css(`width:12px; height:12px; border-radius:50%; border:3px solid ${lg.color}; background:#fff;`)} />{lg.label}</span></React.Fragment>))}
+<span style={css(`display:inline-flex; align-items:center; gap:6px;`)}><span style={css(`width:9px; height:9px; transform:rotate(45deg); border:2px solid #C77B00; background:#FFF6E5;`)} />Unmapped DC</span>
+<span style={css(`color:#8E96A3;`)}>Lines join each DC to its current SC</span>
+</div>
+</div>
+</div>
+</>) : null}
 {/* 2026-09-28 fix — Push to Alignment / Add Reviewer modal moved here, to the global level.
     It used to live inside the Design Review block, so opening it from Ops Alignment's
     "+ Add Reviewer" set pushOpen=true with no modal JSX on that screen to show. */}
@@ -8699,7 +8737,11 @@ class NDCApp extends React.Component {
       lmdcs.push(Object.assign({ code: a.dc, lmscCode: a.sc, zone: a.zone, lat: dcLat, lng: dcLng, capacity: a.cap, active: true, pending: false, rlhMode: 'Direct Vehicle', mdcCode: null, laneName: null, cutoff: null, tat: null, isLocal: true, distFromSc: 0, lmZh: scLmZh[a.sc] || null, lmCh: scLmCh[a.sc] || null }, lmAmFor(a.dc, a.sc), lmdcDefaults, { pincodes: seedPincodesFor(lmdcs.length + idx) }));
     });
     nodeAdditions.filter(a => !a.mapped || !a.sc).forEach((a, idx) => {
-      lmdcs.push(Object.assign({ code: a.dc, lmscCode: null, zone: a.zone, lat: 0, lng: 0, capacity: a.cap, active: true, pending: true, rlhMode: 'Direct Vehicle', mdcCode: null, laneName: null, cutoff: null, tat: null, isLocal: true, distFromSc: 0, lmZh: null, lmCh: null, lmAm1: null, lmAm2: null }, lmdcDefaults, { pincodes: seedPincodesFor(lmdcs.length + idx) }));
+      lmdcs.push(Object.assign({ code: a.dc, lmscCode: null, zone: a.zone, ...(() => { // V4.0 2026-10-22 — near an SC of the DC's own city (else zone), ±0.2°; was 0,0 (unplaceable on a map)
+        const pre = a.dc.split('-')[0]; const an = scs.find(s => s.cityCode === pre && s.lat) || scs.find(s => s.zone === a.zone && s.lat);
+        let h = 0; for (let k = 0; k < a.dc.length; k++) h = (h * 31 + a.dc.charCodeAt(k)) >>> 0;
+        return an ? { lat: +(an.lat + ((h % 40) - 20) / 100).toFixed(4), lng: +(an.lng + (((h >>> 6) % 40) - 20) / 100).toFixed(4) } : { lat: 0, lng: 0 };
+      })(), capacity: a.cap, active: true, pending: true, rlhMode: 'Direct Vehicle', mdcCode: null, laneName: null, cutoff: null, tat: null, isLocal: true, distFromSc: 0, lmZh: null, lmCh: null, lmAm1: null, lmAm2: null }, lmdcDefaults, { pincodes: seedPincodesFor(lmdcs.length + idx) }));
     });
     // Co-Loading lanes get stitched into their originating SC's own generated plan (2026-08-19) —
     // frozen at generation time, appended to plan.rows as lane-rows, right after `plans` exists.
@@ -11437,7 +11479,7 @@ class NDCApp extends React.Component {
   // convention (goCreateMore()) rather than resuming a stale in-progress draft.
   goMapping() {
     this.setState({
-      mapSection: 'wizard', mapStep: 1, mapDroppedDcs: {}, mapPreVal: null,
+      mapSection: 'wizard', mapStep: 1, mapDroppedDcs: {}, mapPreVal: null, mapViewOpen: false,
       mapDraft: { name: '', volFileName: null, scCodes: [], dcCodes: [], params: { rho: 0.2, newNodeAddition: true, singlePinSingleSc: true, refRunId: null, tolerance: 50 }, scParams: {} },
     });
   }
@@ -11538,6 +11580,24 @@ class NDCApp extends React.Component {
     const cur = Object.assign({}, this.state.mapDroppedDcs);
     codes.forEach(c => { if (include) delete cur[c]; else cur[c] = true; });
     this.setState({ mapDroppedDcs: cur });
+  }
+  // mapDownloadZeroVolDcsCsv() — V4.0 2026-10-22, mirrors Route Planner's downloadZeroVolDcsCsv():
+  // every DC selected for this run (selected SCs' DCs, plus unmapped DCs when New Node Addition is
+  // on) with zero planned volume in the chosen plan. Same columns as Route Planner's export.
+  mapDownloadZeroVolDcsCsv() {
+    const st = this.state, d = st.data, draft = st.mapDraft || {};
+    if (!draft.volFileName) { this.showToast('Pick a volume plan first', '#C77B00'); return; }
+    if (!(draft.scCodes || []).length) { this.showToast('Select at least one SC to download', '#C77B00'); return; }
+    const eligible = this.mapComputeEligibleDcs(draft.scCodes, (draft.params || {}).newNodeAddition);
+    const addByCode = {}; (d.nodeAdditions || []).forEach(a => { addByCode[a.dc] = a; });
+    const q = (v) => { const s = String(v == null ? '' : v); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+    const rows = eligible.filter(dc => !this.mapVolumeInfoForDc(dc.code, draft.volFileName, dc.capacity).hasVolume).map(dc => {
+      const sc = (d.scs || []).find(s => s.code === dc.currentSc) || {}; const add = addByCode[dc.code];
+      return [dc.currentSc || '', dc.currentSc ? (sc.name || '') : '(unmapped)', dc.code, add ? add.name : '', 0, dc.capacity || 0, add ? 'Addition' : 'AutoDML'].map(q).join(',');
+    });
+    const head = 'SC Code,SC Name,DC Code,DC Name,Planned Volume,Capacity,Source\n';
+    this.downloadText('sc-dc-mapping-zero-volume-dcs.csv', head + rows.join('\n') + (rows.length ? '\n' : ''));
+    this.showToast('Zero-Volume DCs downloaded \u00b7 ' + rows.length + ' DC' + (rows.length === 1 ? '' : 's') + ' across ' + draft.scCodes.length + ' SC' + (draft.scCodes.length === 1 ? '' : 's'), '#128A3E');
   }
   mapDropDc(code) {
     const cur = Object.assign({}, this.state.mapDroppedDcs);
@@ -18700,6 +18760,8 @@ class NDCApp extends React.Component {
       const vi = this.mapVolumeInfoForDc(a.dc, draft.volFileName, a.cap);
       return {
         code: a.dc, name: a.name, zone: a.zone, capacity: fmtInt(a.cap),
+        ...(() => { const lm = (d.lmdcs || []).find(l => l.code === a.dc) || {}; const pins = lm.pincodes || [];
+          return { pinsLabel: pins.length === 0 ? '—' : (pins.length <= 2 ? pins.join(', ') : pins.slice(0, 2).join(', ') + ' +' + (pins.length - 2) + ' more'), pinsTitle: pins.length ? pins.join(', ') : 'No pincodes on file for this DC' }; })(),
         vol: vi.hasVolume ? fmtInt(vi.volumePlanned) : '0', volFg: vi.hasVolume ? '#14171F' : '#D14B4B', volWeight: vi.hasVolume ? '400' : '700',
         volFlag: vi.hasVolume ? 'OK' : '0 volume', volFlagBg: vi.hasVolume ? '#E7F4EC' : '#FBEAEA', volFlagFg: vi.hasVolume ? '#128A3E' : '#D14B4B',
         included: !mapDroppedDcs[a.dc], onToggleInclude: () => this.mapToggleDcIncluded(a.dc),
@@ -18795,6 +18857,44 @@ class NDCApp extends React.Component {
     const mapPvState = !mpv.sig ? 'none' : (!mts.fresh ? 'stale' : (mpv.errors.length ? 'errors' : (mpv.warnings.length && !mpv.ack ? 'warnings' : 'ready')));
 
     // ===== Run queue
+    // Map view (V4.0 2026-10-22) — only the selected span: selected SCs, their selected (mapped)
+    // DCs as lines to their current SC, and selected unmapped DCs as points. Equirectangular
+    // projection fitted to that span. DCs without coordinates are skipped and counted.
+    const mapViewOpen = !!st.mapViewOpen;
+    let mapViewLines = [], mapViewDcs = [], mapViewUnmapped = [], mapViewScs = [], mapViewLegend = [], mapViewSummary = '', mapViewScalePx = 0, mapViewScaleLabel = '';
+    const mapViewW = 940, mapViewH = 560;
+    if (mapViewOpen) {
+      const PAL = ['#1F6F5C', '#2F4FC6', '#B8387A', '#C77B00', '#1E6FB8', '#7A4FC6', '#128A3E', '#D14B4B'];
+      const has = (o) => o && o.lat != null && o.lng != null && !(+o.lat === 0 && +o.lng === 0);
+      const selScs = (draft.scCodes || []).map(c => (d.scs || []).find(s => s.code === c)).filter(Boolean);
+      const colorOf = {}; selScs.forEach((s, k) => { colorOf[s.code] = PAL[k % PAL.length]; });
+      const dcsAll = (d.lmdcs || []).filter(l => colorOf[l.lmscCode] && !mapClosedCodes[l.code]);
+      const dcsIn = dcsAll.filter(l => !mapDroppedDcs[l.code]);
+      const lmByCode = {}; (d.lmdcs || []).forEach(l => { if (!l.lmscCode) lmByCode[l.code] = l; });
+      const unIn = (draft.params || {}).newNodeAddition !== false ? mapUnmappedDcList.filter(u => u.included).map(u => Object.assign({}, lmByCode[u.code] || {}, { code: u.code, name: u.name })) : [];
+      const pts = selScs.filter(has).concat(dcsIn.filter(has), unIn.filter(has));
+      const noCoord = dcsIn.filter(l => !has(l)).length + unIn.filter(u => !has(u)).length;
+      if (pts.length) {
+        let minLat = Math.min.apply(null, pts.map(p => +p.lat)), maxLat = Math.max.apply(null, pts.map(p => +p.lat));
+        let minLng = Math.min.apply(null, pts.map(p => +p.lng)), maxLng = Math.max.apply(null, pts.map(p => +p.lng));
+        const kx = Math.cos(((minLat + maxLat) / 2) * Math.PI / 180);
+        const spanX = Math.max(0.02, (maxLng - minLng) * kx), spanY = Math.max(0.02, maxLat - minLat), pad = 40;
+        const sc = Math.min((mapViewW - 2 * pad) / spanX, (mapViewH - 2 * pad) / spanY);
+        const ox = (mapViewW - spanX * sc) / 2, oy = (mapViewH - spanY * sc) / 2;
+        const P = (o) => ({ x: +(ox + ((+o.lng - minLng) * kx) * sc).toFixed(1), y: +(oy + (maxLat - +o.lat) * sc).toFixed(1) });
+        const scPt = {}; selScs.filter(has).forEach(s => { scPt[s.code] = P(s); });
+        dcsIn.filter(has).forEach(l => { const p = P(l), s = scPt[l.lmscCode]; if (s) mapViewLines.push({ x1: p.x, y1: p.y, x2: s.x, y2: s.y, stroke: colorOf[l.lmscCode] }); mapViewDcs.push({ x: p.x, y: p.y, fill: colorOf[l.lmscCode], title: l.code + ' → ' + l.lmscCode }); });
+        unIn.filter(has).forEach(u => { const p = P(u); mapViewUnmapped.push({ x: p.x, y: p.y, title: u.code + (u.name ? ' — ' + u.name : '') + ' · unmapped' }); });
+        selScs.filter(has).forEach(s => { mapViewScs.push(Object.assign({ code: s.code, stroke: colorOf[s.code], title: s.code + ' — ' + (s.name || '') }, scPt[s.code])); });
+        const kmPerPx = 111.32 / sc, nice = [1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000];
+        const km = nice.find(n => n / kmPerPx >= 70) || 1000; mapViewScalePx = Math.round(km / kmPerPx); mapViewScaleLabel = km + ' km';
+      }
+      mapViewLegend = selScs.map(s => ({ color: colorOf[s.code], label: s.code + ' · ' + dcsIn.filter(l => l.lmscCode === s.code).length + ' DCs' }));
+      const excl = dcsAll.length - dcsIn.length;
+      mapViewSummary = dcsIn.length + ' mapped DC' + (dcsIn.length === 1 ? '' : 's') + ' · ' + unIn.length + ' unmapped DC' + (unIn.length === 1 ? '' : 's')
+        + (excl ? ' · ' + excl + ' unticked DC' + (excl === 1 ? '' : 's') + ' not shown' : '') + (noCoord ? ' · ' + noCoord + ' without coordinates not shown' : '')
+        + ((draft.params || {}).newNodeAddition === false && mapUnmappedDcList.length ? ' · unmapped DCs hidden (New Node Addition is off)' : '');
+    }
     const mapQueueRows = (st.mapQueue || []).map(r => {
       const run = (d.mappingRuns || []).find(m => m.id === r.mapRunId) || {};
       return { id: run.name || r.mapRunId, statusLabel: r.status, statusBg: r.status === 'Completed' ? '#E7F4EC' : '#EAF1FB', statusFg: r.status === 'Completed' ? '#128A3E' : '#1E6FB8' };
@@ -18829,6 +18929,9 @@ class NDCApp extends React.Component {
       mapHeaderSortCapUtilMax, onMapHeaderSortCapUtilMaxDown: () => this.mapHeaderStep('sortCapUtilMax', -5, 'mapHeaderSortCapUtilMax'), onMapHeaderSortCapUtilMaxUp: () => this.mapHeaderStep('sortCapUtilMax', 5, 'mapHeaderSortCapUtilMax'),
       mapToleranceRangeLabel, mapToleranceAnyWarn, mapVolUtilRangeLabel, mapVolUtilAnyOver100, mapSortCapUtilRangeLabel, mapSortCapUtilAnyOver100,
       mapPreviewScs, mapAnyMissingCap, mapTriggerBlocked, mapDcCount2: mapEligibleDcs.length,
+      mapViewOpen, mapViewW, mapViewH, mapViewLines, mapViewDcs, mapViewUnmapped, mapViewScs, mapViewLegend, mapViewSummary, mapViewScalePx, mapViewScaleLabel,
+      onMapOpenMapView: () => this.setState({ mapViewOpen: true }), onMapCloseMapView: () => this.setState({ mapViewOpen: false }),
+      onMapDownloadZeroVol: () => this.mapDownloadZeroVolDcsCsv(),
       mapPvState, mapPvRan: mpv.sig != null && mts.fresh, mapValFlags, mapValErrCount: mts.fresh ? mpv.errors.length : 0, mapValWarnCount: mts.fresh ? mpv.warnings.length : 0,
       mapPvCanAck: mts.fresh && !mpv.errors.length && mpv.warnings.length > 0 && !mpv.ack, mapPvAcked: mts.fresh && !!mpv.ack && mpv.warnings.length > 0,
       mapPvMoves: mts.fresh ? fmtInt(mpv.moves) : '—', mapPvVolume: mts.fresh ? fmtInt(mpv.volume) : '—', mapPvRanAt: mpv.ranAt || '',
