@@ -4099,3 +4099,40 @@ RNG-based approximation. Read the method's own comment block first; the short ve
       23/23, SC Master AutoDML 10/10, edge 7/7, 0 runtime errors.
   - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md` (`engine.js` and `index.html`
     unchanged).
+
+- **2026-10-22 (later) — SC-DC Mapping wizard: 4 more changes.**
+  1. **Step 1 run-name field removed** ("Cluster / run name (optional)"). Runs are named
+     "Cluster: A + B + C" as before.
+  2. **Unmapped DCs show the same columns as mapped DCs**: ☐ / DC Code / Name / Volume / Capacity
+     / Vol Flag / Source (Addition) / Pincodes, on the same grid as each SC's DC table. Zone moved
+     to the Name tooltip.
+  3. **Map view on Step 2** ("Map view" button beside "SELECTED SCs").
+     - **Shows only the selected span**: the selected SCs; each selected (ticked) mapped DC as a
+       point joined by a straight line to its current SC (colour per SC); selected unmapped DCs as
+       amber diamonds (only when New Node Addition is on, since only then are they in the run).
+     - Fitted with an equirectangular projection; scale bar; legend with each SC's DC count.
+     - The summary notes unticked DCs, DCs without coordinates, and unmapped DCs hidden when New
+       Node Addition is off.
+     - Unticking far-away unmapped DCs tightens the span (DELS + NOI2 + AGRS: 200 km → 20 km
+       scale).
+  4. **"Download Zero-Volume DCs" on Step 1** (beside Select all / Clear all) —
+     `mapDownloadZeroVolDcsCsv()` mirrors Route Planner's export:
+     - same columns: SC Code, SC Name, DC Code, DC Name, Planned Volume, Capacity, Source;
+     - every selected DC with zero planned volume in the chosen plan (unmapped DCs: blank SC,
+       "(unmapped)"); unticked DCs left out;
+     - same toast.
+  - **Seed fix**: the two unmapped additions (PNQ-388, CCU-204) were seeded at lat 0, lng 0 and
+    couldn't be placed on a map. They're now placed within ±0.2° of an SC in their own city (else
+    zone), like every other demo DC. That also gives the solver a real distance for them.
+  - **Verification**:
+    - new jsdom suite **19/19**:
+      - seed coordinates; run-name gone;
+      - unmapped columns and values;
+      - CSV: 79 rows = 79 no-volume DCs, header matches Route Planner, unticked DCs excluded,
+        toast;
+      - map: 3 SCs, 492 lines + points, 2 unmapped, all coordinates in frame, no unselected SCs,
+        summary and scale, unmapped removal tightens the span, New Node off hides unmapped,
+        closes.
+    - Regression: wizard 38/38, SC-DC 34/34, Configurations / Speed 23/23, SC Master 10/10,
+      edge 7/7. 0 runtime errors; 0 JSX-text `\u` escapes.
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
