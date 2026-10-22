@@ -37,7 +37,8 @@
      BEFORE the main app file, so its functions/consts land in the same
      shared global scope the main file's eval'd code reads from. See
      engine.js's own header comment for the full explanation. -->
-<script src="engine.js"></script>
+<script src="engine.js?v=20261020"></script>
+<!-- ?v= — bump this date whenever engine.js changes, so browsers fetch the new engine. -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -100,7 +101,9 @@
     return;
   }
 
-  fetch(FILE)
+  // cache: 'no-cache' (V4.0, 2026-10-20) — always revalidate with the server, so a fresh deploy
+  // shows on a normal reload instead of a stale cached copy of the app file.
+  fetch(FILE, { cache: 'no-cache' })
     .then(function (r) {
       if (!r.ok) throw new Error(FILE + ' — HTTP ' + r.status);
       return r.text();
