@@ -6,13 +6,16 @@
 > - **V4.0 scope:**
 >   - the **global month cycle** concept (V4.0 keeps the global design cycle; V3.0's production
 >     month model is deliberately not ported);
->   - the **SC-DC Mapping** build: restore SC-DC Mapping + SC Rate Card + LMDC Pincodes from the
->     2026-10-14 archive, and build the Ops Alignment › Node Mapping tier. **Not started.**
+>   - the **SC-DC Mapping** build: SC-DC Mapping + SC Rate Card + LMDC Pincodes **restored
+>     2026-10-20** (see that entry). Still to build: the Ops Alignment › Node Mapping tier (needs a
+>     spec), which is what makes a committed migration reach `Aligned`.
 > - **Already in V4.0 from V3.0 (see the 2026-10-19 entries):** Configurations static L1s, Speed
 >   Profile quick apply, SC Master AutoDML / readiness (with its `engine.js`).
-> - **Today:** Node Mapping still lands on "SC-DC Mapping · COMING SOON". The archive spec and code
->   live in the Claude project (`07_SC-DC_Mapping_Archive.md`, `archive_code.md`), not in this
->   repo.
+> - **Global cycle:** already in V4.0 — V4.0 never took V3.0's 2026-10-19 removal, and every block in
+>   `archive_cycle.md` is present verbatim (checked 2026-10-20).
+> - **Today:** Design Creation and Design Review › Node Mapping are live; Ops Alignment › Node
+>   Mapping is still tagged SOON. The archive spec and code live in the Claude project
+>   (`07_SC-DC_Mapping_Archive.md`, `archive_code.md`), not in this repo.
 
 This file is the one place to read before changing anything — either
 yourself, or by pasting this whole file to an AI assistant along with your
@@ -3929,3 +3932,170 @@ RNG-based approximation. Read the method's own comment block first; the short ve
     - Configurations / Speed Profile suite: 23 / 23 pass. 0 runtime errors.
   - **Files changed**: `engine.js`, `v4.0-rlh-design-base.jsx`, `context.md`. **Deploy `engine.js`
     and the jsx together.**
+
+- **2026-10-20 — V4.0: SC-DC Mapping, SC Rate Card and LMDC Pincodes restored.**
+  - **Source**: the 2026-10-14 archive (`archive_code.md`, 50 blocks; spec in
+    `07_SC-DC_Mapping_Archive.md`), re-grafted by anchor text in the handover's order (engine →
+    pure functions → seed → class methods → bindings → JSX → layout → Coming Soon flags). Restored
+    as built; the known open items below are deliberately not fixed in this pass.
+  - **Global cycle**: nothing to do. V4.0 kept it; all 11 blocks of `archive_cycle.md` (207 lines)
+    are present verbatim.
+  - **engine.js**:
+    - `mappingRuns` / `migrationPipeline` in `RLH_TRANSACTIONAL_KEYS` and in
+      `emptyRlhTransactional()`;
+    - `suffixRlhIdsForMonth()` suffixes mapping run ids, sets `cycleMonth` and returns
+      `_mappingRunIdMap`;
+    - `rateCard` in the `materializeRLHScs()` whitelist;
+    - `groupDcsBySharedPincode()`.
+  - **jsx — as archived**:
+    - top-level `mapVolumeInfoForDcPure` / `computeMappingResultPure` /
+      `deriveMigrationPipelineEntries`;
+    - `seedPincodesFor()`; the two seeded runs; `mapDcDecisions` re-keyed per month; all `map*` /
+      `reviewMap*` state;
+    - `goMapping()`, `effectiveLmscFor()`, the original `buildScDcCounts(includePipeline)` and the
+      full `map*` state machine;
+    - Rate Card methods and `buildRateCardModal()`; `scDcMapVals()` / `reviewMapVals()` and their
+      `renderVals()` spreads;
+    - the Design Creation wizard (Steps 1–4, Run Queue) and Design Review (Stage 1 decide / pivot
+      / finalise / commit, Stage 2 per-SC push);
+    - the Route Planner Step 1 "Include pipeline DCs" toggle with "(N pipeline)";
+    - the Rate Card modal, bulk card (bulk grid back to 3 columns), errors banner and column.
+  - **jsx — re-fitted to today's code (it changed after the archive)**:
+    - **SC Master**: RATE CARD column inserted before the Edit column → 19 tracks (`scGridCols` and
+      `scGridMinW` both updated).
+    - **LMDC Pincodes**:
+      - inline edit was replaced by the Edit LMDC form (2026-10-15), so Pincodes is a **field in
+        that form**; the table keeps a view cell (16 tracks, `min-width:1810px`);
+      - `openLmdcForm` / `saveLmdcEdit` carry it;
+      - the upload reads a `PINCODES` column (`;` `,` or `|` separated); the export writes it
+        (`;`-joined).
+    - **LMDC template**: the production `.xlsx` gets **PINCODES as a new last column** (after
+      STATUS) on both sheets, so no existing column moves; all 19 data validations are kept.
+      `LMDC_TEMPLATE_COLS` gets the same entry.
+    - **Migrations pipeline**: Migrations stays merged in "Additions, Closures & Migrations"
+      (decision #54). The not-yet-aligned pipeline is its own section under the merged table;
+      Aligned pipeline entries join the merged table as Migration rows (always none until Ops
+      Alignment exists). The tab count includes Pending + Rejected pipeline entries.
+    - `creationVals()` now returns `rpIncludePipeline` / `onRpIncludePipelineToggle` (the archive
+      recorded the consts but not the return entry).
+  - **Seed change (decision #55, seed only — solver unchanged)**: since the archive the demo pool
+    became ~12.6k DCs packed tightly around their own SC, and seeded pincodes only repeat every
+    9,000 DCs, so both seeded runs proposed **zero** moves (empty Design Review, empty pipeline).
+    Now:
+    - ~10% of DCs also list one pincode of a DC on their nearest same-zone SC;
+    - a seeded cluster is an anchor SC plus its nearest eligible same-zone SCs (disjoint across
+      runs).
+    - Result in 2026-09: MAP-SEED-1 (DELS + NOI2 + AGRS) has 50 DCs to decide; MAP-SEED-2
+      (LKOS + NOIS + ASRS, committed) has 27, giving 26 pipeline entries.
+  - **Coming Soon**: the Creation / Review Node Mapping sub-tab chip and landings are gone (the
+    landing remains for NLH / FM). **Ops Alignment › Node Mapping stays SOON**, tooltip updated:
+    no spec yet, so committed migrations stay Pending Alignment.
+  - **Verification**:
+    - compile clean; static scan of every restored JSX name against the `*Vals()` returns found
+      the toggle gap above (fixed); 0 JSX-text `\u` escapes in 2,160 added lines.
+    - jsdom **36/36** on 2026-09 (the latest seeded month; the past-cycle lock lifted in the test
+      for write flows):
+      - seed runs, pipeline, pincodes, decisions, per-month id suffixing (6 months);
+      - wizard: blocked without a volume plan, blocked with 1 SC; Steps 1→4; (ALL) Tolerance;
+        trigger; queue completes;
+      - Design Review Stage 1: no utilisation > 100%; finalise gated until all decided; commit →
+        Committed, 24 pipeline entries, LMDC Master untouched (#41); Stage 2 push;
+      - Migrations pipeline section with both statuses; Route Planner toggle → "(N pipeline)";
+      - Rate Card: modal save (MG + slab); MG without threshold blocked; CSV upload (2 slabs);
+      - LMDC PINCODES column; form field saves.
+    - Edge cases: the current empty month (2026-10) — wizard, Review and the Ops Alignment tier
+      render with 0 errors; switching Aug ↔ Sep shows each month's own runs. Every SC Master row
+      has 19 cells and every LMDC row 16.
+    - Regression: Configurations / Speed Profile 23/23, SC Master AutoDML 10/10 + zone group;
+      0 runtime errors across all suites.
+  - **Known open items (carried from the archive, not fixed)**:
+    - Ops Alignment › Node Mapping tier (no spec), so `Aligned` is unreachable and Stage 2 push
+      only sets a flag;
+    - cross-SC cost uses ×55 uniformly in `computeMappingResultPure()`;
+    - Rate Card CPS has no consumer;
+    - no eligibility computation;
+    - `triggerRuns()` doesn't rebuild routes from live pool membership.
+    - Also: `seedPincodesFor()` makes 7-digit codes (3-digit prefix + 4-digit suffix), as
+      archived.
+  - **Files changed**: `engine.js`, `v4.0-rlh-design-base.jsx`, `context.md`. Deploy all three
+    together.
+
+- **2026-10-20 (later) — Stale app file after deploy; `index.html` cache fix.**
+  - **Report**: after the SC-DC deploy, Design Creation › Node Mapping still showed "Coming Soon".
+  - **Checked**:
+    - the repo's jsx is the restore build byte for byte (only CRLF line endings from the browser
+      upload, harmless);
+    - clicking Design Creation › Node Mapping on that exact code shows the SC-DC Mapping landing
+      ("Start a mapping run" → Step 1), with no Coming Soon and 0 errors.
+    - So the browser was running a cached pre-restore copy. `index.html` fetched the jsx with a
+      plain `fetch(FILE)`, so a browser could reuse it after a deploy.
+  - **Fix**:
+    - `fetch(FILE, { cache: 'no-cache' })` — always revalidates, so a normal reload picks up a new
+      deploy;
+    - `engine.js?v=20261020` — **bump this date whenever `engine.js` changes**.
+  - **Files changed**: `index.html`, `context.md`.
+
+- **2026-10-22 — SC-DC Mapping wizard: 7 fixes / enhancements.**
+  1. **No landing.** Design Creation › Node Mapping opens straight on Step 1 (`mapSection`
+     defaults to `'wizard'`; the "Start a mapping run" landing is gone; "close results" starts a
+     fresh draft).
+  2. **Per-DC selection.**
+     - Every DC row (each SC's expanded table and the Unmapped DCs list) has a checkbox; the
+       header checkbox selects or clears that SC's DCs (or all unmapped DCs).
+     - "Select all DCs" / "Clear all" sit beside the SC count chip, with "N of M DCs selected".
+     - Unticked DCs are struck through; the SC row shows "selected / total".
+     - The existing `mapDroppedDcs` is now the run's excluded set (`mapToggleDcIncluded()`,
+       `mapSetDcsIncluded()`), so eligibility, the trigger and `run.dcCodes` all honour it. The
+       old zero-volume delete icon is replaced by the checkbox.
+  3. **New Node Addition — ⓘ** "New nodes can be added to any SC, already mapped DCs do not move."
+     Behaviour in `computeMappingResultPure()`:
+     - **On**: a DC already mapped to a selected SC keeps it; new DCs go to the nearest SC. A
+       pincode group with mapped members only considers those members' SCs, so a new DC follows
+       its mapped neighbour.
+     - **Off**: mapped DCs are re-optimised (as before; no new DCs).
+     - Default stays On; the two seeded runs are stored with it Off (they're re-optimisation
+       demos).
+  4. **Tolerance → global "Ideal <> Actual SC Delta"** (`params.tolerance`, km, default 50, −/+ 5
+     stepper or typed). The per-SC Tolerance column and its (ALL) stepper are gone. A warning
+     shows above 50 km. Step 3 summary and the Design Review recap ("Ideal <> Actual Δ") read the
+     global value; older runs fall back to their per-SC values. Still recorded only — the solver
+     doesn't consume it (unchanged open item).
+  5. **Rate Card (view only) in Step 2**: a RATE CARD column per SC ("View" / "Not set") opens
+     SC Master's Rate Card in a read-only modal:
+     - "View only" title and a pointer to SC Master;
+     - read-only inputs; no add / remove rows; Close instead of Cancel; no Save;
+     - `saveRateCardModal()` refuses in that mode.
+  6. **SC Vehicle Availability step removed** → 3 steps: Input Selection › Operating Mode ›
+     Validate & Trigger.
+  7. **Step 3 = Validate & Trigger**, modelled on Route Planner's Step 4:
+     - **Pre-Validation Check** (`mapRunPreValidation()`).
+       - **Errors**: SC master data missing (Sort Cap / Vol Cap / HTP); no DCs selected; selected
+         DCs with no volume in the plan.
+       - **Warnings**, from a preview solve: projected volume utilisation outside the SC's
+         Min–Max; projected sort-capacity utilisation above its max; zero-capacity DCs left
+         unserved; DCs without pincodes under Single Pin – Single SC; New Node Addition on with
+         no new DCs selected (the run would propose nothing).
+     - Validation panel with Error / Warning pills and "Accept all warnings".
+     - Readiness banner; stat strip (SCs, DCs selected, Planned Volume, Expected Changes).
+     - **Trigger needs a fresh, error-free check with warnings accepted.** The check is tied to
+       a signature of the inputs (draft, excluded DCs, cycle), so any change makes it stale with
+       no scattered resets.
+     - `mapTriggerRun()` enforces the same gate.
+  - **Verification**:
+    - compile; identifier scan of the changed screens; 0 JSX-text `\u` escapes.
+    - New jsdom suite **38/38** (2026-09, DELS + NOI2 + AGRS):
+      - opens on Step 1; 3-step stepper;
+      - DC selection: default all 499, untick one → 498 / "123 / 124", eligibility honours it, SC
+        select-all toggle, Clear all → 0, Select all;
+      - tooltip; New Node On → no mapped DC moves (one zero-capacity DC stays unserved); Off → 52
+        changes;
+      - delta stepper and input; Rate Card view-only (2 read-only inputs, no Save, SC Master
+        untouched);
+      - check required → 79 no-volume DCs flagged; excluding them makes the check stale; re-run →
+        0 errors, 3 warnings; accept → ready, 35 expected changes; the real run matches 35 and
+        uses 418 selected DCs and Δ 40 km; Design Review shows "Ideal <> Actual Δ 40 km"; a new
+        run resets everything.
+    - Regression: SC-DC suite 34/34 (updated for the new steps), Configurations / Speed Profile
+      23/23, SC Master AutoDML 10/10, edge 7/7, 0 runtime errors.
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md` (`engine.js` and `index.html`
+    unchanged).
