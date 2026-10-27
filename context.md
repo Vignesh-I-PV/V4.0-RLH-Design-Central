@@ -4136,3 +4136,77 @@ RNG-based approximation. Read the method's own comment block first; the short ve
     - Regression: wizard 38/38, SC-DC 34/34, Configurations / Speed 23/23, SC Master 10/10,
       edge 7/7. 0 runtime errors; 0 JSX-text `\u` escapes.
   - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
+
+- **2026-10-22 (later 2) — SC-DC Mapping: real geography + capacity solver; Design Review rebuilt.**
+  - **Product answers (2026-10-22)**:
+    - **#59** — real-km geography for this module;
+    - **#60** — Ideal <> Actual SC Delta is the solver's fallback limit (if the ideal SC can't
+      take a DC, the next-best SC with room must be within Δ km of the ideal, else the DC is left
+      unmapped);
+    - Simulate "after" counts undecided DCs as proposed.
+  - **Geography (#59)**: `mapDcGeoPure()` places each mapped DC at its stored road distance to its
+    SC (`distFromSc`, which equals `NDC_haversineKm`'s ×55 figure) on a fixed bearing from its
+    code (FNV-1a + avalanche). `mapKmPure()` = plain km. Why: demo DCs are stored at ~1/55 scale
+    around their SC, with offsets varying only in latitude, so on a true map they collapsed onto
+    the SC and Dist Old (×55) vs Dist New (raw) were on different scales. Unmapped DCs keep their
+    stored position. Other modules are unchanged.
+  - **Solver rewrite** (`computeMappingResultPure`, #60):
+    - pincode groups → ideal SC = least mean distance;
+    - two capacity limits per SC: volume ≤ Vol Cap × Vol Util Max %, and DCs ≤ Sort Cap × Max
+      Sort Cap Util % (Sort Capacity = DC sort destinations, as this module always read it);
+    - ideal full → next-best SC with room within Δ km of the ideal, else unserved with a reason;
+    - placement order: most-to-lose first;
+    - New Node Addition on: mapped DCs never move (even in a mixed pincode group) and use
+      capacity first.
+    - Rows carry `idealSc`, `distOld`, `distNew` and `unservedReason`; costs / CPS use consistent
+      km (the old ×55 open item is closed); `perSc` gains `capacity` / `dcCapacity`.
+  - **Volume basis (#61)**: a DC's planned volume = its home SC's average DC volume (SC volume ÷
+    DC count) ×0.75–1.25 — Route Planner's own basis, so SCs sum to ~0.8× Vol Cap. It was DC
+    capacity ×0.55–0.95 (~10× Vol Cap in total, the old "859%" artefact), and no-volume DCs fell
+    back to full capacity in the solve. They now count as 0.
+  - **Seeds now**: MAP-SEED-1 (DELS + NOI2 + AGRS) 241 moves / 1 unserved; MAP-SEED-2 (LKOS + NOIS
+    + ASRS, committed) 142 pipeline entries. Overlap: ~49% of DCs sit closer to another selected SC.
+  - **Wizard**:
+    - Step 2 Run Name field (placeholder "Cluster: A + B + C"); Δ card retitled "Fallback limit,
+      km" with a tooltip stating the rule;
+    - Map view = shared `NdcSpokeMap` / `ndcSpokeMapPure()`: SC as source with straight lines to
+      its DCs, a dashed span outline per SC (overlap = overlapping outlines), unmapped diamonds,
+      density-aware line opacity, and an "overlap: N DCs (x%) sit closer to another selected SC"
+      summary.
+    - Pre-validation sort check uses DC count.
+  - **Design Review (Node Mapping)**:
+    1. Side rail replaced by **To Review / Finalised** tabs with that tab's runs as cards.
+    2. **DC-Level Changes** columns: DC Code / Movement Flag ("From X" or "New DC") / New SC /
+       Dist Old / Dist New / Dist Delta (New − Old; green = shorter, red = longer) / Optional
+       Remarks / Decision (Accept / Reject).
+    3. **Accept all / Reject all / Reset** for the run (`mapDecideAll()`, `mapResetDecisions()`;
+       unserved DCs with an SC → Keep on old SC), plus Accept all / Reject all per SC.
+    4. **Grouped by the SC gaining each DC** ("X gains N DCs · from other SCs / new · keeps M · vol
+       util current → post"). Unplaced DCs are listed separately with their reason and "Keep on
+       <old SC>".
+    5. **Simulate** (button in the run header):
+       - 6 cards, before = plan output, after = decisions (undecided as proposed), coloured
+         deltas: avg SC → DC distance, volume-weighted distance, DCs changing SC, unserved, highest
+         volume / sort utilisation;
+       - Before / After spoke maps on one shared frame (✕ = unserved);
+       - per-SC table.
+    6. **Distance metrics**: average SC → DC distance and volume-weighted distance (Σ vol × km /
+       Σ vol), current → plan, in the run header; per SC in the Pivot and Simulate.
+    7. **SC Pivot**: DCs, Added, Removed, Volume, Vol Cap, Vol Util, Sort Cap, Sort Util, Avg and
+       Vol-wtd distance — current → post (post = decisions, undecided as proposed); >100% red,
+       ≥90% amber.
+    - Finalise preview, commit and Stage 2 are unchanged.
+  - **Verification**:
+    - new jsdom suite **26/26**: Run Name; tooltip; spokes start at their SC; 3 span outlines; DCs
+      spread; overlap summary; Δ 0 vs 500 under tight capacity (63 vs 43 unmapped, reason text);
+      capacity respected; New Node keeps mapped DCs; no rail + tabs + cards; exact column set;
+      grouped by gaining SC; Dist Delta sign / colour; distance tiles; Accept all 248/248; Reset;
+      per-SC Reject; Reject all; Simulate (6 cards, maps, after-Reject 241 → 0 changes); Pivot
+      utilisation; finalise + commit; Finalised tab.
+    - Maps checked as rendered images.
+    - Regression: SC-DC 34/34, wizard 38/38 and 19/19 (map checks moved to the new binding
+      shape), Configurations / Speed 23/23, SC Master 10/10, edge 7/7. 0 runtime errors; 0 JSX
+      `\u` escapes.
+  - **Open**: ρ (migration penalty) is still recorded, not used. With real overlap the solve
+    proposes many moves (241 of 497 in MAP-SEED-1); ρ is the natural damper.
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
