@@ -4210,3 +4210,51 @@ RNG-based approximation. Read the method's own comment block first; the short ve
   - **Open**: ρ (migration penalty) is still recorded, not used. With real overlap the solve
     proposes many moves (241 of 497 in MAP-SEED-1); ρ is the natural damper.
   - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
+
+- **2026-10-27 — SC-DC Mapping: India basemap; creation selection; Design Review list / detail.**
+  1. **India basemap on every SC-DC map** (Step 2 Map view, Simulate, the new card map):
+     - `NDC_INDIA_STATES` = DataMeet's India states GeoJSON (official outline incl. J&K / Ladakh),
+       simplified to 0.04° / 2 dp: 33 states, ~48 KB, drawn as state shapes with names;
+     - `NDC_CITIES` = 41 real city points;
+     - the frame = the selection plus a context margin (≥0.6°), on a light sea background.
+     - **Note**: seeded SC coordinates are synthetic (e.g. DELS plots near Ludhiana, GGNS near
+       Agra); real AutoDML coordinates will place correctly. Have the boundary depiction checked
+       against the Survey of India before any external use.
+  2. **Design Creation, Step 1**:
+     - "Select all DCs" / "Clear all" for DCs replaced by **Select all SCs** (every active SC) and
+       **Clear SCs**;
+     - with a zone filter on, **Select all <Zone> SCs** selects that filtered list (`mapSetScs()`);
+     - the Unmapped DCs header gets **Select all DCs** / **Clear**;
+     - the DC count and "Download Zero-Volume DCs" stay.
+  3. **Design Review (Node Mapping)**:
+     - **L1 = plan cards only** (To Review / Finalised tabs). A run no longer auto-opens — the
+       open run's header looked like a second card. Each card has **Map** and **CSV** buttons and
+       "Open →".
+     - **L2** (click a card): "← All plans" back link; the header has Map, CSV and Simulate.
+       DC-Level Changes is SC-wise: each SC has **DCs Added** (open by default; the decision table
+       — decisions stay at the gaining SC, with Accept / Reject all added), **DCs Removed** ("moving
+       to", distances, delta, status, and Keep on SC for unplaced DCs), and **Unchanged** (a neat
+       code + distance grid), each a dropdown (`NdcDcSection`, `mapToggleSection()`). New DCs that
+       weren't placed sit in their own block. SC Pivot Summary is unchanged.
+     - **Simulate is enabled only after at least one decision.**
+     - **Card map** modal: Current / Plan output / Your decisions (Finalised: Current / Final),
+       with a summary line.
+     - **Finalise preview and Finalised** use the same SC-wise dropdowns (read-only, Push to
+       Alignment per SC on Finalised). **No comma-separated DC lists remain.**
+     - **CSV per card** (`mapDownloadRunCsv()`):
+       - columns: DC Code, Movement Flag, Current SC, New SC, Distance Old SC (km), Distance New SC
+         (km), Volume;
+       - SC-wise in run order: Added, then Removed, then Unchanged. A moving DC appears under both
+         SCs. Unmapped (no SC either side) come last with SC fields empty;
+       - To Review = your decisions (undecided as proposed); Finalised = committed.
+     - Shared helper `mapRunViews(run)`: geography, distances and the current / plan / after /
+       final views.
+  - **Verification**:
+    - new jsdom suite **28/28** (select-all / zone / clear SCs; unmapped select-all; map states and
+      cities; L1 cards only, one per run; CSV header + ordering; card map modes; L2 blocks,
+      dropdown defaults and toggling; Simulate gated; back; Finalised blocks + Push; no comma
+      lists; finalised CSV);
+    - India map checked as a rendered image;
+    - regression: previous round 26/26 (now opens the run explicitly), SC-DC 34/34, wizard 38/38 and
+      19/19, Configurations / Speed 23/23, SC Master 10/10, edge 7/7. 0 runtime errors; 0 JSX `\u`.
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
