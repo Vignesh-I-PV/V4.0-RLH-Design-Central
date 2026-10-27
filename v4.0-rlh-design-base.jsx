@@ -3266,7 +3266,11 @@ NLH cycle: {schedNlhMonthLabel}
 {/* ===== STEP 2 — Operating Mode ===== */}
 {(mapStep === 2) ? (<>
 <div style={css(`font-size:15px; font-weight:700; color:#14171F; margin-bottom:4px;`)}>Operating Mode</div>
-<div style={css(`font-size:12px; color:#5A5E66; margin-bottom:16px;`)}>Baseline is always the current SC-DC mapping per AutoDML — not a choice made here.</div>
+<div style={css(`font-size:12px; color:#5A5E66; margin-bottom:14px;`)}>Baseline is always the current SC-DC mapping per AutoDML — not a choice made here.</div>
+<div style={css(`display:flex; align-items:center; gap:10px; margin-bottom:16px;`)}>
+<label style={css(`font-size:12px; font-weight:600; color:#14171F; white-space:nowrap;`)}>Run Name</label>
+<input value={mapDraftName} onInput={onMapSetName} placeholder={mapRunNamePh} aria-label={"Run name"} style={css(`width:100%; max-width:380px; height:34px; border:1px solid #E6EBF2; border-radius:8px; padding:0 12px; font-family:inherit; font-size:12.5px; color:#14171F; box-sizing:border-box;`)} />
+</div>
 
 {/* New Node Addition + Cross-SC Migration Penalty + Single Pin – Single SC — global, side by side */}
 <div style={css(`display:flex; gap:10px; margin-bottom:20px;`)}>
@@ -3284,7 +3288,7 @@ NLH cycle: {schedNlhMonthLabel}
 <button onClick={onMapSinglePinSingleScToggle} style={css(`width:34px; height:19px; border-radius:999px; border:none; background:${mapSinglePinSingleScOn ? mapAccent : '#D0D5DD'}; position:relative; cursor:pointer; flex-shrink:0;`)}><div style={css(`width:14px; height:14px; border-radius:999px; background:#fff; position:absolute; top:2.5px; left:${mapSinglePinSingleScOn ? '17px' : '3px'}; transition:left 120ms;`)} /></button>
 </div>
 <div style={css(`flex:1; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 12px; border:1px solid ${mapDeltaWarn ? '#EDD9AF' : '#E6EBF2'}; background:${mapDeltaWarn ? '#FFFBF3' : '#fff'}; border-radius:7px;`)}>
-<div style={css(`min-width:0;`)}><div style={css(`font-size:12px; font-weight:600; color:#14171F;`)}>Ideal &lt;&gt; Actual SC Delta</div><div style={css(`font-size:10.5px; color:#8E96A3;`)}>Global, km · applies to every SC in the run</div></div>
+<div style={css(`min-width:0;`)}><div style={css(`font-size:12px; font-weight:600; color:#14171F;`)}>Ideal &lt;&gt; Actual SC Delta</div><div style={css(`font-size:10.5px; color:#8E96A3; display:flex; align-items:center; gap:4px;`)}>Fallback limit, km <span className={"ndc-tip"} style={css(`display:inline-flex; cursor:help;`)}><svg width={"12"} height={"12"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M12 16v-4m0-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg><span className={"ndc-tip-pop"}>If a DC’s ideal (nearest) SC has no capacity left, the next best SC with room must be within this many km of the ideal; otherwise the DC is left unmapped.</span></span></div></div>
 <div style={css(`display:flex; align-items:center; border:1px solid #C3C9D4; border-radius:6px; background:#fff; flex-shrink:0;`)}>
 <button onClick={onMapDeltaDown} aria-label={"Decrease by 5 km"} style={css(`width:24px; height:26px; border:none; border-right:1px solid #C3C9D4; background:transparent; cursor:pointer; font-size:14px; color:#5A5E66;`)}>{"−"}</button>
 <input type={"number"} min={"0"} step={"5"} value={mapDelta} onInput={onMapDeltaInput} aria-label={"Ideal <> Actual SC Delta in km"} style={css(`width:46px; height:26px; border:none; text-align:center; font-family:inherit; font-size:12px; font-variant-numeric:tabular-nums; outline:none;`)} />
@@ -4195,40 +4199,37 @@ NLH cycle: {schedNlhMonthLabel}
     run just updates the right panel in place — no round trip, no lost scroll position, better use
     of the available width than a single centered 980px column ever was. */}
 <div style={css(`flex:1; display:flex; min-height:0;`)}>
-{/* LEFT RAIL */}
-<div style={css(`width:300px; flex-shrink:0; border-right:1px solid #E6EBF2; background:#FAFBFD; overflow-y:auto;`)}>
-<div style={css(`padding:16px;`)}>
-<div style={css(`display:flex; gap:6px; margin-bottom:14px;`)}>
-<button onClick={() => onReviewMapStageFilter('toReview')} style={css(`flex:1; height:32px; padding:0 8px; border:1px solid ${reviewMapStageFilter === 'toReview' ? reviewMapAccent : '#E6EBF2'}; background:${reviewMapStageFilter === 'toReview' ? '#EAF3EF' : '#fff'}; color:${reviewMapStageFilter === 'toReview' ? reviewMapAccent : '#5A5E66'}; font-family:inherit; font-size:11.5px; font-weight:700; border-radius:7px; cursor:pointer;`)}>To Review ({reviewMapToReviewCount})</button>
-<button onClick={() => onReviewMapStageFilter('finalised')} style={css(`flex:1; height:32px; padding:0 8px; border:1px solid ${reviewMapStageFilter === 'finalised' ? reviewMapAccent : '#E6EBF2'}; background:${reviewMapStageFilter === 'finalised' ? '#EAF3EF' : '#fff'}; color:${reviewMapStageFilter === 'finalised' ? reviewMapAccent : '#5A5E66'}; font-family:inherit; font-size:11.5px; font-weight:700; border-radius:7px; cursor:pointer;`)}>Finalised ({reviewMapFinalisedCount})</button>
+{/* V4.0 2026-10-22 — no side rail: To Review / Finalised tabs, then that tab's runs as cards. */}
+<div style={css(`flex:1; overflow-y:auto; padding:20px 32px; min-width:0;`)}>
+<div style={css(`display:inline-flex; gap:4px; padding:4px; background:#F2F5FA; border-radius:10px; margin-bottom:14px;`)}>
+<button onClick={() => onReviewMapStageFilter('toReview')} style={css(`height:32px; padding:0 16px; border:none; border-radius:7px; background:${reviewMapStageFilter === 'toReview' ? '#fff' : 'transparent'}; box-shadow:${reviewMapStageFilter === 'toReview' ? '0 1px 3px rgba(20,23,31,0.12)' : 'none'}; color:${reviewMapStageFilter === 'toReview' ? reviewMapAccent : '#5A5E66'}; font-family:inherit; font-size:12.5px; font-weight:700; cursor:pointer;`)}>To Review ({reviewMapToReviewCount})</button>
+<button onClick={() => onReviewMapStageFilter('finalised')} style={css(`height:32px; padding:0 16px; border:none; border-radius:7px; background:${reviewMapStageFilter === 'finalised' ? '#fff' : 'transparent'}; box-shadow:${reviewMapStageFilter === 'finalised' ? '0 1px 3px rgba(20,23,31,0.12)' : 'none'}; color:${reviewMapStageFilter === 'finalised' ? reviewMapAccent : '#5A5E66'}; font-family:inherit; font-size:12.5px; font-weight:700; cursor:pointer;`)}>Finalised ({reviewMapFinalisedCount})</button>
 </div>
-<div style={css(`display:flex; flex-direction:column; gap:6px;`)}>
+<div style={css(`display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:10px; margin-bottom:20px; max-width:1240px;`)}>
 {(reviewMapPlanCards || []).map((c, __iRpc) => (<React.Fragment key={__iRpc}>
-<button onClick={c.onClick} style={css(`text-align:left; padding:11px 12px; border:1px solid ${c.selected ? reviewMapAccent : '#E6EBF2'}; background:${c.selected ? '#EAF3EF' : '#fff'}; border-radius:8px; cursor:pointer; font-family:inherit;`)}>
-<div style={css(`display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:4px;`)}>
-<span style={css(`font-size:12.5px; font-weight:700; color:#14171F; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;`)}>{c.name}</span>
-<span style={css(`padding:2px 7px; border-radius:999px; font-size:9.5px; font-weight:600; background:${c.statusBg}; color:${c.statusFg}; flex-shrink:0;`)}>{c.statusLabel}</span>
+<button onClick={c.onClick} style={css(`text-align:left; padding:12px 14px; border:1px solid ${c.selected ? reviewMapAccent : '#E6EBF2'}; box-shadow:${c.selected ? '0 0 0 3px rgba(31,111,92,0.14)' : 'none'}; background:#fff; border-radius:10px; cursor:pointer; font-family:inherit;`)}>
+<div style={css(`display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:3px;`)}>
+<span style={css(`font-size:13px; font-weight:700; color:#14171F; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;`)}>{c.name}</span>
+<span style={css(`padding:2px 8px; border-radius:999px; font-size:9.5px; font-weight:600; background:${c.statusBg}; color:${c.statusFg}; flex-shrink:0;`)}>{c.statusLabel}</span>
 </div>
-<div style={css(`font-size:10.5px; color:#8E96A3;`)}>{c.scCount} SCs · {c.dcCount} DCs {(c.movements > 0) ? (<><span style={css(`color:#C77B00; font-weight:600;`)}> · {c.movements} to review</span></>) : null}</div>
+<div style={css(`font-size:10.5px; color:#8E96A3; margin-bottom:8px;`)}>{c.id}</div>
+<div style={css(`display:flex; gap:12px; font-size:11.5px; color:#5A5E66;`)}><span><strong style={css(`color:#14171F;`)}>{c.scCount}</strong> SCs</span><span><strong style={css(`color:#14171F;`)}>{c.dcCount}</strong> DCs</span><span style={css(`color:${c.movements > 0 ? '#C77B00' : '#5A5E66'};`)}><strong>{c.movements}</strong> moves</span><span style={css(`color:${c.unmapped > 0 ? '#D14B4B' : '#5A5E66'};`)}><strong>{c.unmapped}</strong> unmapped</span></div>
 </button>
 </React.Fragment>))}
-{((reviewMapPlanCards || []).length === 0) ? (<><div style={css(`padding:20px; text-align:center; color:#8E96A3; font-size:11.5px;`)}>Nothing here yet.</div></>) : null}
+{((reviewMapPlanCards || []).length === 0) ? (<><div style={css(`padding:20px; color:#8E96A3; font-size:12px;`)}>Nothing here yet.</div></>) : null}
 </div>
-</div>
-</div>
-{/* RIGHT PANEL */}
-<div style={css(`flex:1; overflow-y:auto; padding:24px 32px; min-width:0;`)}>
+
 {(reviewMapOpenCard) ? (<>
-<div style={css(`max-width:1000px;`)}>
+<div style={css(`max-width:1240px;`)}>
 {/* Recap header — Route Planner's own big-number-tile convention, not the earlier small
     INPUTS/OUTPUTS text-only summary. */}
 <div style={css(`background:#fff; border:1px solid #E6EBF2; border-radius:10px; padding:18px 20px; margin-bottom:20px;`)}>
 <div style={css(`display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px;`)}>
 <span style={css(`font-size:16px; font-weight:700; color:#14171F;`)}>{reviewMapOpenCard.name}</span>
-<span style={css(`padding:3px 10px; border-radius:999px; font-size:10.5px; font-weight:600; background:${reviewMapOpenCard.statusBg}; color:${reviewMapOpenCard.statusFg};`)}>{reviewMapOpenCard.statusLabel}</span>
+<span style={css(`display:inline-flex; align-items:center; gap:8px;`)}><button onClick={onReviewMapSimOpen} title={"Simulate: plan output vs your decisions, with maps"} style={css(`display:inline-flex; align-items:center; gap:6px; height:30px; padding:0 12px; border:1px solid ${reviewMapAccent}; background:#fff; color:${reviewMapAccent}; font-family:inherit; font-size:12px; font-weight:700; border-radius:7px; cursor:pointer;`)}><svg width={"14"} height={"14"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M3 17l6-6 4 4 8-8M14 7h7v7"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg>Simulate</button><span style={css(`padding:3px 10px; border-radius:999px; font-size:10.5px; font-weight:600; background:${reviewMapOpenCard.statusBg}; color:${reviewMapOpenCard.statusFg};`)}>{reviewMapOpenCard.statusLabel}</span></span>
 </div>
 <div style={css(`font-size:12px; color:#5A5E66; margin-bottom:16px;`)}>{reviewMapOpenCard.scCount} SCs · {reviewMapOpenCard.dcCount} DCs · {reviewMapOpenCard.volume} vol · ρ {reviewMapOpenCard.rho} · New Addition {reviewMapOpenCard.newAdditionLabel} · Ideal &lt;&gt; Actual Δ {reviewMapOpenCard.toleranceLabel}</div>
-<div style={css(`display:grid; grid-template-columns:repeat(3,1fr); gap:14px; padding-top:14px; border-top:1px solid #EEF1F6;`)}>
+<div style={css(`display:grid; grid-template-columns:repeat(5,1fr); gap:14px; padding-top:14px; border-top:1px solid #EEF1F6;`)}>
 <div>
 <div style={css(`font-size:22px; font-weight:700; color:${reviewMapOpenCard.movements > 0 ? '#C77B00' : '#14171F'};`)}>{reviewMapOpenCard.movements}</div>
 <div style={css(`font-size:11px; color:#8E96A3;`)}>Movement{reviewMapOpenCard.movements === 1 ? '' : 's'}</div>
@@ -4240,6 +4241,14 @@ NLH cycle: {schedNlhMonthLabel}
 <div>
 <div style={css(`font-size:22px; font-weight:700; color:#14171F;`)}>{reviewMapOpenCard.pctChanged}%</div>
 <div style={css(`font-size:11px; color:#8E96A3;`)}>Of DCs changed</div>
+</div>
+<div>
+<div style={css(`font-size:15px; font-weight:700; color:#14171F; margin-top:4px;`)}>{reviewMapDist.avgPre} {"→"} {reviewMapDist.avgPlan}</div>
+<div style={css(`font-size:11px; color:#8E96A3;`)}>Avg SC → DC distance (current → plan)</div>
+</div>
+<div>
+<div style={css(`font-size:15px; font-weight:700; color:#14171F; margin-top:4px;`)}>{reviewMapDist.wPre} {"→"} {reviewMapDist.wPlan}</div>
+<div style={css(`font-size:11px; color:#8E96A3;`)}>Volume-weighted distance (current → plan)</div>
 </div>
 </div>
 </div>
@@ -4254,120 +4263,91 @@ NLH cycle: {schedNlhMonthLabel}
     SC, or a collapsed "No changes" count. New unserved additions (no old SC) get their own
     section below, since they don't belong to any SC group. */}
 {(reviewMapTab === 'changes') ? (<>
+<div style={css(`display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px;`)}>
+<span style={css(`font-size:12.5px; color:#14171F;`)}><strong>{reviewMapDecidedCount}</strong> of <strong>{reviewMapNeedCount}</strong> decided</span>
+<span style={css(`font-size:11.5px; color:#8E96A3;`)}>Grouped by the SC gaining each DC</span>
+<span style={css(`margin-left:auto; display:inline-flex; gap:6px;`)}>
+<button onClick={onReviewMapAcceptAll} style={css(`height:30px; padding:0 12px; border:1px solid #128A3E; background:#fff; color:#128A3E; font-family:inherit; font-size:12px; font-weight:700; border-radius:7px; cursor:pointer;`)}>Accept all</button>
+<button onClick={onReviewMapRejectAll} style={css(`height:30px; padding:0 12px; border:1px solid #D14B4B; background:#fff; color:#D14B4B; font-family:inherit; font-size:12px; font-weight:700; border-radius:7px; cursor:pointer;`)}>Reject all</button>
+<button onClick={onReviewMapReset} style={css(`height:30px; padding:0 12px; border:1px solid #E6EBF2; background:#fff; color:#5A5E66; font-family:inherit; font-size:12px; font-weight:600; border-radius:7px; cursor:pointer;`)}>Reset</button>
+</span>
+</div>
 <div style={css(`display:flex; flex-direction:column; gap:14px;`)}>
-{(reviewMapScSections || []).map((sec, __iRms) => (<React.Fragment key={__iRms}>
+{(reviewMapGainSections || []).map((sec, __iRgs) => (<React.Fragment key={__iRgs}>
 <div style={css(`border:1px solid #E6EBF2; border-radius:8px; overflow:hidden;`)}>
-<div style={css(`display:flex; align-items:center; gap:12px; padding:10px 14px; background:#F7F9FC; border-bottom:1px solid #E6EBF2;`)}>
-<span style={css(`font-size:13px; font-weight:700; color:#14171F;`)}>{sec.code}</span>
-<span style={css(`font-size:10px; color:#5A5E66;`)}>Vol {sec.preVolPct == null ? '—' : sec.preVolPct + '%'} {"→"} {sec.postVolPct == null ? '—' : sec.postVolPct + '%'} · Sort {sec.preSortPct == null ? '—' : sec.preSortPct + '%'} {"→"} {sec.postSortPct == null ? '—' : sec.postSortPct + '%'}</span>
-{(sec.movingOut.length > 0) ? (<><span style={css(`font-size:11px; color:#D14B4B;`)}>Moving out {sec.movingOut.length}</span></>) : null}
-{(sec.newArrivals.length > 0) ? (<><span style={css(`font-size:11px; color:#128A3E;`)}>New arrivals {sec.newArrivals.length}</span></>) : null}
-{(sec.movingIn.length > 0) ? (<><span style={css(`font-size:11px; color:#128A3E;`)}>Moving in {sec.movingIn.length}</span></>) : null}
-{(sec.atRisk.length > 0) ? (<><span style={css(`font-size:11px; color:#C77B00;`)}>At risk {sec.atRisk.length}</span></>) : null}
-<span style={css(`font-size:11px; color:#8E96A3; margin-left:auto;`)}>{sec.unchangedCount} no change</span>
+<div style={css(`display:flex; align-items:center; gap:12px; flex-wrap:wrap; padding:10px 14px; background:#F7F9FC; border-bottom:1px solid #E6EBF2;`)}>
+<span style={css(`font-size:13px; font-weight:700; color:#14171F;`)}>{sec.code} gains {sec.count} DC{sec.count === 1 ? '' : 's'}</span>
+<span style={css(`font-size:11px; color:#5A5E66;`)}>{sec.fromOther} from other SCs · {sec.fromNew} new · keeps {sec.keeps}</span>
+<span style={css(`font-size:11px; color:#5A5E66;`)}>Vol util {sec.volPre} {"→"} <span style={css(`color:${sec.volPostFg}; font-weight:600;`)}>{sec.volPost}</span></span>
+{(sec.hasRows) ? (<><span style={css(`margin-left:auto; display:inline-flex; gap:6px;`)}><button onClick={sec.onAcceptSc} style={css(`height:26px; padding:0 10px; border:1px solid #128A3E; background:#fff; color:#128A3E; font-family:inherit; font-size:11px; font-weight:700; border-radius:6px; cursor:pointer;`)}>Accept all</button><button onClick={sec.onRejectSc} style={css(`height:26px; padding:0 10px; border:1px solid #D14B4B; background:#fff; color:#D14B4B; font-family:inherit; font-size:11px; font-weight:700; border-radius:6px; cursor:pointer;`)}>Reject all</button></span></>) : null}
 </div>
-{(sec.movingOut.length === 0 && sec.movingIn.length === 0 && sec.atRisk.length === 0 && sec.newArrivals.length === 0) ? (<>
-<div style={css(`padding:14px; text-align:center; color:#8E96A3; font-size:12px;`)}>Nothing proposed to change for this SC.</div>
-</>) : (<>
-<div style={css(`display:grid; grid-template-columns:0.9fr 0.85fr 0.8fr 75px 75px 1.1fr 140px; padding:7px 14px; font-size:9.5px; font-weight:700; color:#8E96A3; letter-spacing:0.03em;`)}>
-<div>DC</div><div>DIRECTION</div><div>COUNTERPART SC</div><div style={css(`text-align:right;`)}>DIST OLD</div><div style={css(`text-align:right;`)}>DIST NEW</div><div>REMARK</div><div style={css(`text-align:center;`)}>DECISION</div>
+{(sec.hasRows) ? (<>
+<div style={css(`overflow-x:auto;`)}>
+<div style={css(`min-width:900px;`)}>
+<div style={css(`display:grid; grid-template-columns:110px 130px 70px 90px 90px 100px minmax(140px,1fr) 150px;`)}>
+<div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>DC CODE</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>MOVEMENT FLAG</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>NEW SC</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>DIST OLD</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>DIST NEW</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)} title={"New − Old. Negative (green) = shorter; positive (red) = longer"}>DIST DELTA</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>OPTIONAL REMARKS</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>DECISION</div>
 </div>
-{(sec.movingOut || []).map((r, __iRmo) => (<React.Fragment key={'o' + __iRmo}>
-<div style={css(`display:grid; grid-template-columns:0.9fr 0.85fr 0.8fr 75px 75px 1.1fr 140px; padding:8px 14px; border-top:1px solid #EEF1F6; align-items:center;`)}>
-<div style={css(`font-size:12.5px; font-weight:600; color:#14171F;`)}>{r.code}</div>
-<div style={css(`font-size:11px; color:#D14B4B;`)}>Moving out</div>
-<div style={css(`font-size:12px; color:#14171F;`)}>{r.newSc}</div>
-<div style={css(`font-size:11.5px; text-align:right; color:#5A5E66; font-variant-numeric:tabular-nums;`)}>{r.distOldLabel}</div>
-<div style={css(`font-size:11.5px; text-align:right; color:#14171F; font-variant-numeric:tabular-nums;`)}>{r.distNewLabel}</div>
-<input value={r.remark} onInput={r.onRemark} placeholder={"Optional remark"} style={css(`height:26px; border:1px solid #E6EBF2; border-radius:6px; padding:0 8px; font-family:inherit; font-size:11.5px; box-sizing:border-box;`)} />
-<div style={css(`display:flex; gap:4px; justify-content:center;`)}>
-<button onClick={r.onAccept} title={"Accept"} style={css(`width:26px; height:26px; border:1px solid ${r.decision === 'Accept' ? '#128A3E' : '#E6EBF2'}; background:${r.decision === 'Accept' ? '#E7F4EC' : '#fff'}; border-radius:6px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#128A3E;`)}><svg width={"12"} height={"12"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2.2"}><path d={"M20 6L9 17l-5-5"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg></button>
-<button onClick={r.onReject} title={"Reject"} style={css(`width:26px; height:26px; border:1px solid ${r.decision === 'Reject' ? '#D14B4B' : '#E6EBF2'}; background:${r.decision === 'Reject' ? '#FBEAEA' : '#fff'}; border-radius:6px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#D14B4B;`)}><svg width={"12"} height={"12"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M6 6l12 12M18 6L6 18"} strokeLinecap={"round"} /></svg></button>
+{(sec.rows || []).map((r, __iRgr) => (<React.Fragment key={__iRgr}>
+<div style={css(`display:grid; grid-template-columns:110px 130px 70px 90px 90px 100px minmax(140px,1fr) 150px; align-items:center; border-top:1px solid #F2F5FA;`)}>
+<div style={css(`padding:7px 10px; font-size:12px; font-weight:600; color:#14171F;`)}>{r.code}</div>
+<div style={css(`padding:7px 10px;`)}><span style={css(`padding:2px 8px; border-radius:999px; font-size:10.5px; font-weight:600; background:${r.flagBg}; color:${r.flagFg}; white-space:nowrap;`)}>{r.flag}</span></div>
+<div style={css(`padding:7px 10px; font-size:12px; font-weight:600; color:#1F6F5C;`)}>{r.newSc}</div>
+<div style={css(`padding:7px 10px; font-size:12px; text-align:right; color:#5A5E66; font-variant-numeric:tabular-nums;`)}>{r.distOld}</div>
+<div style={css(`padding:7px 10px; font-size:12px; text-align:right; color:#14171F; font-variant-numeric:tabular-nums;`)}>{r.distNew}</div>
+<div style={css(`padding:7px 10px; font-size:12px; text-align:right; font-weight:700; color:${r.deltaFg}; font-variant-numeric:tabular-nums;`)}>{r.delta}</div>
+<div style={css(`padding:5px 10px;`)}><input value={r.remark} onInput={r.onRemark} placeholder={"Optional"} aria-label={"Remark for " + r.code} style={css(`width:100%; height:28px; border:1px solid #E6EBF2; border-radius:6px; padding:0 8px; font-family:inherit; font-size:11.5px; box-sizing:border-box;`)} /></div>
+<div style={css(`padding:5px 10px; display:flex; gap:4px;`)}>
+<button onClick={r.onAccept} style={css(`height:28px; padding:0 10px; border:1px solid ${r.aBd}; background:${r.aBg}; color:${r.aFg}; font-family:inherit; font-size:11px; font-weight:700; border-radius:6px; cursor:pointer;`)}>Accept</button>
+<button onClick={r.onReject} style={css(`height:28px; padding:0 10px; border:1px solid ${r.rBd}; background:${r.rBg}; color:${r.rFg}; font-family:inherit; font-size:11px; font-weight:700; border-radius:6px; cursor:pointer;`)}>Reject</button>
 </div>
 </div>
 </React.Fragment>))}
-{(sec.newArrivals || []).map((r, __iRmn) => (<React.Fragment key={'n' + __iRmn}>
-<div style={css(`display:grid; grid-template-columns:0.9fr 0.85fr 0.8fr 75px 75px 1.1fr 140px; padding:8px 14px; border-top:1px solid #EEF1F6; align-items:center;`)}>
-<div style={css(`font-size:12.5px; font-weight:600; color:#14171F;`)}>{r.code}</div>
-<div style={css(`font-size:11px; color:#128A3E;`)}>New arrival</div>
-<div style={css(`font-size:12px; color:#8E96A3;`)}>{"— (new DC)"}</div>
-<div style={css(`font-size:11.5px; text-align:right; color:#5A5E66; font-variant-numeric:tabular-nums;`)}>{r.distOldLabel}</div>
-<div style={css(`font-size:11.5px; text-align:right; color:#14171F; font-variant-numeric:tabular-nums;`)}>{r.distNewLabel}</div>
-<input value={r.remark} onInput={r.onRemark} placeholder={"Optional remark"} style={css(`height:26px; border:1px solid #E6EBF2; border-radius:6px; padding:0 8px; font-family:inherit; font-size:11.5px; box-sizing:border-box;`)} />
-<div style={css(`display:flex; gap:4px; justify-content:center;`)}>
-<button onClick={r.onAccept} title={"Accept"} style={css(`width:26px; height:26px; border:1px solid ${r.decision === 'Accept' ? '#128A3E' : '#E6EBF2'}; background:${r.decision === 'Accept' ? '#E7F4EC' : '#fff'}; border-radius:6px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#128A3E;`)}><svg width={"12"} height={"12"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2.2"}><path d={"M20 6L9 17l-5-5"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg></button>
-<button onClick={r.onReject} title={"Reject"} style={css(`width:26px; height:26px; border:1px solid ${r.decision === 'Reject' ? '#D14B4B' : '#E6EBF2'}; background:${r.decision === 'Reject' ? '#FBEAEA' : '#fff'}; border-radius:6px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#D14B4B;`)}><svg width={"12"} height={"12"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M6 6l12 12M18 6L6 18"} strokeLinecap={"round"} /></svg></button>
 </div>
+</div>
+</>) : (<><div style={css(`padding:12px 14px; font-size:12px; color:#8E96A3;`)}>No DCs move into {sec.code} in this plan.</div></>)}
 </div>
 </React.Fragment>))}
-{(sec.atRisk || []).map((r, __iRma) => (<React.Fragment key={'a' + __iRma}>
-<div style={css(`display:grid; grid-template-columns:0.9fr 0.85fr 0.8fr 75px 75px 1.1fr 140px; padding:8px 14px; border-top:1px solid #EEF1F6; align-items:center; background:#FFFBF3;`)}>
-<div style={css(`font-size:12.5px; font-weight:600; color:#14171F;`)}>{r.code}</div>
-<div style={css(`font-size:11px; color:#C77B00;`)}>At risk — unserved</div>
-<div style={css(`font-size:12px; color:#8E96A3;`)}>{"—"}</div>
-<div style={css(`font-size:11.5px; text-align:right; color:#8E96A3;`)}>{"—"}</div>
-<div style={css(`font-size:11.5px; text-align:right; color:#8E96A3;`)}>{"—"}</div>
-<input value={r.remark} onInput={r.onRemark} placeholder={"Optional remark"} style={css(`height:26px; border:1px solid #E6EBF2; border-radius:6px; padding:0 8px; font-family:inherit; font-size:11.5px; box-sizing:border-box;`)} />
-<div style={css(`display:flex; justify-content:center;`)}>
-<button onClick={r.onKeepOldSc} style={css(`height:26px; padding:0 10px; border:1px solid ${r.decision === 'KeepOldSc' ? reviewMapAccent : '#E6EBF2'}; background:${r.decision === 'KeepOldSc' ? '#EAF3EF' : '#fff'}; color:${r.decision === 'KeepOldSc' ? reviewMapAccent : '#5A5E66'}; font-family:inherit; font-size:10.5px; font-weight:600; border-radius:6px; cursor:pointer; white-space:nowrap;`)}>Keep on Old SC</button>
-</div>
-</div>
-</React.Fragment>))}
-{(sec.movingIn || []).map((r, __iRmi) => (<React.Fragment key={'i' + __iRmi}>
-<div style={css(`display:grid; grid-template-columns:0.9fr 0.85fr 0.8fr 75px 75px 1.1fr 140px; padding:8px 14px; border-top:1px solid #EEF1F6; align-items:center; opacity:0.85;`)}>
-<div style={css(`font-size:12.5px; font-weight:600; color:#14171F;`)}>{r.code}</div>
-<div style={css(`font-size:11px; color:#128A3E;`)}>Moving in</div>
-<div style={css(`font-size:12px; color:#14171F;`)}>{r.oldSc}</div>
-<div style={css(`font-size:11.5px; text-align:right; color:#8E96A3;`)}>{"—"}</div>
-<div style={css(`font-size:11.5px; text-align:right; color:#8E96A3;`)}>{"—"}</div>
-<div style={css(`font-size:11.5px; color:#8E96A3; font-style:italic;`)}>{r.remark || '—'}</div>
-<div style={css(`text-align:center;`)}><span style={css(`padding:2px 8px; border-radius:999px; font-size:10px; font-weight:600; background:${r.decisionLabel === 'Accept' ? '#E7F4EC' : (r.decisionLabel === 'Reject' ? '#FBEAEA' : '#F7F9FC')}; color:${r.decisionLabel === 'Accept' ? '#128A3E' : (r.decisionLabel === 'Reject' ? '#D14B4B' : '#8E96A3')};`)}>{r.decisionLabel} (decided under {r.oldSc})</span></div>
-</div>
-</React.Fragment>))}
-</>)}
-{(sec.unchangedCount > 0) ? (<>
-<div style={css(`border-top:1px solid #EEF1F6;`)}>
-<button onClick={sec.onToggleUnchanged} style={css(`width:100%; text-align:left; padding:8px 14px; border:none; background:transparent; cursor:pointer; font-family:inherit; font-size:11.5px; color:#5A5E66; display:flex; align-items:center; gap:6px;`)}>
-<svg width={"11"} height={"11"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2.4"} style={css(`transform:rotate(${sec.expanded ? '90deg' : '0deg'}); transition:transform 120ms;`)}><path d={"M9 6l6 6-6 6"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg>
-{sec.unchangedCount} DC{sec.unchangedCount === 1 ? '' : 's'} with no change {sec.expanded ? '(hide)' : '(show)'}
-</button>
-{(sec.expanded) ? (<><div style={css(`padding:6px 14px 10px; display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:2px 10px;`)}>{(sec.unchangedCodes || []).map((code, __iUc) => (<React.Fragment key={__iUc}><div style={css(`font-size:11.5px; color:#5A5E66; padding:2px 0; font-variant-numeric:tabular-nums;`)}>{code}</div></React.Fragment>))}</div></>) : null}
-</div>
-</>) : null}
-</div>
-</React.Fragment>))}
-{(reviewMapUnservedNew.length > 0) ? (<>
+{(reviewMapHasDrops) ? (<>
 <div style={css(`border:1px solid #F3D9A0; border-radius:8px; overflow:hidden;`)}>
-<div style={css(`padding:10px 14px; background:#FBF1DF; font-size:13px; font-weight:700; color:#C77B00;`)}>Unserved — new additions ({reviewMapUnservedNew.length})</div>
-<div style={css(`padding:10px 14px; font-size:11.5px; color:#5A5E66; line-height:1.7; word-break:break-word;`)}>{reviewMapUnservedNew.join(', ')} — no prior SC and no capacity to place them; flagged only, no action available here.</div>
-</div>
-</>) : null}
-</div>
-</>) : null}
-{/* View 2 — SC Pivot Summary */}
-{(reviewMapTab === 'pivot') ? (<>
-<div style={css(`border:1px solid #E6EBF2; border-radius:8px; overflow:hidden; margin-bottom:14px;`)}>
-<div style={css(`display:grid; grid-template-columns:1fr 90px 90px 90px 90px 90px; background:#F7F9FC; padding:8px 12px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em;`)}>
-<div>SC</div><div style={css(`text-align:right;`)}>TOTAL</div><div style={css(`text-align:right;`)}>UNCHANGED</div><div style={css(`text-align:right;`)}>REMOVED</div><div style={css(`text-align:right;`)}>ADDED</div><div style={css(`text-align:right;`)}>UNSERVED</div>
-</div>
-{(reviewMapPivotRows || []).map((p, __iRmp) => (<React.Fragment key={__iRmp}>
-<div style={css(`display:grid; grid-template-columns:1fr 90px 90px 90px 90px 90px; padding:9px 12px; border-top:1px solid #EEF1F6; align-items:center;`)}>
-<div style={css(`font-size:12.5px; font-weight:600; color:#14171F;`)}>{p.code}</div>
-<div style={css(`font-size:12px; text-align:right; font-weight:700; color:#14171F;`)}>{p.total}</div>
-<div style={css(`font-size:12px; text-align:right; color:#5A5E66;`)}>{p.unchanged}</div>
-<div style={css(`font-size:12px; text-align:right; color:#D14B4B;`)}>{p.removed}</div>
-<div style={css(`font-size:12px; text-align:right; color:#128A3E;`)}>{p.added}</div>
-<div style={css(`font-size:12px; text-align:right; color:${p.unserved > 0 ? '#C77B00' : '#C3C9D4'};`)}>{p.unserved}</div>
+<div style={css(`padding:10px 14px; background:#FBF1DF; font-size:13px; font-weight:700; color:#9A5E00;`)}>Not placed — {reviewMapDropRows.length} DC{reviewMapDropRows.length === 1 ? '' : 's'} (no SC with capacity within the Ideal &lt;&gt; Actual SC Delta)</div>
+{(reviewMapDropRows || []).map((r, __iRdr) => (<React.Fragment key={__iRdr}>
+<div style={css(`display:grid; grid-template-columns:110px 190px 90px minmax(180px,1.2fr) minmax(140px,1fr) 150px; align-items:center; border-top:1px solid #F7EAD0;`)}>
+<div style={css(`padding:7px 10px; font-size:12px; font-weight:600; color:#14171F;`)}>{r.code}</div>
+<div style={css(`padding:7px 10px;`)}><span style={css(`padding:2px 8px; border-radius:999px; font-size:10.5px; font-weight:600; background:#FBF1DF; color:#9A5E00; white-space:nowrap;`)}>{r.flag}</span></div>
+<div style={css(`padding:7px 10px; font-size:12px; text-align:right; color:#5A5E66;`)}>{r.distOld}</div>
+<div style={css(`padding:7px 10px; font-size:11.5px; color:#5A5E66;`)}>{r.reason}</div>
+<div style={css(`padding:5px 10px;`)}>{(r.canKeep) ? (<><input value={r.remark} onInput={r.onRemark} placeholder={"Optional"} aria-label={"Remark for " + r.code} style={css(`width:100%; height:28px; border:1px solid #E6EBF2; border-radius:6px; padding:0 8px; font-family:inherit; font-size:11.5px; box-sizing:border-box;`)} /></>) : null}</div>
+<div style={css(`padding:5px 10px;`)}>{(r.canKeep) ? (<><button onClick={r.onKeep} style={css(`height:28px; padding:0 10px; border:1px solid #1F6F5C; background:${r.keepBg}; color:${r.keepFg}; font-family:inherit; font-size:11px; font-weight:700; border-radius:6px; cursor:pointer; white-space:nowrap;`)}>{r.keepLabel}</button></>) : (<><span style={css(`font-size:11px; color:#8E96A3;`)}>Flag only</span></>)}</div>
 </div>
 </React.Fragment>))}
 </div>
-<div style={css(`display:flex; align-items:center; gap:18px; padding:12px 14px; background:#F7F9FC; border-radius:8px; font-size:12px;`)}>
-<span style={css(`font-weight:700; color:#14171F;`)}>Plan overall</span>
-<span>Total <strong>{reviewMapOverallTotals.total}</strong></span>
-<span>Unchanged <strong>{reviewMapOverallTotals.unchanged}</strong></span>
-<span>Removed <strong>{reviewMapOverallTotals.removed}</strong></span>
-<span>Added <strong>{reviewMapOverallTotals.added}</strong></span>
-<span style={css(`color:${reviewMapOverallUnserved > 0 ? '#C77B00' : '#8E96A3'};`)}>Unserved <strong>{reviewMapOverallUnserved}</strong></span>
+</>) : null}
+</div>
+</>) : null}
+{/* View 2 — SC Pivot Summary (V4.0 2026-10-22: volume + sort utilisation and distances, current → post) */}
+{(reviewMapTab === 'pivot') ? (<>
+<div style={css(`font-size:11.5px; color:#8E96A3; margin-bottom:8px;`)}>Current = today’s mapping · Post = your decisions, undecided DCs counted as proposed · Sort utilisation = DCs ÷ Sort Capacity</div>
+<div style={css(`border:1px solid #E6EBF2; border-radius:8px; overflow-x:auto; margin-bottom:14px;`)}>
+<div style={css(`min-width:1080px;`)}>
+<div style={css(`display:grid; grid-template-columns:70px 80px 60px 60px 140px 80px 110px 70px 110px 150px 150px;`)}>
+<div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>SC</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>DCs</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>ADDED</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>REMOVED</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>VOLUME</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>VOL CAP</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>VOL UTIL</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>SORT CAP</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>SORT UTIL</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>AVG DISTANCE</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>VOL-WTD DISTANCE</div>
+</div>
+{(reviewMapPivot2 || []).map((p, __iRp2) => (<React.Fragment key={__iRp2}>
+<div style={css(`display:grid; grid-template-columns:70px 80px 60px 60px 140px 80px 110px 70px 110px 150px 150px; align-items:center; border-top:1px solid #EEF1F6; font-size:12px; font-variant-numeric:tabular-nums;`)}>
+<div style={css(`padding:8px 10px; font-weight:700; color:#14171F;`)}>{p.code}</div>
+<div style={css(`padding:8px 10px; text-align:right;`)}>{p.dcPre} {"→"} <strong>{p.dcPost}</strong></div>
+<div style={css(`padding:8px 10px; text-align:right; color:#128A3E;`)}>+{p.added}</div>
+<div style={css(`padding:8px 10px; text-align:right; color:#D14B4B;`)}>{"−"}{p.removed}</div>
+<div style={css(`padding:8px 10px; text-align:right;`)}>{p.volPre} {"→"} <strong>{p.volPost}</strong></div>
+<div style={css(`padding:8px 10px; text-align:right; color:#5A5E66;`)}>{p.volCap}</div>
+<div style={css(`padding:8px 10px; text-align:right;`)}><span style={css(`color:${p.vuPreFg};`)}>{p.vuPre}</span> {"→"} <strong style={css(`color:${p.vuPostFg};`)}>{p.vuPost}</strong></div>
+<div style={css(`padding:8px 10px; text-align:right; color:#5A5E66;`)}>{p.sortCap}</div>
+<div style={css(`padding:8px 10px; text-align:right;`)}><span style={css(`color:${p.suPreFg};`)}>{p.suPre}</span> {"→"} <strong style={css(`color:${p.suPostFg};`)}>{p.suPost}</strong></div>
+<div style={css(`padding:8px 10px; text-align:right;`)}>{p.avgPre} {"→"} <strong>{p.avgPost}</strong></div>
+<div style={css(`padding:8px 10px; text-align:right;`)}>{p.wPre} {"→"} <strong>{p.wPost}</strong></div>
+</div>
+</React.Fragment>))}
+</div>
 </div>
 </>) : null}
 <div style={css(`display:flex; justify-content:flex-end; margin-top:20px;`)}>
@@ -7213,19 +7193,52 @@ No changes ({c.noChangeCount}) {c.expanded ? '(hide)' : '(show)'}
 </div>
 <div style={css(`font-size:12px; color:#5A5E66; margin-bottom:12px;`)}>{mapViewSummary}</div>
 <div style={css(`border:1px solid #E6EBF2; border-radius:10px; background:#F7F9FC; overflow:hidden;`)}>
-<svg viewBox={"0 0 " + mapViewW + " " + mapViewH} style={css(`width:100%; height:auto; display:block;`)} role={"img"} aria-label={"Selected SCs with mapped DCs as lines and unmapped DCs as points"}>
-{(mapViewLines || []).map((ln, __iMvl) => (<React.Fragment key={__iMvl}><line x1={ln.x1} y1={ln.y1} x2={ln.x2} y2={ln.y2} stroke={ln.stroke} strokeWidth={"0.8"} strokeOpacity={"0.45"} /></React.Fragment>))}
-{(mapViewDcs || []).map((p, __iMvd) => (<React.Fragment key={__iMvd}><circle cx={p.x} cy={p.y} r={"2.4"} fill={p.fill}><title>{p.title}</title></circle></React.Fragment>))}
-{(mapViewUnmapped || []).map((p, __iMvu) => (<React.Fragment key={__iMvu}><rect x={p.x - 5} y={p.y - 5} width={"10"} height={"10"} transform={"rotate(45 " + p.x + " " + p.y + ")"} fill={"#FFF6E5"} stroke={"#C77B00"} strokeWidth={"2"}><title>{p.title}</title></rect></React.Fragment>))}
-{(mapViewScs || []).map((p, __iMvs) => (<React.Fragment key={__iMvs}><circle cx={p.x} cy={p.y} r={"9"} fill={"#fff"} stroke={p.stroke} strokeWidth={"3.5"}><title>{p.title}</title></circle><text x={p.x} y={p.y - 14} textAnchor={"middle"} fontSize={"12"} fontWeight={"700"} fill={"#14171F"} stroke={"#fff"} strokeWidth={"3"} paintOrder={"stroke"}>{p.code}</text></React.Fragment>))}
-<line x1={mapViewW - 24 - mapViewScalePx} y1={mapViewH - 18} x2={mapViewW - 24} y2={mapViewH - 18} stroke={"#5A5E66"} strokeWidth={"2"} />
-<text x={mapViewW - 24 - mapViewScalePx / 2} y={mapViewH - 24} textAnchor={"middle"} fontSize={"11"} fill={"#5A5E66"}>{mapViewScaleLabel}</text>
-</svg>
+<NdcSpokeMap m={mapViewM} label={"Selected SCs as sources with straight lines to their DCs"} />
 </div>
 <div style={css(`display:flex; flex-wrap:wrap; align-items:center; gap:8px 18px; margin-top:12px; font-size:12px; color:#14171F;`)}>
 {(mapViewLegend || []).map((lg, __iMvg) => (<React.Fragment key={__iMvg}><span style={css(`display:inline-flex; align-items:center; gap:6px;`)}><span style={css(`width:12px; height:12px; border-radius:50%; border:3px solid ${lg.color}; background:#fff;`)} />{lg.label}</span></React.Fragment>))}
 <span style={css(`display:inline-flex; align-items:center; gap:6px;`)}><span style={css(`width:9px; height:9px; transform:rotate(45deg); border:2px solid #C77B00; background:#FFF6E5;`)} />Unmapped DC</span>
-<span style={css(`color:#8E96A3;`)}>Lines join each DC to its current SC</span>
+<span style={css(`color:#8E96A3;`)}>Lines run from each SC to its current DCs · dashed outline = the SC’s span</span>
+</div>
+</div>
+</div>
+</>) : null}
+{(reviewMapSimOpen) ? (<>
+<div style={css(`position:fixed; inset:0; z-index:95; background:rgba(11,20,48,0.5); display:flex; align-items:center; justify-content:center; padding:20px;`)} onClick={onReviewMapSimClose}>
+<div style={css(`background:#fff; border-radius:14px; padding:20px 22px; width:100%; max-width:1180px; max-height:94vh; overflow:auto; box-shadow:0 20px 60px rgba(11,20,48,0.3);`)} onClick={(e) => e.stopPropagation()}>
+<div style={css(`display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:4px;`)}>
+<div style={css(`font-size:16px; font-weight:700; color:#14171F;`)}>Simulate — {reviewMapRunName}</div>
+<button onClick={onReviewMapSimClose} aria-label={"Close"} style={css(`width:30px; height:30px; border:1px solid #E6EBF2; border-radius:8px; background:#fff; cursor:pointer; color:#5A5E66; font-size:14px;`)}>✕</button>
+</div>
+<div style={css(`font-size:12px; color:#5A5E66; margin-bottom:14px;`)}>Before = the plan’s output · After = your decisions ({reviewMapSim.undecided} undecided DC{reviewMapSim.undecided === 1 ? '' : 's'} counted as proposed)</div>
+<div style={css(`display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-bottom:16px;`)}>
+{(reviewMapSim.cards || []).map((c, __iRsc) => (<React.Fragment key={__iRsc}>
+<div style={css(`border:1px solid #E6EBF2; border-radius:10px; padding:12px 14px;`)}>
+<div style={css(`font-size:10.5px; font-weight:700; color:#8E96A3; letter-spacing:0.04em; margin-bottom:6px;`)}>{c.label}</div>
+<div style={css(`display:flex; align-items:baseline; gap:10px; font-variant-numeric:tabular-nums;`)}><span style={css(`font-size:13px; color:#5A5E66;`)}>{c.before}</span><span style={css(`color:#C3C9D4;`)}>{"→"}</span><span style={css(`font-size:17px; font-weight:700; color:#14171F;`)}>{c.after}</span></div>
+<div style={css(`font-size:11.5px; font-weight:700; color:${c.deltaFg}; margin-top:3px;`)}>{c.delta}</div>
+</div>
+</React.Fragment>))}
+</div>
+<div style={css(`display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:10px;`)}>
+<div><div style={css(`font-size:11px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; margin-bottom:6px;`)}>BEFORE — PLAN OUTPUT</div><div style={css(`border:1px solid #E6EBF2; border-radius:10px; overflow:hidden;`)}><NdcSpokeMap m={reviewMapSim.mapBefore} label={"Before: plan output"} /></div></div>
+<div><div style={css(`font-size:11px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; margin-bottom:6px;`)}>AFTER — YOUR DECISIONS</div><div style={css(`border:1px solid #E6EBF2; border-radius:10px; overflow:hidden;`)}><NdcSpokeMap m={reviewMapSim.mapAfter} label={"After: your decisions"} /></div></div>
+</div>
+<div style={css(`display:flex; flex-wrap:wrap; gap:8px 16px; font-size:12px; color:#14171F; margin-bottom:14px;`)}>
+{(reviewMapSim.legend || []).map((lg, __iRsl) => (<React.Fragment key={__iRsl}><span style={css(`display:inline-flex; align-items:center; gap:6px;`)}><span style={css(`width:12px; height:12px; border-radius:50%; border:3px solid ${lg.color}; background:#fff;`)} />{lg.code}</span></React.Fragment>))}
+<span style={css(`color:#5A5E66;`)}>✕ unserved DC · dashed outline = SC span</span>
+</div>
+<div style={css(`border:1px solid #E6EBF2; border-radius:8px; overflow-x:auto;`)}>
+<div style={css(`display:grid; grid-template-columns:80px repeat(4, 1fr); min-width:640px;`)}>
+<div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>SC</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>DCs</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>VOL UTIL</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>SORT UTIL</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>VOL-WTD DISTANCE</div>
+{(reviewMapSim.rows || []).map((r, __iRsr) => (<React.Fragment key={__iRsr}>
+<div style={css(`padding:8px 10px; font-size:12px; font-weight:700; color:${r.color}; border-top:1px solid #EEF1F6;`)}>{r.code}</div>
+<div style={css(`padding:8px 10px; font-size:12px; text-align:right; border-top:1px solid #EEF1F6;`)}>{r.dcA} {"→"} <strong>{r.dcB}</strong></div>
+<div style={css(`padding:8px 10px; font-size:12px; text-align:right; border-top:1px solid #EEF1F6;`)}><span style={css(`color:${r.vuAFg};`)}>{r.vuA}</span> {"→"} <strong style={css(`color:${r.vuBFg};`)}>{r.vuB}</strong></div>
+<div style={css(`padding:8px 10px; font-size:12px; text-align:right; border-top:1px solid #EEF1F6;`)}><span style={css(`color:${r.suAFg};`)}>{r.suA}</span> {"→"} <strong style={css(`color:${r.suBFg};`)}>{r.suB}</strong></div>
+<div style={css(`padding:8px 10px; font-size:12px; text-align:right; border-top:1px solid #EEF1F6;`)}>{r.wA} {"→"} <strong>{r.wB}</strong></div>
+</React.Fragment>))}
+</div>
 </div>
 </div>
 </div>
@@ -7538,11 +7551,14 @@ function NDC_haversineKm(lat1, lng1, lat2, lng2) {
 // mapVolumeInfoForDcPure(dcCode, fileName, capacity) — 2026-09-16, extracted from the
 // NDCApp.prototype.mapVolumeInfoForDc method (which is now a thin wrapper around this) so seed
 // data can call it directly, before any component instance exists. Body/behavior unchanged.
-function mapVolumeInfoForDcPure(dcCode, fileName, capacity) {
+// baseVolume (V4.0 2026-10-22, #61): when given, planned volume = the home SC's average DC volume
+// ×0.75–1.25 (Route Planner's own per-DC basis, so a SC's DCs sum to roughly its planned volume and
+// compare sensibly with Vol Cap). Without it, the old capacity-based figure (≈10× Vol Cap in total).
+function mapVolumeInfoForDcPure(dcCode, fileName, capacity, baseVolume) {
   const key = (dcCode || '') + '::' + (fileName || '');
   let h = 0; for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) & 0x7fffffff;
   const hasVolume = (h % 7) !== 0;
-  const volumePlanned = hasVolume ? Math.round((capacity || 1000) * (0.55 + (h % 40) / 100)) : 0;
+  const volumePlanned = hasVolume ? Math.round(baseVolume != null ? baseVolume * (0.75 + (h % 50) / 100) : (capacity || 1000) * (0.55 + (h % 40) / 100)) : 0;
   return { hasVolume, volumePlanned };
 }
 
@@ -7557,54 +7573,120 @@ function mapVolumeInfoForDcPure(dcCode, fileName, capacity) {
 // this constraint used to be a silent, hardcoded rule with no way to turn it off; now each DC is
 // its own one-DC "group" instead of being grouped by shared pincode, so DCs at the same pincode
 // can land on different SCs independently, based purely on each DC's own nearest-SC distance.
+// SC-DC Mapping geography (V4.0 2026-10-22, decision #59). Demo DCs are stored at ~1/55 scale around
+// their home SC (NDC_haversineKm ×55 turns those offsets into road-like km for own-SC legs), while SC
+// positions are true scale. This module places each DC at its true distance by scaling its offset ×55
+// around its home SC, then uses plain km everywhere: own-SC distances match the rest of the app and
+// cross-SC distances become real. DCs with no home SC (unmapped additions) keep their stored position.
+function mapDcGeoPure(dc, scByCode) {
+  if (!dc || dc.lat == null || dc.lng == null || (+dc.lat === 0 && +dc.lng === 0)) return null;
+  const home = dc.lmscCode ? scByCode[dc.lmscCode] : null;
+  if (home && home.lat != null && home.lng != null) {
+    // True distance = the DC's stored road distance to its SC (distFromSc, = NDC_haversineKm's ×55
+    // figure), on a fixed bearing from the DC code (stored offsets only vary latitude, which would
+    // draw every SC's DCs as one straight column).
+    let km = +dc.distFromSc; if (!(km > 0)) km = NDC_haversineKm(+dc.lat, +dc.lng, +home.lat, +home.lng);
+    let h = 2166136261; const c = String(dc.code || ''); for (let i = 0; i < c.length; i++) { h ^= c.charCodeAt(i); h = Math.imul(h, 16777619); }
+    h ^= h >>> 16; h = Math.imul(h, 2246822507); h ^= h >>> 13; h = Math.imul(h, 3266489909); h ^= h >>> 16; // FNV-1a + avalanche
+    const b = (((h >>> 0) % 3600) / 10) * Math.PI / 180, lat0 = +home.lat;
+    return { lat: lat0 + (km / 111.32) * Math.cos(b), lng: +home.lng + (km / (111.32 * Math.cos(lat0 * Math.PI / 180))) * Math.sin(b) };
+  }
+  return { lat: +dc.lat, lng: +dc.lng };
+}
+// mapAvgDcVolumePure(data) — per-SC average DC volume (SC planned volume ÷ its DC count) and a network
+// average for DCs with no home SC. Feeds mapVolumeInfoForDcPure's baseVolume.
+function mapAvgDcVolumePure(data) {
+  const byCode = {}; let tv = 0, tn = 0;
+  (data.scs || []).forEach(s => { if (s.volume > 0 && s.dcCount > 0) { byCode[s.code] = s.volume / s.dcCount; tv += s.volume; tn += s.dcCount; } });
+  return { byCode, network: tn > 0 ? tv / tn : null };
+}
+function mapKmPure(a, b) {
+  if (!a || !b || a.lat == null || b.lat == null) return null;
+  return +(NDC_haversineKm(a.lat, a.lng, b.lat, b.lng) / 55).toFixed(1);
+}
+
+// computeMappingResultPure(data, run) — simulated SC-DC solve (rewritten V4.0 2026-10-22, #59–#60).
+// 1. Groups: DCs sharing a pincode form one group (Single Pin – Single SC), else one DC per group.
+// 2. Ideal SC = the selected SC with the least mean distance for the group.
+// 3. Capacity, two limits per SC: volume ≤ Vol Cap × Vol Util Max %, and DC count ≤ Sort Cap × Max Sort
+//    Cap Util % (Sort Capacity = DC sort destinations, as this module has always read it).
+// 4. Ideal SC full → next-best SC with room, but only if it is within Δ km (Ideal <> Actual SC Delta,
+//    params.tolerance) of the ideal distance; otherwise the group is left unserved / unmapped.
+// 5. New Node Addition on → DCs already mapped to a selected SC stay there (placed first, using
+//    capacity); only new DCs are assigned. Groups are placed most-to-lose first (largest gap between
+//    their best and second-best SC). ρ is still recorded, not used.
 function computeMappingResultPure(data, run) {
+  const scByCode = {}; (data.scs || []).forEach(s => { scByCode[s.code] = s; });
   const scs = (data.scs || []).filter(s => run.scCodes.indexOf(s.code) >= 0);
   const dcs = (data.lmdcs || []).filter(l => run.dcCodes.indexOf(l.code) >= 0);
   const RATE = NDC_costPerKmFor('TATA 407 / 10ft');
-  const singlePinSingleSc = !(run.params && run.params.singlePinSingleSc === false);
+  const params = run.params || {};
+  const singlePinSingleSc = params.singlePinSingleSc !== false;
+  const newNodeMode = !!params.newNodeAddition;
+  const delta = params.tolerance != null ? +params.tolerance : 50;
+  const scP = (code) => Object.assign({ volUtilMin: 0, volUtilMax: 100, sortCapUtilMax: 100 }, (run.scParams || {})[code]);
+  const capOf = {}, capN = {}; scs.forEach(s => {
+    const p = scP(s.code);
+    capOf[s.code] = s.volCap ? s.volCap * p.volUtilMax / 100 : Infinity;
+    capN[s.code] = s.sortCap ? Math.floor(s.sortCap * (p.sortCapUtilMax != null ? p.sortCapUtilMax : 100) / 100) : Infinity;
+  });
+  const geo = {}; dcs.forEach(dc => { geo[dc.code] = mapDcGeoPure(dc, scByCode); });
+  const avgV = mapAvgDcVolumePure(data);
+  const vol = {}; dcs.forEach(dc => {
+    const base = (dc.lmscCode && avgV.byCode[dc.lmscCode] != null) ? avgV.byCode[dc.lmscCode] : avgV.network;
+    const vp = run.volFileName ? mapVolumeInfoForDcPure(dc.code, run.volFileName, dc.capacity, base).volumePlanned : (base != null ? Math.round(base) : dc.capacity);
+    vol[dc.code] = dc.capacity > 0 ? (vp || 0) : 0; // no volume in the plan = 0 (was: fell back to DC capacity, ~10× real)
+  });
+  const kmTo = (code, scCode) => mapKmPure(geo[code], scByCode[scCode]);
   const groups = singlePinSingleSc
     ? groupDcsBySharedPincode(dcs.map(dc => ({ code: dc.code, pincodes: dc.pincodes || [] })))
-    : new Map(dcs.map(dc => [dc.code, dc.code])); // toggle off — every DC is its own group
-
+    : new Map(dcs.map(dc => [dc.code, dc.code]));
   const byGroup = {};
-  dcs.forEach(dc => { const g = groups.get(dc.code); byGroup[g] = byGroup[g] || []; byGroup[g].push(dc); });
-  // V4.0 2026-10-22 — New Node Addition mode: new nodes can go to any SC; DCs already mapped to a
-  // selected SC stay on it. A group with mapped members only considers those members' SCs, so a
-  // new DC sharing a pincode follows its mapped neighbour (Single Pin – Single SC still holds).
-  const newNodeMode = !!(run.params && run.params.newNodeAddition);
+  dcs.forEach(dc => { if (dc.capacity === 0 || !geo[dc.code]) return; const g = groups.get(dc.code); (byGroup[g] = byGroup[g] || []).push(dc); });
   const runScSet = {}; scs.forEach(s => { runScSet[s.code] = true; });
-  const pinnedScOf = (dc) => (newNodeMode && dc.lmscCode && dc.lmscCode !== 'Pending' && runScSet[dc.lmscCode]) ? dc.lmscCode : null;
-  const groupSuggestedSc = {};
-  Object.keys(byGroup).forEach(g => {
-    let best = null, bestSum = Infinity;
-    const pinned = {}; byGroup[g].forEach(dc => { const p = pinnedScOf(dc); if (p) pinned[p] = true; });
-    const candidates = Object.keys(pinned).length ? scs.filter(sc => pinned[sc.code]) : scs;
-    candidates.forEach(sc => {
-      const sum = byGroup[g].reduce((a, dc) => a + NDC_haversineKm(dc.lat, dc.lng, sc.lat, sc.lng), 0);
-      if (sum < bestSum) { bestSum = sum; best = sc.code; }
-    });
-    groupSuggestedSc[g] = best || scs[0].code;
+  const oldScOf = (dc) => (dc.lmscCode && dc.lmscCode !== 'Pending') ? dc.lmscCode : null;
+  const meanKm = (members, scCode) => members.reduce((a, dc) => a + (kmTo(dc.code, scCode) || 0), 0) / members.length;
+  const load = {}, loadN = {}; scs.forEach(s => { load[s.code] = 0; loadN[s.code] = 0; });
+  const assigned = {}, idealOf = {}, reasonOf = {};
+  const gInfo = Object.keys(byGroup).map(g => {
+    const members = byGroup[g];
+    const ranked = scs.filter(s => s.lat != null).map(s => ({ code: s.code, km: meanKm(members, s.code) })).sort((a, b) => a.km - b.km);
+    const pinned = {}; if (newNodeMode) members.forEach(dc => { const o = oldScOf(dc); if (o && runScSet[o]) pinned[o] = true; });
+    return { g, members, ranked, pinned: Object.keys(pinned), v: members.reduce((a, dc) => a + vol[dc.code], 0),
+      regret: ranked.length > 1 ? ranked[1].km - ranked[0].km : 0 };
   });
-
+  // pinned groups first (New Node Addition on): they stay, and use capacity
+  gInfo.filter(x => x.pinned.length).forEach(x => {
+    const tgt = x.ranked.find(r => x.pinned.indexOf(r.code) >= 0) || { code: x.pinned[0] };
+    idealOf[x.g] = x.ranked.length ? x.ranked[0].code : tgt.code; assigned[x.g] = tgt.code; load[tgt.code] += x.v; loadN[tgt.code] += x.members.length;
+  });
+  gInfo.filter(x => !x.pinned.length).sort((a, b) => b.regret - a.regret || (a.g < b.g ? -1 : 1)).forEach(x => {
+    if (!x.ranked.length) { reasonOf[x.g] = 'No location'; return; }
+    const ideal = x.ranked[0]; idealOf[x.g] = ideal.code;
+    const fits = (code) => load[code] + x.v <= capOf[code] && loadN[code] + x.members.length <= capN[code];
+    const pick = x.ranked.find(r => (r.km - ideal.km) <= delta && fits(r.code));
+    if (pick) { assigned[x.g] = pick.code; load[pick.code] += x.v; loadN[pick.code] += x.members.length; }
+    else reasonOf[x.g] = 'Ideal SC ' + ideal.code + ' is full and no other SC with room is within ' + delta + ' km of it';
+  });
   const dcRows = dcs.map(dc => {
-    const oldSc = dc.lmscCode && dc.lmscCode !== 'Pending' ? dc.lmscCode : null;
-    const isUnserved = dc.capacity === 0;
-    const newSc = isUnserved ? null : (pinnedScOf(dc) || groupSuggestedSc[groups.get(dc.code)]);
+    const oldSc = oldScOf(dc); const g = groups.get(dc.code);
+    const zeroCap = dc.capacity === 0, noGeo = !geo[dc.code];
+    // New Node Addition on: a DC already on a selected SC never moves, even inside a mixed pincode group.
+    const newSc = (zeroCap || noGeo) ? null : ((newNodeMode && oldSc && runScSet[oldSc]) ? oldSc : (assigned[g] || null));
+    const isUnserved = !newSc;
     const isUnchanged = !isUnserved && oldSc === newSc;
     const needsDecision = !isUnchanged && !(isUnserved && oldSc === null);
-    const volPlanned = run.volFileName ? mapVolumeInfoForDcPure(dc.code, run.volFileName, dc.capacity).volumePlanned : dc.capacity;
-    return { code: dc.code, oldSc, newSc, volume: dc.capacity > 0 ? (volPlanned || dc.capacity) : 0, isUnserved, isUnchanged, needsDecision };
+    const distOld = oldSc ? kmTo(dc.code, oldSc) : null, distNew = newSc ? kmTo(dc.code, newSc) : null;
+    return { code: dc.code, oldSc, newSc, idealSc: idealOf[g] || null, volume: vol[dc.code], distOld, distNew,
+      isUnserved, isUnchanged, needsDecision,
+      unservedReason: isUnserved ? (zeroCap ? 'Zero capacity' : (noGeo ? 'No location on file' : (reasonOf[g] || 'Not placed'))) : null };
   });
 
   const lanesMap = {};
   let totalCost = 0, totalVolume = 0;
   const perScAgg = {}; scs.forEach(sc => { perScAgg[sc.code] = { code: sc.code, dcsServed: 0, cost: 0, volume: 0 }; });
-
   dcRows.filter(r => !r.isUnserved).forEach(r => {
-    const dc = dcs.find(x => x.code === r.code);
-    const targetScObj = scs.find(s => s.code === r.newSc);
-    const dist = targetScObj ? NDC_haversineKm(dc.lat, dc.lng, targetScObj.lat, targetScObj.lng) : 0;
-    const cost = +(dist * RATE).toFixed(2);
+    const cost = +((r.distNew || 0) * RATE).toFixed(2);
     totalCost += cost; totalVolume += r.volume;
     if (perScAgg[r.newSc]) { perScAgg[r.newSc].dcsServed++; perScAgg[r.newSc].cost += cost; perScAgg[r.newSc].volume += r.volume; }
     if (r.isUnchanged) return;
@@ -7612,36 +7694,78 @@ function computeMappingResultPure(data, run) {
     lanesMap[laneKey] = lanesMap[laneKey] || { laneKey, fromSc: r.oldSc || '—', toSc: r.newSc, dcCodes: [], dcCount: 0, volume: 0, cost: 0, groupId: groups.get(r.code) };
     lanesMap[laneKey].dcCodes.push(r.code); lanesMap[laneKey].dcCount++; lanesMap[laneKey].volume += r.volume; lanesMap[laneKey].cost += cost;
   });
-
-  const unservedDcs = dcRows.filter(r => r.isUnserved).map(r => ({
-    code: r.code, priorSc: r.oldSc,
-    reason: r.oldSc ? 'Zero capacity — solver could not re-place this DC' : 'Zero capacity — solver could not place this new DC',
-  }));
-
+  const unservedDcs = dcRows.filter(r => r.isUnserved).map(r => ({ code: r.code, priorSc: r.oldSc, reason: r.unservedReason }));
   let baselineCost = 0, baselineVolume = 0;
-  dcRows.filter(r => !r.isUnserved && r.oldSc).forEach(r => {
-    const dc = dcs.find(x => x.code === r.code);
-    const curScObj = (data.scs || []).find(s => s.code === r.oldSc);
-    if (!curScObj) return;
-    baselineCost += NDC_haversineKm(dc.lat, dc.lng, curScObj.lat, curScObj.lng) * RATE;
-    baselineVolume += r.volume;
-  });
-
+  dcRows.filter(r => r.oldSc && r.distOld != null && r.volume > 0).forEach(r => { baselineCost += r.distOld * RATE; baselineVolume += r.volume; });
   const h = run.id.split('').reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 0);
   const lanes = Object.values(lanesMap).sort((a, b) => b.dcCount - a.dcCount);
   const cps = totalVolume > 0 ? +(totalCost / totalVolume).toFixed(3) : 0;
   const baselineCps = baselineVolume > 0 ? +(baselineCost / baselineVolume).toFixed(3) : 0;
-
   return {
     solveTimeSeconds: 4 + (h % 40),
     totalCost: +totalCost.toFixed(2), totalVolume, cps, baselineCps,
     cpsDeltaPct: baselineCps > 0 ? +(((cps - baselineCps) / baselineCps) * 100).toFixed(1) : 0,
     perSc: Object.values(perScAgg).map(p => Object.assign({}, p, {
-      cost: +p.cost.toFixed(2), utilisationPct: Math.min(100, Math.round((p.volume / Math.max(1, ((data.scs || []).find(s => s.code === p.code) || {}).volCap || 1)) * 100)),
+      cost: +p.cost.toFixed(2), utilisationPct: Math.min(100, Math.round((p.volume / Math.max(1, (scByCode[p.code] || {}).volCap || 1)) * 100)),
+      capacity: capOf[p.code] === Infinity ? null : Math.round(capOf[p.code]), dcCapacity: capN[p.code] === Infinity ? null : capN[p.code],
       vehiclesUsed: Math.max(1, Math.ceil(p.volume / 2000)),
     })),
-    lanes, unservedDcs, dcRows,
+    lanes, unservedDcs, dcRows, delta,
   };
+}
+
+// ndcSpokeMapPure(o) — V4.0 2026-10-22. Builds an SC-as-source spoke map: each SC with straight lines
+// to its DCs, a light hull per SC (its span — overlap between hulls is overlap between SCs), unmapped
+// DCs as diamonds and dropped DCs as crosses. o = { scs:[{code,name,lat,lng,color}], dcs:[{code,lat,
+// lng,sc,title}], unmapped:[...], dropped:[...], fit?:[{lat,lng}], w, h }. Equirectangular, fitted.
+function ndcSpokeMapPure(o) {
+  const w = o.w || 940, h = o.h || 560, pad = 36;
+  const m = { w, h, hulls: [], lines: [], dcs: [], unmapped: [], dropped: [], scs: [], scalePx: 0, scaleLabel: '' };
+  const ok = (p) => p && p.lat != null && p.lng != null && isFinite(p.lat) && isFinite(p.lng);
+  const pts = (o.fit || [].concat(o.scs || [], o.dcs || [], o.unmapped || [], o.dropped || [])).filter(ok);
+  if (!pts.length) return m;
+  const minLat = Math.min.apply(null, pts.map(p => p.lat)), maxLat = Math.max.apply(null, pts.map(p => p.lat));
+  const minLng = Math.min.apply(null, pts.map(p => p.lng)), maxLng = Math.max.apply(null, pts.map(p => p.lng));
+  const kx = Math.cos(((minLat + maxLat) / 2) * Math.PI / 180);
+  const spanX = Math.max(0.02, (maxLng - minLng) * kx), spanY = Math.max(0.02, maxLat - minLat);
+  const sc = Math.min((w - 2 * pad) / spanX, (h - 2 * pad) / spanY);
+  const ox = (w - spanX * sc) / 2, oy = (h - spanY * sc) / 2;
+  const P = (p) => ({ x: +(ox + (p.lng - minLng) * kx * sc).toFixed(1), y: +(oy + (maxLat - p.lat) * sc).toFixed(1) });
+  const scPt = {}, colorOf = {};
+  (o.scs || []).filter(ok).forEach(s => { scPt[s.code] = P(s); colorOf[s.code] = s.color; });
+  const hull = (ps) => { // monotone chain
+    const a = ps.slice().sort((p, q) => p.x - q.x || p.y - q.y); if (a.length < 3) return a;
+    const cr = (O, A, B) => (A.x - O.x) * (B.y - O.y) - (A.y - O.y) * (B.x - O.x);
+    const lo = [], up = [];
+    a.forEach(p => { while (lo.length >= 2 && cr(lo[lo.length - 2], lo[lo.length - 1], p) <= 0) lo.pop(); lo.push(p); });
+    a.slice().reverse().forEach(p => { while (up.length >= 2 && cr(up[up.length - 2], up[up.length - 1], p) <= 0) up.pop(); up.push(p); });
+    return lo.slice(0, -1).concat(up.slice(0, -1));
+  };
+  const bySc = {};
+  (o.dcs || []).filter(ok).forEach(d => { const p = P(d); (bySc[d.sc] = bySc[d.sc] || []).push(p); const s = scPt[d.sc];
+    if (s) m.lines.push({ x1: s.x, y1: s.y, x2: p.x, y2: p.y, stroke: colorOf[d.sc] });
+    m.dcs.push({ x: p.x, y: p.y, fill: colorOf[d.sc] || '#8E96A3', title: d.title || d.code }); });
+  Object.keys(bySc).forEach(code => { if (!scPt[code]) return; const hp = hull(bySc[code].concat([scPt[code]]));
+    if (hp.length >= 3) m.hulls.push({ points: hp.map(p => p.x + ',' + p.y).join(' '), color: colorOf[code] }); });
+  (o.unmapped || []).filter(ok).forEach(d => { const p = P(d); m.unmapped.push({ x: p.x, y: p.y, title: d.title || d.code }); });
+  (o.dropped || []).filter(ok).forEach(d => { const p = P(d); m.dropped.push({ x: p.x, y: p.y, title: d.title || d.code }); });
+  (o.scs || []).filter(ok).forEach(s => { m.scs.push(Object.assign({ code: s.code, stroke: s.color, title: s.code + (s.name ? ' — ' + s.name : '') }, scPt[s.code])); });
+  m.lineOpacity = Math.max(0.12, Math.min(0.55, 45 / Math.max(1, m.lines.length / Math.max(1, m.scs.length)))); // denser spokes → lighter
+  const kmPerPx = 111.32 / sc, nice = [1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000];
+  const km = nice.find(n => n / kmPerPx >= Math.min(90, w / 8)) || 1000; m.scalePx = Math.round(km / kmPerPx); m.scaleLabel = km + ' km';
+  return m;
+}
+function NdcSpokeMap(props) {
+  const m = props.m || { w: 940, h: 560 };
+  return (<svg viewBox={'0 0 ' + m.w + ' ' + m.h} style={{ width: '100%', height: 'auto', display: 'block', background: '#F7F9FC' }} role="img" aria-label={props.label || 'SC-DC spoke map'}>
+    {(m.hulls || []).map((p, i) => <polygon key={'h' + i} points={p.points} fill={p.color} fillOpacity="0.07" stroke={p.color} strokeOpacity="0.45" strokeDasharray="4 3" strokeWidth="1.2" />)}
+    {(m.lines || []).map((l, i) => <line key={'l' + i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} stroke={l.stroke} strokeWidth="0.8" strokeOpacity={m.lineOpacity || 0.5} />)}
+    {(m.dcs || []).map((p, i) => <circle key={'d' + i} cx={p.x} cy={p.y} r="2.3" fill={p.fill}><title>{p.title}</title></circle>)}
+    {(m.dropped || []).map((p, i) => <g key={'x' + i}><path d={'M' + (p.x - 4) + ' ' + (p.y - 4) + 'L' + (p.x + 4) + ' ' + (p.y + 4) + 'M' + (p.x + 4) + ' ' + (p.y - 4) + 'L' + (p.x - 4) + ' ' + (p.y + 4)} stroke="#5A5E66" strokeWidth="1.8" /><title>{p.title}</title></g>)}
+    {(m.unmapped || []).map((p, i) => <rect key={'u' + i} x={p.x - 5} y={p.y - 5} width="10" height="10" transform={'rotate(45 ' + p.x + ' ' + p.y + ')'} fill="#FFF6E5" stroke="#C77B00" strokeWidth="2"><title>{p.title}</title></rect>)}
+    {(m.scs || []).map((p, i) => <g key={'s' + i}><circle cx={p.x} cy={p.y} r="9" fill="#fff" stroke={p.stroke} strokeWidth="3.5"><title>{p.title}</title></circle><text x={p.x} y={p.y - 14} textAnchor="middle" fontSize="12" fontWeight="700" fill="#14171F" stroke="#fff" strokeWidth="3" paintOrder="stroke">{p.code}</text></g>)}
+    {(m.scalePx > 0) ? <g><line x1={m.w - 20 - m.scalePx} y1={m.h - 16} x2={m.w - 20} y2={m.h - 16} stroke="#5A5E66" strokeWidth="2" /><text x={m.w - 20 - m.scalePx / 2} y={m.h - 22} textAnchor="middle" fontSize="11" fill="#5A5E66">{m.scaleLabel}</text></g> : null}
+  </svg>);
 }
 
 // deriveMigrationPipelineEntries(dcRows, decisions, runId, lmdcs) — 2026-09-16, extracted from
@@ -11620,7 +11744,15 @@ class NDCApp extends React.Component {
   // planner actually reviewed — the two can't drift apart on "what volume did this DC have."
   // mapVolumeInfoForDc — thin wrapper; see mapVolumeInfoForDcPure (top-level, seed data calls it directly).
   mapVolumeInfoForDc(dcCode, fileName, capacity) {
-    return mapVolumeInfoForDcPure(dcCode, fileName, capacity);
+    // V4.0 2026-10-22 — same per-SC volume basis as the solver (cached per data snapshot).
+    const d = this.state.data;
+    if (!this._mapVolCache || this._mapVolCache.scs !== d.scs || this._mapVolCache.lmdcs !== d.lmdcs) {
+      const scOf = {}; (d.lmdcs || []).forEach(l => { scOf[l.code] = l.lmscCode; });
+      this._mapVolCache = { scs: d.scs, lmdcs: d.lmdcs, scOf, avg: mapAvgDcVolumePure(d) };
+    }
+    const c = this._mapVolCache, sc = c.scOf[dcCode];
+    const base = (sc && c.avg.byCode[sc] != null) ? c.avg.byCode[sc] : c.avg.network;
+    return mapVolumeInfoForDcPure(dcCode, fileName, capacity, base);
   }
 
   mapToggleSc(code) {
@@ -11710,7 +11842,7 @@ class NDCApp extends React.Component {
       const volOut = [], sortOver = [];
       preview.perSc.forEach(p => {
         const sc = scs.find(s => s.code === p.code) || {}, lim = sp(p.code);
-        const vu = sc.volCap ? Math.round(p.volume / sc.volCap * 100) : 0, su = sc.sortCap ? Math.round(p.volume / sc.sortCap * 100) : 0;
+        const vu = sc.volCap ? Math.round(p.volume / sc.volCap * 100) : 0, su = sc.sortCap ? Math.round(p.dcsServed / sc.sortCap * 100) : 0; // sort = DC destinations
         if (vu < lim.volUtilMin || vu > lim.volUtilMax) volOut.push(p.code + ' ' + vu + '% (' + lim.volUtilMin + '–' + lim.volUtilMax + '%)');
         if (su > lim.sortCapUtilMax) sortOver.push(p.code + ' ' + su + '% (max ' + lim.sortCapUtilMax + '%)');
       });
@@ -11803,6 +11935,22 @@ class NDCApp extends React.Component {
     return computeMappingResultPure(this.state.data, run);
   }
 
+  // V4.0 2026-10-22 — bulk decisions. scCode limits to moves INTO that SC (gaining-SC view). At run
+  // level, unserved DCs that had an SC get KeepOldSc (the only available decision for them).
+  mapDecideAll(runId, decision, scCode) {
+    const run = (this.state.data.mappingRuns || []).find(r => r.id === runId); if (!run || !run.results) return;
+    const cur = Object.assign({}, this.state.mapDcDecisions[runId] || {});
+    run.results.dcRows.filter(r => r.needsDecision).forEach(r => {
+      if (scCode && (r.isUnserved || r.newSc !== scCode)) return;
+      const dd = r.isUnserved ? 'KeepOldSc' : decision;
+      cur[r.code] = { decision: dd, remark: (cur[r.code] || {}).remark || '' };
+    });
+    this.setState({ mapDcDecisions: Object.assign({}, this.state.mapDcDecisions, { [runId]: cur }) });
+  }
+  mapResetDecisions(runId) {
+    const all = Object.assign({}, this.state.mapDcDecisions); delete all[runId];
+    this.setState({ mapDcDecisions: all });
+  }
   mapDecideDc(runId, dcCode, decision, remark) {
     const cur = this.state.mapDcDecisions[runId] || {};
     const existing = cur[dcCode] || {};
@@ -18861,38 +19009,27 @@ class NDCApp extends React.Component {
     // DCs as lines to their current SC, and selected unmapped DCs as points. Equirectangular
     // projection fitted to that span. DCs without coordinates are skipped and counted.
     const mapViewOpen = !!st.mapViewOpen;
-    let mapViewLines = [], mapViewDcs = [], mapViewUnmapped = [], mapViewScs = [], mapViewLegend = [], mapViewSummary = '', mapViewScalePx = 0, mapViewScaleLabel = '';
-    const mapViewW = 940, mapViewH = 560;
+    let mapViewM = null, mapViewLegend = [], mapViewSummary = '';
     if (mapViewOpen) {
       const PAL = ['#1F6F5C', '#2F4FC6', '#B8387A', '#C77B00', '#1E6FB8', '#7A4FC6', '#128A3E', '#D14B4B'];
-      const has = (o) => o && o.lat != null && o.lng != null && !(+o.lat === 0 && +o.lng === 0);
-      const selScs = (draft.scCodes || []).map(c => (d.scs || []).find(s => s.code === c)).filter(Boolean);
+      const scBy = {}; (d.scs || []).forEach(s => { scBy[s.code] = s; });
+      const selScs = (draft.scCodes || []).map(c => scBy[c]).filter(Boolean);
       const colorOf = {}; selScs.forEach((s, k) => { colorOf[s.code] = PAL[k % PAL.length]; });
       const dcsAll = (d.lmdcs || []).filter(l => colorOf[l.lmscCode] && !mapClosedCodes[l.code]);
       const dcsIn = dcsAll.filter(l => !mapDroppedDcs[l.code]);
-      const lmByCode = {}; (d.lmdcs || []).forEach(l => { if (!l.lmscCode) lmByCode[l.code] = l; });
-      const unIn = (draft.params || {}).newNodeAddition !== false ? mapUnmappedDcList.filter(u => u.included).map(u => Object.assign({}, lmByCode[u.code] || {}, { code: u.code, name: u.name })) : [];
-      const pts = selScs.filter(has).concat(dcsIn.filter(has), unIn.filter(has));
-      const noCoord = dcsIn.filter(l => !has(l)).length + unIn.filter(u => !has(u)).length;
-      if (pts.length) {
-        let minLat = Math.min.apply(null, pts.map(p => +p.lat)), maxLat = Math.max.apply(null, pts.map(p => +p.lat));
-        let minLng = Math.min.apply(null, pts.map(p => +p.lng)), maxLng = Math.max.apply(null, pts.map(p => +p.lng));
-        const kx = Math.cos(((minLat + maxLat) / 2) * Math.PI / 180);
-        const spanX = Math.max(0.02, (maxLng - minLng) * kx), spanY = Math.max(0.02, maxLat - minLat), pad = 40;
-        const sc = Math.min((mapViewW - 2 * pad) / spanX, (mapViewH - 2 * pad) / spanY);
-        const ox = (mapViewW - spanX * sc) / 2, oy = (mapViewH - spanY * sc) / 2;
-        const P = (o) => ({ x: +(ox + ((+o.lng - minLng) * kx) * sc).toFixed(1), y: +(oy + (maxLat - +o.lat) * sc).toFixed(1) });
-        const scPt = {}; selScs.filter(has).forEach(s => { scPt[s.code] = P(s); });
-        dcsIn.filter(has).forEach(l => { const p = P(l), s = scPt[l.lmscCode]; if (s) mapViewLines.push({ x1: p.x, y1: p.y, x2: s.x, y2: s.y, stroke: colorOf[l.lmscCode] }); mapViewDcs.push({ x: p.x, y: p.y, fill: colorOf[l.lmscCode], title: l.code + ' → ' + l.lmscCode }); });
-        unIn.filter(has).forEach(u => { const p = P(u); mapViewUnmapped.push({ x: p.x, y: p.y, title: u.code + (u.name ? ' — ' + u.name : '') + ' · unmapped' }); });
-        selScs.filter(has).forEach(s => { mapViewScs.push(Object.assign({ code: s.code, stroke: colorOf[s.code], title: s.code + ' — ' + (s.name || '') }, scPt[s.code])); });
-        const kmPerPx = 111.32 / sc, nice = [1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000];
-        const km = nice.find(n => n / kmPerPx >= 70) || 1000; mapViewScalePx = Math.round(km / kmPerPx); mapViewScaleLabel = km + ' km';
-      }
+      const unLm = {}; (d.lmdcs || []).forEach(l => { if (!l.lmscCode) unLm[l.code] = l; });
+      const unIn = (draft.params || {}).newNodeAddition !== false ? mapUnmappedDcList.filter(u => u.included) : [];
+      const dcPts = [], noCoord = []; let closerElsewhere = 0;
+      dcsIn.forEach(l => { const g = mapDcGeoPure(l, scBy); if (!g) { noCoord.push(l.code); return; }
+        const own = mapKmPure(g, scBy[l.lmscCode]); if (selScs.some(s => s.code !== l.lmscCode && (mapKmPure(g, s) || 1e9) < own)) closerElsewhere++;
+        dcPts.push(Object.assign({ code: l.code, sc: l.lmscCode, title: l.code + ' ← ' + l.lmscCode + ' · ' + Math.round(own) + ' km' }, g)); });
+      const unPts = []; unIn.forEach(u => { const g = mapDcGeoPure(unLm[u.code], scBy); if (!g) noCoord.push(u.code); else unPts.push(Object.assign({ code: u.code, title: u.code + (u.name ? ' — ' + u.name : '') + ' · unmapped' }, g)); });
+      mapViewM = ndcSpokeMapPure({ w: 940, h: 560, scs: selScs.map(s => ({ code: s.code, name: s.name, lat: s.lat, lng: s.lng, color: colorOf[s.code] })), dcs: dcPts, unmapped: unPts });
       mapViewLegend = selScs.map(s => ({ color: colorOf[s.code], label: s.code + ' · ' + dcsIn.filter(l => l.lmscCode === s.code).length + ' DCs' }));
       const excl = dcsAll.length - dcsIn.length;
-      mapViewSummary = dcsIn.length + ' mapped DC' + (dcsIn.length === 1 ? '' : 's') + ' · ' + unIn.length + ' unmapped DC' + (unIn.length === 1 ? '' : 's')
-        + (excl ? ' · ' + excl + ' unticked DC' + (excl === 1 ? '' : 's') + ' not shown' : '') + (noCoord ? ' · ' + noCoord + ' without coordinates not shown' : '')
+      mapViewSummary = dcsIn.length + ' mapped DC' + (dcsIn.length === 1 ? '' : 's') + ' · ' + unPts.length + ' unmapped'
+        + ' · overlap: ' + closerElsewhere + ' DC' + (closerElsewhere === 1 ? '' : 's') + ' (' + (dcsIn.length ? Math.round(closerElsewhere / dcsIn.length * 100) : 0) + '%) sit closer to another selected SC'
+        + (excl ? ' · ' + excl + ' unticked not shown' : '') + (noCoord.length ? ' · ' + noCoord.length + ' without coordinates not shown' : '')
         + ((draft.params || {}).newNodeAddition === false && mapUnmappedDcList.length ? ' · unmapped DCs hidden (New Node Addition is off)' : '');
     }
     const mapQueueRows = (st.mapQueue || []).map(r => {
@@ -18929,7 +19066,7 @@ class NDCApp extends React.Component {
       mapHeaderSortCapUtilMax, onMapHeaderSortCapUtilMaxDown: () => this.mapHeaderStep('sortCapUtilMax', -5, 'mapHeaderSortCapUtilMax'), onMapHeaderSortCapUtilMaxUp: () => this.mapHeaderStep('sortCapUtilMax', 5, 'mapHeaderSortCapUtilMax'),
       mapToleranceRangeLabel, mapToleranceAnyWarn, mapVolUtilRangeLabel, mapVolUtilAnyOver100, mapSortCapUtilRangeLabel, mapSortCapUtilAnyOver100,
       mapPreviewScs, mapAnyMissingCap, mapTriggerBlocked, mapDcCount2: mapEligibleDcs.length,
-      mapViewOpen, mapViewW, mapViewH, mapViewLines, mapViewDcs, mapViewUnmapped, mapViewScs, mapViewLegend, mapViewSummary, mapViewScalePx, mapViewScaleLabel,
+      mapViewOpen, mapViewM, mapViewLegend, mapViewSummary, mapRunNamePh: 'Cluster: ' + ((draft.scCodes || []).join(' + ') || 'A + B'),
       onMapOpenMapView: () => this.setState({ mapViewOpen: true }), onMapCloseMapView: () => this.setState({ mapViewOpen: false }),
       onMapDownloadZeroVol: () => this.mapDownloadZeroVolDcsCsv(),
       mapPvState, mapPvRan: mpv.sig != null && mts.fresh, mapValFlags, mapValErrCount: mts.fresh ? mpv.errors.length : 0, mapValWarnCount: mts.fresh ? mpv.warnings.length : 0,
@@ -19226,7 +19363,103 @@ class NDCApp extends React.Component {
       });
     }) : [];
 
+    // ===== V4.0 2026-10-22 — gaining-SC decisions, distance metrics, pivot utilisation, Simulate =====
+    const geoBy = {}; const geoOf = (code) => { if (!(code in geoBy)) geoBy[code] = mapDcGeoPure(dcByCode[code], scByCode); return geoBy[code]; };
+    const kmRow = (r, sc) => { if (!sc) return null; if (sc === r.oldSc && r.distOld != null) return r.distOld; if (sc === r.newSc && r.distNew != null) return r.distNew; return mapKmPure(geoOf(r.code), scByCode[sc]); };
+    const effPre = (r) => r.oldSc || null;
+    const effPlan = (r) => r.isUnserved ? null : r.newSc;
+    const effAfter = (r) => { const d0 = dec[r.code]; if (d0 && d0.decision === 'Accept') return r.newSc; if (d0 && (d0.decision === 'Reject' || d0.decision === 'KeepOldSc')) return r.oldSc || null; return r.isUnserved ? null : r.newSc; };
+    const fmtKm = (v) => v == null ? '—' : (Math.round(v * 10) / 10).toLocaleString('en-IN') + ' km';
+    const metricsFor = (fn) => {
+      const rows = results ? results.dcRows : []; let n = 0, sd = 0, sv = 0, svd = 0, moved = 0, unserved = 0; const per = {};
+      (run ? run.scCodes : []).forEach(c => { per[c] = { n: 0, vol: 0, sd: 0, sv: 0, svd: 0 }; });
+      rows.forEach(r => { const sc = fn(r); if (!sc) { unserved++; return; } const km = kmRow(r, sc); if (sc !== r.oldSc) moved++;
+        if (km != null) { n++; sd += km; sv += r.volume; svd += r.volume * km; }
+        if (per[sc]) { per[sc].n++; per[sc].vol += r.volume; if (km != null) { per[sc].sd += km; per[sc].sv += r.volume; per[sc].svd += r.volume * km; } } });
+      Object.keys(per).forEach(c => { const p = per[c], s = scByCode[c] || {}; p.avg = p.n ? p.sd / p.n : null; p.wavg = p.sv ? p.svd / p.sv : null;
+        p.volUtil = s.volCap ? Math.round(p.vol / s.volCap * 100) : null; p.sortUtil = s.sortCap ? Math.round(p.n / s.sortCap * 100) : null; });
+      return { avg: n ? sd / n : null, wavg: sv ? svd / sv : null, moved, unserved, per };
+    };
+    const mPre = run ? metricsFor(effPre) : null, mPlan = run ? metricsFor(effPlan) : null, mAfter = run ? metricsFor(effAfter) : null;
+    const utilChip = (v) => v == null ? { label: '—', fg: '#8E96A3' } : { label: v + '%', fg: v > 100 ? '#D14B4B' : (v >= 90 ? '#C77B00' : '#14171F') };
+    const DEC_BTN = (on, kind) => on ? (kind === 'Accept' ? { bg: '#128A3E', fg: '#fff', bd: '#128A3E' } : { bg: '#D14B4B', fg: '#fff', bd: '#D14B4B' }) : { bg: '#fff', fg: '#5A5E66', bd: '#E6EBF2' };
+    const decRow = (r) => {
+      const d0 = dec[r.code] || {}; const dOld = r.distOld, dNew = r.distNew; const delta = (dOld != null && dNew != null) ? Math.round((dNew - dOld) * 10) / 10 : null;
+      const accept = DEC_BTN(d0.decision === 'Accept', 'Accept'), reject = DEC_BTN(d0.decision === 'Reject', 'Reject');
+      return { code: r.code, flag: r.oldSc ? 'From ' + r.oldSc : 'New DC', flagBg: r.oldSc ? '#EAF1FB' : '#E7F4EC', flagFg: r.oldSc ? '#1E6FB8' : '#128A3E',
+        newSc: r.newSc || '—', distOld: fmtKm(dOld), distNew: fmtKm(dNew),
+        delta: delta == null ? '—' : (delta > 0 ? '+' : '') + delta.toLocaleString('en-IN') + ' km', deltaFg: delta == null ? '#8E96A3' : (delta < 0 ? '#128A3E' : (delta > 0 ? '#D14B4B' : '#5A5E66')),
+        remark: d0.remark || '', onRemark: (e) => this.mapDecideDc(run.id, r.code, d0.decision || null, e.target.value),
+        aBg: accept.bg, aFg: accept.fg, aBd: accept.bd, rBg: reject.bg, rFg: reject.fg, rBd: reject.bd,
+        onAccept: () => this.mapDecideDc(run.id, r.code, 'Accept', d0.remark), onReject: () => this.mapDecideDc(run.id, r.code, 'Reject', d0.remark) };
+    };
+    const reviewMapGainSections = (results && run && !isCommitted) ? run.scCodes.map(code => {
+      const rows = results.dcRows.filter(r => r.needsDecision && !r.isUnserved && r.newSc === code);
+      const keeps = results.dcRows.filter(r => r.isUnchanged && r.newSc === code).length;
+      const pre = mPre.per[code] || {}, post = mAfter.per[code] || {};
+      return { code, count: rows.length, keeps, rows: rows.map(decRow), hasRows: rows.length > 0,
+        fromNew: rows.filter(r => !r.oldSc).length, fromOther: rows.filter(r => r.oldSc).length,
+        volPre: utilChip(pre.volUtil).label, volPost: utilChip(post.volUtil).label, volPostFg: utilChip(post.volUtil).fg,
+        decidedHere: rows.filter(r => (dec[r.code] || {}).decision).length,
+        onAcceptSc: () => this.mapDecideAll(run.id, 'Accept', code), onRejectSc: () => this.mapDecideAll(run.id, 'Reject', code) };
+    }) : [];
+    const reviewMapDropRows = (results && run && !isCommitted) ? results.dcRows.filter(r => r.isUnserved).map(r => {
+      const d0 = dec[r.code] || {}; const kept = d0.decision === 'KeepOldSc';
+      return { code: r.code, flag: r.oldSc ? 'Unserved · was ' + r.oldSc : 'New DC · not placed', reason: r.unservedReason || '', distOld: fmtKm(r.distOld),
+        canKeep: !!r.oldSc, keepLabel: r.oldSc ? 'Keep on ' + r.oldSc : '', kept, keepBg: kept ? '#1F6F5C' : '#fff', keepFg: kept ? '#fff' : '#1F6F5C',
+        remark: d0.remark || '', onRemark: (e) => this.mapDecideDc(run.id, r.code, d0.decision || null, e.target.value),
+        onKeep: () => this.mapDecideDc(run.id, r.code, 'KeepOldSc', d0.remark) };
+    }) : [];
+    const needRows = results ? results.dcRows.filter(r => r.needsDecision) : [];
+    const reviewMapDecidedCount = needRows.filter(r => (dec[r.code] || {}).decision).length;
+    const reviewMapNeedCount = needRows.length;
+    const pivotPost = mAfter;
+    const reviewMapPivot2 = (results && run) ? run.scCodes.map(code => {
+      const s = scByCode[code] || {}, pre = mPre.per[code] || {}, post = pivotPost.per[code] || {};
+      let added = 0, removed = 0; results.dcRows.forEach(r => { const e = effAfter(r); if (r.oldSc !== code && e === code) added++; if (r.oldSc === code && e !== code) removed++; });
+      const vp = utilChip(pre.volUtil), vq = utilChip(post.volUtil), sp = utilChip(pre.sortUtil), sq = utilChip(post.sortUtil);
+      return { code, dcPre: pre.n || 0, dcPost: post.n || 0, added, removed,
+        volPre: fmtInt(Math.round(pre.vol || 0)), volPost: fmtInt(Math.round(post.vol || 0)), volCap: s.volCap ? fmtInt(s.volCap) : '—',
+        vuPre: vp.label, vuPreFg: vp.fg, vuPost: vq.label, vuPostFg: vq.fg, sortCap: s.sortCap ? fmtInt(s.sortCap) : '—',
+        suPre: sp.label, suPreFg: sp.fg, suPost: sq.label, suPostFg: sq.fg,
+        avgPre: fmtKm(pre.avg), avgPost: fmtKm(post.avg), wPre: fmtKm(pre.wavg), wPost: fmtKm(post.wavg) };
+    }) : [];
+    const deltaCard = (label, a, b, lowerBetter, fmt) => {
+      const dv = (a != null && b != null) ? b - a : null; const good = dv == null || dv === 0 ? null : (lowerBetter ? dv < 0 : dv > 0);
+      return { label, before: fmt(a), after: fmt(b), delta: dv == null ? '—' : (dv === 0 ? 'No change' : (dv > 0 ? '▲ +' : '▼ ') + fmt(Math.abs(dv)).replace(/^-/, '')),
+        deltaFg: good == null ? '#8E96A3' : (good ? '#128A3E' : '#D14B4B') };
+    };
+    const maxUtil = (m, k) => { const v = Object.values(m.per).map(p => p[k]).filter(x => x != null); return v.length ? Math.max.apply(null, v) : null; };
+    const simOpen = !!st.reviewMapSimOpen && !!run && !!results;
+    let reviewMapSim = null;
+    if (simOpen) {
+      const PAL = ['#1F6F5C', '#2F4FC6', '#B8387A', '#C77B00', '#1E6FB8', '#7A4FC6', '#128A3E', '#D14B4B'];
+      const colorOf = {}; run.scCodes.forEach((c, k) => { colorOf[c] = PAL[k % PAL.length]; });
+      const scList = run.scCodes.map(c => scByCode[c]).filter(Boolean).map(s => ({ code: s.code, name: s.name, lat: s.lat, lng: s.lng, color: colorOf[s.code] }));
+      const fit = [].concat(scList, results.dcRows.map(r => geoOf(r.code)).filter(Boolean));
+      const build = (fn) => { const dcs = [], dropped = [];
+        results.dcRows.forEach(r => { const g = geoOf(r.code); if (!g) return; const sc = fn(r);
+          if (sc) dcs.push(Object.assign({ code: r.code, sc, title: r.code + ' ← ' + sc + (kmRow(r, sc) != null ? ' · ' + Math.round(kmRow(r, sc)) + ' km' : '') }, g));
+          else dropped.push(Object.assign({ code: r.code, title: r.code + ' · unserved' }, g)); });
+        return ndcSpokeMapPure({ w: 560, h: 420, scs: scList, dcs, dropped, fit }); };
+      const pct = (v) => v == null ? '—' : v + '%', km = (v) => v == null ? '—' : (Math.round(v * 10) / 10).toLocaleString('en-IN') + ' km', n = (v) => v == null ? '—' : String(v);
+      reviewMapSim = {
+        cards: [deltaCard('Avg SC → DC distance', mPlan.avg, mAfter.avg, true, km), deltaCard('Volume-weighted distance', mPlan.wavg, mAfter.wavg, true, km),
+          deltaCard('DCs changing SC', mPlan.moved, mAfter.moved, null, n), deltaCard('Unserved DCs', mPlan.unserved, mAfter.unserved, true, n),
+          deltaCard('Highest volume utilisation', maxUtil(mPlan, 'volUtil'), maxUtil(mAfter, 'volUtil'), true, pct), deltaCard('Highest sort utilisation', maxUtil(mPlan, 'sortUtil'), maxUtil(mAfter, 'sortUtil'), true, pct)],
+        rows: run.scCodes.map(c => { const a = mPlan.per[c] || {}, b = mAfter.per[c] || {}; const va = utilChip(a.volUtil), vb = utilChip(b.volUtil), sa = utilChip(a.sortUtil), sb = utilChip(b.sortUtil);
+          return { code: c, color: colorOf[c], dcA: a.n || 0, dcB: b.n || 0, vuA: va.label, vuAFg: va.fg, vuB: vb.label, vuBFg: vb.fg, suA: sa.label, suAFg: sa.fg, suB: sb.label, suBFg: sb.fg, wA: km(a.wavg), wB: km(b.wavg) }; }),
+        mapBefore: build(effPlan), mapAfter: build(effAfter),
+        legend: scList.map(s => ({ code: s.code, color: s.color })),
+        undecided: reviewMapNeedCount - reviewMapDecidedCount,
+      };
+    }
     return {
+      reviewMapGainSections, reviewMapDropRows, reviewMapHasDrops: reviewMapDropRows.length > 0, reviewMapDecidedCount, reviewMapNeedCount, reviewMapPivot2,
+      reviewMapDist: run ? { avgPre: fmtKm(mPre.avg), avgPlan: fmtKm(mPlan.avg), wPre: fmtKm(mPre.wavg), wPlan: fmtKm(mPlan.wavg) } : null,
+      onReviewMapAcceptAll: () => run && this.mapDecideAll(run.id, 'Accept'), onReviewMapRejectAll: () => run && this.mapDecideAll(run.id, 'Reject'),
+      onReviewMapReset: () => run && this.mapResetDecisions(run.id),
+      reviewMapSimOpen: simOpen, reviewMapSim, onReviewMapSimOpen: () => this.setState({ reviewMapSimOpen: true }), onReviewMapSimClose: () => this.setState({ reviewMapSimOpen: false }),
       reviewMapAccent: ACCENT,
       reviewMapRunList, reviewMapHasRuns: allRuns.length > 0,
       reviewMapStageFilter, onReviewMapStageFilter, reviewMapToReviewCount: toReviewRuns.length, reviewMapFinalisedCount: finalisedRuns.length,
