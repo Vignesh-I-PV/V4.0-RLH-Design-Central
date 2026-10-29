@@ -4258,3 +4258,59 @@ RNG-based approximation. Read the method's own comment block first; the short ve
     - regression: previous round 26/26 (now opens the run explicitly), SC-DC 34/34, wizard 38/38 and
       19/19, Configurations / Speed 23/23, SC Master 10/10, edge 7/7. 0 runtime errors; 0 JSX `\u`.
   - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
+
+- **2026-10-27 (later) — LMDC Master owns additions and closures; AutoDML merge; LMDC readiness;
+  Migrations-only Node Inputs.**
+  - **Decisions**:
+    - **#62** — LMDC Master is the source of new LMDCs (additions) and closures (Status =
+      Inactive); AutoDML node parameters win for DCs that exist in AutoDML;
+    - **#63** — LMDC rows with missing details are flagged "needs action" (SC Master pattern);
+    - **#64** — Node Inputs keeps only the migrations upload.
+    - Pincodes are user input, never taken from AutoDML.
+  - **AutoDML LMDC feed** (`engineStore.autodmlLmdc`, seeded with every DC that came from AutoDML,
+    i.e. not the user-added ones): `lmdcDecorate()` tags each row AutoDML / Manual. For AutoDML
+    rows, LMSC / latitude / longitude / capacity always come from the feed. Manual rows keep their
+    own values, and their SC distance is computed from real coordinates. `mapDcGeoPure()` uses a
+    Manual DC's coordinates as-is. No `engine.js` change (uses `addLmdc` /
+    `ensureClassDMaterialized`).
+  - **Additions / closures derived** (`lmdcDerive()`, on every cycle load and LMDC refresh):
+    - additions = active Manual rows (mapped = has an LMSC);
+    - closures = rows with Status Inactive.
+    - The seeded closures (CJB-118, AMD-077) are now LMDC rows set Inactive. SC-DC eligibility,
+      the Route Planner DC counts and the unmapped list read the derived lists unchanged.
+  - **LMDC upload**:
+    - unknown LMDC codes now **create** Manual LMDCs (`addLmdc` + `ensureClassDMaterialized`);
+    - LMSC CODE / LATITUDE / LONGITUDE / CAPACITY apply to Manual rows (validated) and are
+      replaced by AutoDML's for AutoDML rows (counted as "merged with AutoDML");
+    - a blank ZH / CH POC cell means "no change" — it used to reject the whole row; missing POCs
+      are now flagged on the row instead;
+    - the toast reports updated / new / merged / skipped.
+    - Template descriptions (column list and the `.xlsx`) updated: node parameters required for new
+      LMDCs not in AutoDML; Status Inactive = closure; Pincodes required, user input.
+  - **Readiness** (`lmdcMissingFields()`, active rows):
+    - missing Coordinates, Capacity (Manual: > 0), POC LM ZH, POC LM CH or Pincodes; LMSC is not
+      required, since a new DC can wait for SC-DC Mapping;
+    - flagged rows sort first, are tinted red with an inset bar and a tooltip, and show "Missing"
+      cells; banner "N LMDCs need action"; a Manual chip on user-added rows.
+    - Edit LMDC form: Manual rows get editable LMSC / Latitude / Longitude / Capacity; AutoDML rows
+      show them read-only ("AutoDML values always win"). "Required" outlines; save blocked until
+      Pincodes (all rows) and Latitude / Longitude / Capacity (Manual) are filled.
+  - **Node Inputs › Migrations**: the tab is renamed and its count is migrations + pipeline.
+    - The upload is now real and **migrations-only** (`applyMigrationsCsv()`): LMDC Code, From
+      LMSC, To LMSC; the LMDC must exist, From must be its current LMSC, To a different SC; replaces
+      by DC. It used to be a stub that only showed a toast.
+    - The template has those 3 columns; the table shows LMDC Code / From LMSC / To LMSC / Lat / Lng
+      for migrations only.
+    - A banner points to LMDC Master with the added / inactive counts.
+  - **Verification**:
+    - new jsdom suite **25/25**:
+      - 12,604 AutoDML + 5 Manual rows; derived additions (5, 2 unmapped) and closures;
+      - Migrations tab, template and upload (1 applied, 2 rejected with reasons);
+      - LMDC upload creates NEW-001 complete and NEW-002 incomplete, merges an AutoDML row (LMSC /
+        coordinates / capacity kept, pincodes taken);
+      - flags (NEW-002 missing all 5; banner; first-sorted; Missing cells);
+      - form: Required, save blocked, then fixed; AutoDML read-only;
+      - Inactive → closure; real coordinates in SC-DC.
+    - Regression: SC-DC 34/34, Design Review 28/28 and 26/26, wizard 38/38 and 19/19,
+      Configurations / Speed 23/23, SC Master 10/10, edge 7/7. 0 runtime errors; 0 JSX `\u`.
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
