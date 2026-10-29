@@ -1043,7 +1043,7 @@ All modules
 <button onClick={s.onOpenOpHours} title={"Operating Hours" + (s.opHoursConfigured ? ' — configured' : ' — falls back to always-open default')} aria-label={"Open Operating Hours for " + s.code} style={css(`width:26px; height:26px; border:1px solid ${s.opHoursConfigured ? '#0D7377' : '#E6EBF2'}; background:${s.opHoursConfigured ? '#E9F5F5' : '#fff'}; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; color:#0D7377;`)}><svg width={"13"} height={"13"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"}><path d={"M12 8v4l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg></button>
 </div>
 <div style={css(`padding:10px 10px; text-align:center;`)}>
-<button onClick={s.onOpenRateCard} title={"Rate Card" + (s.rateCardConfigured ? ' — configured' : ' — nothing set yet')} aria-label={"Open Rate Card for " + s.code} style={css(`width:26px; height:26px; border:1px solid ${s.rateCardConfigured ? '#0D7377' : '#E6EBF2'}; background:${s.rateCardConfigured ? '#E9F5F5' : '#fff'}; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; color:#0D7377;`)}><svg width={"13"} height={"13"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"}><path d={"M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg></button>
+<button onClick={s.onOpenRateCard} title={"Rate Card" + (s.rateCardConfigured ? ' — configured' : ' — missing (required)')} aria-label={"Open Rate Card for " + s.code} style={css(`width:26px; height:26px; border:1px solid ${s.rateCardConfigured ? '#0D7377' : (s.rateCardMissing ? '#D14B4B' : '#E6EBF2')}; background:${s.rateCardConfigured ? '#E9F5F5' : (s.rateCardMissing ? '#FBEAEA' : '#fff')}; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; color:#0D7377;`)}><svg width={"13"} height={"13"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"}><path d={"M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg></button>
 </div>
 <div style={css(`padding:7px 10px; display:flex; justify-content:flex-end;`)}>
 <button onClick={s.rowEdit} disabled={rlhCyclePast} aria-label={"Edit row"} title={rlhCyclePast ? "Past cycle — read-only. Switch to the current cycle to edit." : "Edit"} style={css(`width:28px; height:28px; border:1px solid #E6EBF2; background:#fff; border-radius:6px; cursor:${rlhCyclePast ? 'not-allowed' : 'pointer'}; opacity:${rlhCyclePast ? '0.4' : '1'}; display:flex; align-items:center; justify-content:center; color:#5A5E66;`)} onMouseEnter={(e) => hoverOn(e, `border-color:#003F98; color:#003F98;`)} onMouseLeave={(e) => hoverOff(e, `width:28px; height:28px; border:1px solid #E6EBF2; background:#fff; border-radius:6px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#5A5E66;`, `border-color:#003F98; color:#003F98;`)}><svg aria-hidden={"true"} width={"13"} height={"13"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"}><path d={"M14 6l4 4M4 20l4-1 9.5-9.5a2 2 0 00-3-3L5 16z"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg></button>
@@ -1403,7 +1403,7 @@ All modules
 <div style={css(`display:flex; flex-direction:column; height:calc(100vh - 340px); min-height:360px; border:1px solid #E6EBF2; border-radius:8px; overflow:hidden; background:#fff;`)}>
 <div style={css(`flex:1; min-height:0; overflow:auto;`)}>
 <div style={css(`min-width:1810px;`)}>
-{(hasLmdcNeedsAction) ? (<><div role={"status"} style={css(`display:flex; align-items:center; gap:9px; padding:10px 14px; margin-bottom:12px; background:#FBEAEA; border:1px solid #F0C6C6; border-radius:8px;`)}><svg width={"15"} height={"15"} viewBox={"0 0 24 24"} fill={"none"} stroke={"#D14B4B"} strokeWidth={"2"} style={css(`flex-shrink:0;`)}><path d={"M12 9v4m0 4h.01M10.3 3.9L2.4 18a2 2 0 001.7 3h15.8a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg><span style={css(`font-size:12.5px; font-weight:700; color:#D14B4B;`)}>{lmdcNeedsActionCount} LMDC{lmdcNeedsActionCount === 1 ? '' : 's'} need action</span><span style={css(`font-size:12px; color:#5A5E66;`)}>— missing coordinates, capacity, ZH / CH POCs or pincodes. They’re listed first; edit each row (or re-upload) to fill them in.</span></div></>) : null}
+{(hasLmdcNeedsAction) ? (<><div role={"status"} style={css(`display:flex; align-items:center; gap:9px; padding:10px 14px; margin-bottom:12px; background:#FBEAEA; border:1px solid #F0C6C6; border-radius:8px;`)}><svg width={"15"} height={"15"} viewBox={"0 0 24 24"} fill={"none"} stroke={"#D14B4B"} strokeWidth={"2"} style={css(`flex-shrink:0;`)}><path d={"M12 9v4m0 4h.01M10.3 3.9L2.4 18a2 2 0 001.7 3h15.8a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg><span style={css(`font-size:12.5px; font-weight:700; color:#D14B4B;`)}>{lmdcNeedsActionCount} LMDC{lmdcNeedsActionCount === 1 ? '' : 's'} need action</span><span style={css(`font-size:12px; color:#5A5E66;`)}>— user inputs (ZH / CH POCs, pincodes) are required on every row, AutoDML-synced ones included; new LMDCs also need coordinates and capacity. Listed first — hover a row for what’s missing, then edit it or re-upload.</span></div></>) : null}
 {/* min-width = sum of the 16 grid tracks below (1810px). Keep in sync when adding/removing a
     column — a stale value leaves the header background short of its own content (2026-09-16 bug).
     PINCODES column removed 2026-10-14 with SC-DC Mapping; restored in V4.0 on 2026-10-20. */}
@@ -1620,27 +1620,6 @@ All modules
 </div>
 </React.Fragment>))}
 {((nodeChanges || []).length === 0) ? (<><div style={css(`padding:20px; text-align:center; color:#8E96A3; font-size:12px;`)}>No migrations recorded this cycle.</div></>) : null}
-</div>
-<div style={css(`font-size:11px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; margin-bottom:8px;`)}>PIPELINE — NOT YET ALIGNED ({migPipelineCount})</div>
-<div style={css(`font-size:11.5px; color:#8E96A3; margin-bottom:10px; line-height:1.5;`)}>Proposed from SC-DC Mapping's Design Review — either accepted by the planner and awaiting Ops Alignment, or rejected by the planner outright. Neither changes AutoDML/LMDC Master; nothing here is real until it's Aligned above.</div>
-<div style={css(`background:#fff; border:1px solid #E6EBF2; border-radius:8px; overflow:hidden;`)}>
-<div style={css(`display:grid; grid-template-columns:1fr 1fr 1fr 1.3fr 1fr; background:#E6EBF2; position:sticky; top:0; z-index:4;`)}>
-<div style={css(`padding:10px 13px; font-size:10.5px; font-weight:700; color:#5A5E66; letter-spacing:0.04em;`)}>LMDC CODE</div>
-<div style={css(`padding:10px 13px; font-size:10.5px; font-weight:700; color:#5A5E66; letter-spacing:0.04em;`)}>SUGGESTED LMSC</div>
-<div style={css(`padding:10px 13px; font-size:10.5px; font-weight:700; color:#5A5E66; letter-spacing:0.04em;`)}>FROM</div>
-<div style={css(`padding:10px 13px; font-size:10.5px; font-weight:700; color:#5A5E66; letter-spacing:0.04em;`)}>REMARK</div>
-<div style={css(`padding:10px 13px; font-size:10.5px; font-weight:700; color:#5A5E66; letter-spacing:0.04em;`)}>STATUS</div>
-</div>
-{(migPipelineRows || []).map((m, __i33p) => (<React.Fragment key={__i33p}>
-<div style={css(`display:grid; grid-template-columns:1fr 1fr 1fr 1.3fr 1fr; align-items:center; border-top:1px solid #EEF1F6;`)} onMouseEnter={(e) => hoverOn(e, `background:#FAFBFD;`)} onMouseLeave={(e) => hoverOff(e, `display:grid; grid-template-columns:1fr 1fr 1fr 1.3fr 1fr; align-items:center; border-top:1px solid #EEF1F6;`, `background:#FAFBFD;`)}>
-<div style={css(`padding:10px 13px; font-size:12.5px; font-weight:600; color:#14171F; font-variant-numeric:tabular-nums;`)}>{m.lmdcCode}</div>
-<div style={css(`padding:10px 13px; font-size:12.5px; font-weight:700; color:#003F98;`)}>{m.lmscCode}</div>
-<div style={css(`padding:10px 13px; font-size:12px; color:#5A5E66;`)}>{m.fromSc}</div>
-<div style={css(`padding:10px 13px; font-size:11.5px; color:#5A5E66; font-style:italic; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;`)}>{m.remark || '—'}</div>
-<div style={css(`padding:10px 13px;`)}><span style={css(`display:inline-flex; padding:2px 9px; border-radius:999px; font-size:11px; font-weight:600; background:${m.statusBg}; color:${m.statusFg}; white-space:nowrap;`)}>{m.statusLabel}</span></div>
-</div>
-</React.Fragment>))}
-{(migPipelineCount === 0) ? (<><div style={css(`padding:20px; text-align:center; color:#8E96A3; font-size:12px;`)}>Nothing in the pipeline — no undecided or rejected mapping proposals right now.</div></>) : null}
 </div>
 </>) : null}
 </>) : null}
@@ -7162,56 +7141,45 @@ NLH cycle: {schedNlhMonthLabel}
      chips, slabs are free-form rows (each has its own Min/Max/Cost) since shipment-volume
      boundaries aren't a fixed grid the way time-of-day is. ===== */}
 {(rateCardModal.open) ? (<>
-<div style={css(`position:fixed; inset:0; z-index:95; background:rgba(11,20,48,0.5); display:flex; align-items:center; justify-content:center; padding:24px;`)} onClick={rateCardModal.onClose}>
-<div style={css(`background:#fff; border-radius:14px; padding:24px 26px; width:100%; max-width:640px; max-height:90vh; overflow-y:auto; box-shadow:0 20px 60px rgba(11,20,48,0.3);`)} onClick={(e) => e.stopPropagation()}>
-<div style={css(`display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;`)}>
+<div style={css(`position:fixed; inset:0; z-index:90; background:rgba(11,20,48,0.45); display:flex; align-items:center; justify-content:center; padding:24px;`)} onClick={rateCardModal.onClose}>
+<div role={"dialog"} aria-label={"Rate Card"} style={css(`background:#fff; border-radius:14px; width:100%; max-width:640px; max-height:92vh; overflow:auto; box-shadow:0 20px 60px rgba(11,20,48,0.3); padding:22px 24px;`)} onClick={(e) => e.stopPropagation()}>
+<div style={css(`display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:4px;`)}>
 <div style={css(`font-size:16px; font-weight:700; color:#14171F;`)}>Rate Card — {rateCardModal.code}{rateCardModal.readOnly ? ' · View only' : ''}</div>
-<button onClick={rateCardModal.onClose} aria-label={"Close"} style={css(`width:30px; height:30px; border:1px solid #E6EBF2; border-radius:8px; background:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#5A5E66;`)}><svg width={"15"} height={"15"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M6 6l12 12M18 6L6 18"} strokeLinecap={"round"} /></svg></button>
+<button onClick={rateCardModal.onClose} aria-label={"Close"} style={css(`width:30px; height:30px; border:1px solid #E6EBF2; border-radius:8px; background:#fff; cursor:pointer; color:#5A5E66; font-size:14px;`)}>✕</button>
 </div>
-
-{/* 2026-09-30 — Rate Card as a table, per the product sample: Volumes | Cumulative Monthly Volume
-    | Blended CPS. Row 1 is the MG (Up to the threshold; CPS = MG ÷ volume at or below it). Each
-    later row starts where the previous ends; only its upper volume and blended CPS are entered.
-    Incremental volume / slab / payout columns deliberately not shown. */}
-<div style={css(`border:1px solid #E6EBF2; border-radius:10px; overflow:hidden; margin-bottom:12px;`)}>
-<div style={css(`display:grid; grid-template-columns:1.5fr 1fr 1.1fr 34px; background:#F2F5FA; border-bottom:1px solid #E6EBF2;`)}>
-<div style={css(`padding:9px 10px; font-size:10.5px; font-weight:700; color:#5A5E66; letter-spacing:0.04em;`)}>VOLUMES (MONTHLY SHIPMENTS)</div>
-<div style={css(`padding:9px 10px; font-size:10.5px; font-weight:700; color:#5A5E66; letter-spacing:0.04em;`)}>CUMULATIVE MONTHLY VOLUME</div>
-<div style={css(`padding:9px 10px; font-size:10.5px; font-weight:700; color:#5A5E66; letter-spacing:0.04em;`)}>BLENDED CPS (₹)</div>
-<div />
+<div style={css(`font-size:12px; color:#5A5E66; margin-bottom:16px;`)}>{rateCardModal.readOnly ? 'From SC Master — edit it in Design Inputs › Node & Vehicle Master › Sort Centre Master.' : 'Required for every SC. Volumes are shipments per month. Add an MG row if the SC has a minimum guarantee, then any number of Min – Max slabs.'}</div>
+<div style={css(`border:1px solid #E6EBF2; border-radius:10px; padding:12px 14px; margin-bottom:14px; background:${rateCardModal.hasMg ? '#F7FBF9' : '#fff'};`)}>
+<div style={css(`display:flex; align-items:center; justify-content:space-between; gap:10px;`)}>
+<div><div style={css(`font-size:13px; font-weight:700; color:#14171F;`)}>Minimum Guarantee (MG)</div><div style={css(`font-size:11.5px; color:#8E96A3;`)}>Optional — a fixed monthly rate up to a shipment volume</div></div>
+<button onClick={rateCardModal.onToggleMg} disabled={rateCardModal.readOnly} role={"switch"} aria-checked={rateCardModal.hasMg ? 'true' : 'false'} aria-label={"MG row"} style={css(`width:42px; height:24px; border-radius:999px; border:none; background:${rateCardModal.hasMg ? '#0D7377' : '#C3C9D4'}; position:relative; cursor:${rateCardModal.readOnly ? 'default' : 'pointer'}; flex-shrink:0;`)}><span style={css(`position:absolute; top:3px; left:${rateCardModal.hasMg ? '21px' : '3px'}; width:18px; height:18px; border-radius:50%; background:#fff; transition:left 120ms;`)} /></button>
 </div>
-{/* MG row */}
-<div style={css(`display:grid; grid-template-columns:1.5fr 1fr 1.1fr 34px; align-items:center; background:#FDF8EE;`)}>
-<div style={css(`padding:8px 10px; font-size:12.5px; color:#14171F; display:flex; align-items:center; gap:6px;`)}>
-<span style={css(`font-size:9.5px; font-weight:700; color:#9A5E00; background:#FBF1DF; border-radius:4px; padding:2px 6px;`)}>MG</span>
-<span style={css(`white-space:nowrap; color:#5A5E66;`)}>Up to</span>
-<input type={"number"} min={"0"} value={rateCardModal.mgThreshold} readOnly={rateCardModal.readOnly} onInput={rateCardModal.onMgThresholdChange} placeholder={"e.g. 400000"} style={css(`height:32px; border:1px solid #E6EBF2; border-radius:6px; font-family:inherit; font-size:12.5px; color:#14171F; padding:0 9px; box-sizing:border-box; outline:none; width:100%;`)} />
+{(rateCardModal.hasMg) ? (<>
+<div style={css(`display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;`)}>
+<div><div style={css(`font-size:10.5px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; margin-bottom:5px;`)}>SHIPMENTS / MONTH (UP TO)</div><input type={"number"} min={"0"} value={rateCardModal.mgThreshold} readOnly={rateCardModal.readOnly} onInput={rateCardModal.onMgThresholdChange} placeholder={"e.g. 100000"} style={css(`height:34px; border:1px solid #C3C9D4; border-radius:7px; padding:0 10px; font-family:inherit; font-size:13px; color:#14171F; box-sizing:border-box; width:100%; font-variant-numeric:tabular-nums;`)} /></div>
+<div><div style={css(`font-size:10.5px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; margin-bottom:5px;`)}>MG RATE (₹ / MONTH)</div><input type={"number"} min={"0"} value={rateCardModal.mg} readOnly={rateCardModal.readOnly} onInput={rateCardModal.onMgChange} placeholder={"e.g. 900000"} style={css(`height:34px; border:1px solid #C3C9D4; border-radius:7px; padding:0 10px; font-family:inherit; font-size:13px; color:#14171F; box-sizing:border-box; width:100%; font-variant-numeric:tabular-nums;`)} /></div>
 </div>
-<div style={css(`padding:8px 10px; font-size:12.5px; color:#14171F; font-variant-numeric:tabular-nums;`)}>{rateCardModal.mgCumLabel}</div>
-<div style={css(`padding:8px 10px; font-size:12.5px; color:#14171F;`)}>
-<input type={"number"} min={"0"} value={rateCardModal.mg} readOnly={rateCardModal.readOnly} onInput={rateCardModal.onMgChange} placeholder={"MG ₹ / month"} title={"Minimum Guarantee — flat monthly amount paid at or below this volume"} style={css(`height:32px; border:1px solid #E6EBF2; border-radius:6px; font-family:inherit; font-size:12.5px; color:#14171F; padding:0 9px; box-sizing:border-box; outline:none; width:100%;`)} />
-<div style={css(`font-size:10.5px; color:#8E96A3; margin-top:3px;`)}>MG ÷ volume = {rateCardModal.mgCpsLabel}</div>
+</>) : null}
 </div>
-{(rateCardModal.readOnly) ? (<><div style={css(`margin:-8px 0 14px; font-size:12px; color:#5A5E66;`)}>From SC Master — edit it in Design Inputs › Node &amp; Vehicle Master › Sort Centre Master.</div></>) : null}
-<div />
+<div style={css(`font-size:11px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; margin-bottom:8px;`)}>SLABS</div>
+{(rateCardModal.hasRows) ? (<>
+<div style={css(`display:grid; grid-template-columns:30px 1fr 1fr 1fr 34px; gap:8px; align-items:center; margin-bottom:6px;`)}>
+<div /><div style={css(`font-size:10.5px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; margin-bottom:5px; margin:0;`)}>MIN (SHIPMENTS / MONTH)</div><div style={css(`font-size:10.5px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; margin-bottom:5px; margin:0;`)}>MAX (SHIPMENTS / MONTH)</div><div style={css(`font-size:10.5px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; margin-bottom:5px; margin:0;`)}>RATE (₹ / SHIPMENT)</div><div />
 </div>
 {(rateCardModal.rcRows || []).map((rw, __iRcr) => (<React.Fragment key={__iRcr}>
-<div style={css(`display:grid; grid-template-columns:1.5fr 1fr 1.1fr 34px; align-items:center; border-top:1px solid #EEF1F6;`)}>
-<div style={css(`padding:8px 10px; font-size:12.5px; color:#14171F; display:flex; align-items:center; gap:6px;`)}>
-<span style={css(`white-space:nowrap; color:#5A5E66; font-variant-numeric:tabular-nums;`)}>{rw.fromLabel} to</span>
-<input type={"number"} min={"0"} value={rw.max} readOnly={rateCardModal.readOnly} onInput={rateCardModal.onSlabField(rw.idx, 'max')} placeholder={rw.maxPh} style={css(`height:32px; border:1px solid #E6EBF2; border-radius:6px; font-family:inherit; font-size:12.5px; color:#14171F; padding:0 9px; box-sizing:border-box; outline:none; width:100%;`)} />
-</div>
-<div style={css(`padding:8px 10px; font-size:12.5px; color:#14171F; font-variant-numeric:tabular-nums;`)}>{rw.cumLabel}</div>
-<div style={css(`padding:8px 10px; font-size:12.5px; color:#14171F;`)}><input type={"number"} min={"0"} step={"0.01"} value={rw.cost} readOnly={rateCardModal.readOnly} onInput={rateCardModal.onSlabField(rw.idx, 'cost')} placeholder={"e.g. 3.40"} style={css(`height:32px; border:1px solid #E6EBF2; border-radius:6px; font-family:inherit; font-size:12.5px; color:#14171F; padding:0 9px; box-sizing:border-box; outline:none; width:100%;`)} /></div>
-{(!rateCardModal.readOnly) ? (<><button onClick={() => rateCardModal.onRemoveSlab(rw.idx)} aria-label={"Remove this row"} title={"Remove row"} style={css(`width:28px; height:28px; border:none; background:transparent; cursor:pointer; color:#D14B4B; font-size:14px;`)}>✕</button></>) : (<><div /></>)}
+<div style={css(`display:grid; grid-template-columns:30px 1fr 1fr 1fr 34px; gap:8px; align-items:center; margin-bottom:8px;`)}>
+<div style={css(`font-size:12px; font-weight:700; color:#8E96A3; text-align:center;`)}>{rw.n}</div>
+<input type={"number"} min={"0"} value={rw.min} readOnly={rateCardModal.readOnly} onInput={rateCardModal.onSlabField(rw.idx, 'min')} placeholder={"min"} aria-label={"Slab " + rw.n + " min"} style={css(`height:34px; border:1px solid #C3C9D4; border-radius:7px; padding:0 10px; font-family:inherit; font-size:13px; color:#14171F; box-sizing:border-box; width:100%; font-variant-numeric:tabular-nums;`)} />
+<input type={"number"} min={"0"} value={rw.max} readOnly={rateCardModal.readOnly} onInput={rateCardModal.onSlabField(rw.idx, 'max')} placeholder={rw.maxPh} aria-label={"Slab " + rw.n + " max"} style={css(`height:34px; border:1px solid #C3C9D4; border-radius:7px; padding:0 10px; font-family:inherit; font-size:13px; color:#14171F; box-sizing:border-box; width:100%; font-variant-numeric:tabular-nums;`)} />
+<input type={"number"} min={"0"} step={"0.01"} value={rw.cost} readOnly={rateCardModal.readOnly} onInput={rateCardModal.onSlabField(rw.idx, 'cost')} placeholder={"₹"} aria-label={"Slab " + rw.n + " rate"} style={css(`height:34px; border:1px solid #C3C9D4; border-radius:7px; padding:0 10px; font-family:inherit; font-size:13px; color:#14171F; box-sizing:border-box; width:100%; font-variant-numeric:tabular-nums;`)} />
+{(!rateCardModal.readOnly) ? (<><button onClick={() => rateCardModal.onRemoveSlab(rw.idx)} aria-label={"Remove slab " + rw.n} style={css(`width:30px; height:30px; border:1px solid #E6EBF2; border-radius:7px; background:#fff; cursor:pointer; color:#D14B4B;`)}>✕</button></>) : (<><div /></>)}
 </div>
 </React.Fragment>))}
-</div>
-{(!rateCardModal.readOnly) ? (<><button onClick={rateCardModal.onAddSlab} style={css(`display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 10px; border:1px dashed #C3C9D4; border-radius:6px; background:#fff; font-family:inherit; font-size:12px; color:#5A5E66; cursor:pointer; margin-bottom:18px;`)}>+ Add volume row</button></>) : null}
-
-<div style={css(`display:flex; justify-content:flex-end; gap:8px;`)}>
-<button onClick={rateCardModal.onClose} style={css(`height:34px; padding:0 16px; border:1px solid #E6EBF2; background:#fff; border-radius:8px; font-family:inherit; font-size:12.5px; color:#5A5E66; cursor:pointer;`)}>{rateCardModal.readOnly ? 'Close' : 'Cancel'}</button>
-{(!rateCardModal.readOnly) ? (<><button onClick={rateCardModal.onSave} style={css(`height:34px; padding:0 16px; border:none; background:#003F98; color:#fff; border-radius:8px; font-family:inherit; font-size:12.5px; font-weight:600; cursor:pointer;`)}>Save</button></>) : null}
+</>) : (<><div style={css(`font-size:12px; color:#8E96A3; margin-bottom:8px;`)}>No slabs yet.</div></>)}
+{(!rateCardModal.readOnly) ? (<><button onClick={rateCardModal.onAddSlab} style={css(`height:32px; padding:0 12px; border:1px dashed #0D7377; background:#fff; color:#0D7377; font-family:inherit; font-size:12px; font-weight:700; border-radius:7px; cursor:pointer;`)}>+ Add slab</button></>) : null}
+{(!rateCardModal.readOnly && rateCardModal.issue) ? (<><div role={"status"} style={css(`margin-top:12px; padding:8px 12px; border-radius:7px; background:#FBF1DF; color:#8A5A00; font-size:12px;`)}>{rateCardModal.issue}</div></>) : null}
+<div style={css(`display:flex; justify-content:flex-end; gap:8px; margin-top:18px;`)}>
+<button onClick={rateCardModal.onClose} style={css(`height:36px; padding:0 16px; border:1px solid #E6EBF2; background:#fff; color:#5A5E66; font-family:inherit; font-size:13px; font-weight:600; border-radius:8px; cursor:pointer;`)}>{rateCardModal.readOnly ? 'Close' : 'Cancel'}</button>
+{(!rateCardModal.readOnly) ? (<><button onClick={rateCardModal.onSave} disabled={!rateCardModal.ok} style={css(`height:36px; padding:0 18px; border:none; background:${rateCardModal.ok ? '#0D7377' : '#C3C9D4'}; color:#fff; font-family:inherit; font-size:13px; font-weight:600; border-radius:8px; cursor:${rateCardModal.ok ? 'pointer' : 'not-allowed'};`)}>Save</button></>) : null}
 </div>
 </div>
 </div>
@@ -7992,6 +7960,26 @@ class NDCApp extends React.Component {
     this.engineStore = makeEmptyStore();
     this.activeCycleMonth = { rlh: currentMonthKey(), nlh: currentMonthKey(), fm: currentMonthKey() };
     const _seedForNlh = this.buildSeed();
+    // V4.0 2026-10-27 (#65) — Rate Card is mandatory, so the demo seeds one per configured SC (the
+    // three new AutoDML SCs BBSS / DHNS / GHYS stay unconfigured). ~60% have an MG row; slabs are
+    // explicit Min – Max shipments / month. Written for every month from genesis to today.
+    try {
+      const months = []; let ym = RLH_GENESIS_MONTH; const end = currentMonthKey();
+      for (let k = 0; k < 240 && monthCompare(ym, end) <= 0; k++) { months.push(ym); const yy = +ym.slice(0, 4), mm = +ym.slice(5, 7); ym = (mm === 12 ? (yy + 1) + '-01' : yy + '-' + String(mm + 1).padStart(2, '0')); }
+      materializeRLHScs(this.engineStore, RLH_GENESIS_MONTH).forEach(p0 => { // resolved SCs (volCap may come from AutoDML)
+        const code = p0.code;
+        if (['BBSS', 'DHNS', 'GHYS'].indexOf(code) >= 0) return;
+        const has = (r) => !!(r && ((Number(r.mg) > 0) || (r.slabs || []).length)); // materialized SCs carry an empty {mg:0, slabs:[]} placeholder
+        if (p0.nodeKind === 'MDC' || !(Number(p0.volCap) > 0) || has(p0.rateCard)) return;
+        let h = 0; for (let i = 0; i < code.length; i++) h = (h * 31 + code.charCodeAt(i)) >>> 0;
+        const vm = Math.round(Number(p0.volCap) * 0.8 * 26 / 1000) * 1000; // monthly shipments, roughly
+        const r1 = (x) => Math.round(x / 1000) * 1000;
+        let rc;
+        if (h % 10 < 6) { const thr = r1(vm * 0.55); rc = { mg: r1(thr * (9 + h % 4)), mgThreshold: thr, slabs: [{ min: thr, max: r1(vm * 1.05), cost: 7.5 + (h % 5) * 0.5 }, { min: r1(vm * 1.05), max: null, cost: 6 + (h % 4) * 0.5 }] }; }
+        else rc = { mg: null, mgThreshold: null, slabs: [{ min: 0, max: r1(vm * 0.5), cost: 10.5 + (h % 3) * 0.5 }, { min: r1(vm * 0.5), max: r1(vm * 1.2), cost: 8.5 + (h % 3) * 0.5 }, { min: r1(vm * 1.2), max: null, cost: 7 }] };
+        months.forEach(mo => { const b = peekClassD(this.engineStore, 'rlh', 'scMaster', mo, code) || {}; if (!has(b.rateCard)) setClassDField(this.engineStore, 'rlh', 'scMaster', mo, code, 'rateCard', rc, b); });
+      });
+    } catch (e) { console.warn('Rate Card seed skipped:', e && e.message); /* readiness still flags anything missing */ }
     // seedMapDecisionsAll (2026-09-16) — mapDcDecisions is flat, top-level React state (not part
     // of the per-cycle `data` bucket), so it can't be fixed up inside suffixRlhIdsForMonth the way
     // mappingRuns/migrationPipeline are. Rebuilt here instead, across all 5 seeded months, keyed
@@ -8990,6 +8978,10 @@ class NDCApp extends React.Component {
         });
       });
     })();
+    // V4.0 2026-10-27 (#63) — demo: a few AutoDML-synced LMDCs whose user inputs aren't filled in yet
+    // (AutoDML syncs node parameters only; POCs and pincodes are always the user's).
+    [['GGNS', 3, 'pins'], ['NOIS', 5, 'zh'], ['AGRS', 7, 'pins ch']].forEach(x => { const l = lmdcs.filter(y => y.lmscCode === x[0])[x[1]]; if (!l) return;
+      if (x[2].indexOf('pins') >= 0) l.pincodes = []; if (x[2].indexOf('zh') >= 0) l.lmZh = null; if (x[2].indexOf('ch') >= 0) l.lmCh = null; });
     seedLmdcEntities(this.engineStore, 'rlh', RLH_GENESIS_MONTH, lmdcs);
     // V4.0 2026-10-27 (#62) — LMDC Master is the source of additions and closures. Closures are LMDC
     // rows set Inactive (created here if the seed's closure DCs aren't in the pool yet); the AutoDML
@@ -9841,6 +9833,31 @@ class NDCApp extends React.Component {
   // with its own per-shipment cost — e.g. 1,500,000–2,000,000 shipments → ₹3/shipment).
   // Stored as a single Class D field ('rateCard', {mg, slabs}) on scMaster, same cycle-versioned
   // mechanism every other SC Master field already uses — no engine-level changes needed.
+  // rateCardValidate (V4.0 2026-10-27, #65) — one rule set for the modal and the CSV. MG row optional:
+  // shipments / month (up to) + MG rate (₹ / month). Slabs: explicit Min – Max shipments / month + rate
+  // (₹ / shipment); ascending, no overlap (and not below the MG row); only the last may be open-ended.
+  // A Rate Card needs an MG row or at least one slab (mandatory per SC).
+  rateCardValidate(hasMg, mgRaw, thrRaw, slabsRaw) {
+    const num = (v) => (v === '' || v == null) ? null : Number(String(v).replace(/,/g, ''));
+    let mg = null, thr = null;
+    if (hasMg) { thr = num(thrRaw); mg = num(mgRaw);
+      if (!(thr > 0)) return { err: 'MG row: enter shipments per month (more than 0).' };
+      if (!(mg > 0)) return { err: 'MG row: enter the MG rate (more than 0).' }; }
+    const rows = (slabsRaw || []).filter(s => [s.min, s.max, s.cost].some(v => String(v == null ? '' : v).trim() !== ''));
+    const slabs = []; let prevMax = hasMg ? thr : null;
+    for (let i = 0; i < rows.length; i++) {
+      const s = rows[i], isLast = i === rows.length - 1, n = i + 1;
+      const min = num(s.min), max = num(s.max), cost = num(s.cost);
+      if (min == null || !(min >= 0)) return { err: 'Slab ' + n + ': enter Min shipments per month.' };
+      if (max == null && !isLast) return { err: 'Slab ' + n + ': only the last slab can be open-ended (no Max).' };
+      if (max != null && !(max > min)) return { err: 'Slab ' + n + ': Max must be above Min.' };
+      if (!(cost > 0)) return { err: 'Slab ' + n + ': enter a rate per shipment.' };
+      if (prevMax != null && min < prevMax) return { err: 'Slab ' + n + ': Min must be at least ' + prevMax.toLocaleString('en-IN') + (i === 0 && hasMg ? ' (the MG row covers up to it).' : ' (slabs can’t overlap).') };
+      slabs.push({ min, max, cost }); prevMax = max;
+    }
+    if (!hasMg && !slabs.length) return { err: 'A Rate Card needs an MG row or at least one slab — it’s mandatory for every SC.' };
+    return { rc: { mg: hasMg ? mg : null, mgThreshold: hasMg ? thr : null, slabs } };
+  }
   openRateCardModal(scCode, readOnly) {
     const sc = (this.state.data.scs || []).find(s => s.code === scCode) || {};
     const rc = sc.rateCard || {};
@@ -9853,6 +9870,7 @@ class NDCApp extends React.Component {
         // slab table below. Per direct product clarification, both sides of this are monthly —
         // no separate daily-volume check.
         mgThreshold: rc.mgThreshold != null ? String(rc.mgThreshold) : '',
+        hasMg: !!(rc.mg > 0), // 2026-10-27: MG row optional
         slabs: (rc.slabs || []).map(s => ({ min: s.min != null ? String(s.min) : '', max: s.max != null ? String(s.max) : '', cost: s.cost != null ? String(s.cost) : '' })),
       },
     });
@@ -9862,7 +9880,9 @@ class NDCApp extends React.Component {
   rateCardSetMgThreshold(e) { this.setState({ rateCardModal: Object.assign({}, this.state.rateCardModal, { mgThreshold: e.target.value }) }); }
   rateCardAddSlab() {
     const m = this.state.rateCardModal;
-    const next = (m.slabs || []).concat([{ min: '', max: '', cost: '' }]);
+    const sl = m.slabs || []; const last = sl[sl.length - 1];
+    const startAt = last ? (last.max != null && String(last.max) !== '' ? String(last.max) : '') : (m.hasMg && m.mgThreshold ? String(m.mgThreshold) : '0');
+    const next = sl.concat([{ min: startAt, max: '', cost: '' }]); // Min pre-filled from the previous Max (editable)
     this.setState({ rateCardModal: Object.assign({}, m, { slabs: next }) });
   }
   rateCardRemoveSlab(idx) {
@@ -9886,29 +9906,16 @@ class NDCApp extends React.Component {
     if ((this.state.rateCardModal || {}).readOnly) { this.closeRateCardModal(); return; }
     if (this.isRlhCyclePast()) { this.showToast('This cycle is in the past — Design Inputs are read-only.', '#C77B00'); return; }
     const m = this.state.rateCardModal;
-    const mg = +m.mg || 0;
-    const thr = (m.mgThreshold === '' || m.mgThreshold == null) ? null : (+m.mgThreshold || 0);
-    if (mg > 0 && !(thr > 0)) { this.showToast('Enter the MG row’s volume (Up to …) — MG applies at or below it.', '#C77B00'); return; }
-    if (thr > 0 && !(mg > 0)) { this.showToast('Enter the MG amount for the first row.', '#C77B00'); return; }
-    const raw = (m.slabs || []).filter(s => String(s.max || '') !== '' || String(s.cost || '') !== '');
-    let prev = thr || 0; const slabs = [];
-    for (let i = 0; i < raw.length; i++) {
-      const s = raw[i]; const isLast = i === raw.length - 1;
-      const max = String(s.max || '') === '' ? null : Number(s.max);
-      const cps = Number(s.cost);
-      if (!(cps > 0)) { this.showToast('Row ' + (i + 2) + ': enter a Blended CPS.', '#C77B00'); return; }
-      if (max == null && !isLast) { this.showToast('Row ' + (i + 2) + ': only the last row can be open-ended (“Above”).', '#C77B00'); return; }
-      if (max != null && !(max > prev)) { this.showToast('Row ' + (i + 2) + ': upper volume must be above ' + prev.toLocaleString('en-IN') + '.', '#C77B00'); return; }
-      slabs.push({ min: prev, max, cost: cps });
-      if (max != null) prev = max;
-    }
+    const v = this.rateCardValidate(!!m.hasMg, m.mg, m.mgThreshold, m.slabs);
+    if (v.err) { this.showToast(v.err, '#C77B00'); return; }
     const cycleMonth = this.state.activeCycleMonth.rlh;
     const dBase = peekClassD(this.engineStore, 'rlh', 'scMaster', cycleMonth, m.code) || {};
-    setClassDField(this.engineStore, 'rlh', 'scMaster', cycleMonth, m.code, 'rateCard', { mg, mgThreshold: thr, slabs }, dBase);
+    setClassDField(this.engineStore, 'rlh', 'scMaster', cycleMonth, m.code, 'rateCard', v.rc, dBase);
     this.refreshScs();
     this.setState({ rateCardModal: { open: false } });
     this.showToast('Rate Card saved for ' + m.code, '#128A3E');
   }
+
   // Global Rate Card CSV — long format (SC Code, MG, MG Threshold, Min Shipments, Max Shipments,
   // Cost Per Shipment), one row per slab; MG and MG Threshold are repeated on every row for a
   // given SC (same value expected each time — the first row's values win if they ever disagree,
@@ -9917,8 +9924,8 @@ class NDCApp extends React.Component {
   // as it is. 2026-09-18 addition (item 1) — MG Threshold column added between MG and Min
   // Shipments; required (same as the modal's own save-time check) whenever MG is non-zero.
   rateCardTemplate() {
-    const head = 'SC Code,MG,MG Threshold,Min Shipments,Max Shipments,Cost Per Shipment\n';
-    const sample = 'DELS,50000,1500000,1500000,2000000,5\nDELS,50000,1500000,2000000,3000000,3\nDELS,50000,1500000,3000000,,2\n';
+    const head = 'SC Code,MG Rate (Rs per month),MG Shipments per Month,Min Shipments per Month,Max Shipments per Month,Rate per Shipment\n';
+    const sample = 'DELS,900000,100000,100000,200000,8.5\nDELS,,,200000,,7\nGGNS,,,0,80000,11\nGGNS,,,80000,,9.5\n';
     this.downloadText('rate-card-template.csv', head + sample);
   }
   // rateCardExportCsv() (2026-09-24 addition) — "Download Current Data": same long format as the
@@ -9927,12 +9934,14 @@ class NDCApp extends React.Component {
   // parser reads it back). An SC with no rateCard set at all (mg:0, no slabs) contributes no
   // rows — nothing to round-trip.
   rateCardExportCsv() {
-    const header = 'SC Code,MG,MG Threshold,Min Shipments,Max Shipments,Cost Per Shipment';
+    const header = 'SC Code,MG Rate (Rs per month),MG Shipments per Month,Min Shipments per Month,Max Shipments per Month,Rate per Shipment';
     const rows = [];
     (this.state.data.scs || []).forEach(s => {
       const rc = s.rateCard || {};
       if (!rc.mg && !(rc.slabs || []).length) return;
-      (rc.slabs || []).forEach(sl => rows.push([s.code, rc.mg || 0, rc.mgThreshold != null ? rc.mgThreshold : '', sl.min, sl.max != null ? sl.max : '', sl.cost].map(v => this.csvField(v)).join(',')));
+      const mgC = rc.mg > 0 ? rc.mg : '', thC = rc.mg > 0 && rc.mgThreshold != null ? rc.mgThreshold : '';
+      if (!(rc.slabs || []).length) rows.push([s.code, mgC, thC, '', '', ''].map(v => this.csvField(v)).join(','));
+      (rc.slabs || []).forEach(sl => rows.push([s.code, mgC, thC, sl.min, sl.max != null ? sl.max : '', sl.cost].map(v => this.csvField(v)).join(',')));
     });
     this.downloadText('rate-card-current.csv', header + '\n' + rows.join('\n') + (rows.length ? '\n' : ''));
     this.showToast('Rate Card — current data downloaded · ' + rows.length + ' row' + (rows.length === 1 ? '' : 's'), '#128A3E');
@@ -9946,33 +9955,31 @@ class NDCApp extends React.Component {
     e.target.value = '';
   }
   applyRateCardCsv(text) {
+    // 2026-10-27 (#65) — columns by position: SC Code, MG Rate (₹/month), MG Shipments / Month, Min
+    // Shipments / Month, Max Shipments / Month, Rate per Shipment. MG columns optional; a row with
+    // only MG (blank slab columns) is fine. Rules: rateCardValidate().
     const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
-    const errors = [];
-    const bySc = {};
+    const errors = [], bySc = {};
     lines.slice(1).forEach((line, i) => {
-      const row = i + 2;
-      const cols = line.split(',').map(c => c.trim());
-      const [code, mg, mgThreshold, min, max, cost] = cols;
+      const row = i + 2, cols = line.split(',').map(c => c.trim()); const [code, mg, thr, min, max, cost] = cols;
       if (!code || !this.engineStore.scRegistry[code]) { errors.push({ row, code, msg: 'Unknown SC Code' }); return; }
-      if (mg === '' || isNaN(+mg)) { errors.push({ row, code, msg: 'MG must be a number' }); return; }
-      if (+mg > 0 && (mgThreshold === '' || isNaN(+mgThreshold))) { errors.push({ row, code, msg: 'MG Threshold must be a number whenever MG is set' }); return; }
-      if (min === '' || isNaN(+min)) { errors.push({ row, code, msg: 'Min Shipments must be a number' }); return; }
-      if (max !== '' && isNaN(+max)) { errors.push({ row, code, msg: 'Max Shipments must be a number or blank (open-ended top slab)' }); return; }
-      if (cost === '' || isNaN(+cost)) { errors.push({ row, code, msg: 'Cost Per Shipment must be a number' }); return; }
-      bySc[code] = bySc[code] || { mg: +mg, mgThreshold: mgThreshold === '' ? null : +mgThreshold, slabs: [] };
-      bySc[code].slabs.push({ min: +min, max: max === '' ? null : +max, cost: +cost });
+      const g = bySc[code] = bySc[code] || { rows: [], mg: '', thr: '', first: row };
+      if (mg) g.mg = mg; if (thr) g.thr = thr;
+      if ([min, max, cost].some(x => x)) g.rows.push({ min, max, cost });
     });
+    const ok = {};
+    Object.keys(bySc).forEach(code => { const g = bySc[code];
+      if ((g.mg && !g.thr) || (!g.mg && g.thr)) { errors.push({ row: g.first, code, msg: 'MG Rate and MG Shipments / Month go together' }); return; }
+      const v = this.rateCardValidate(!!(g.mg || g.thr), g.mg, g.thr, g.rows.slice().sort((a, b) => Number(a.min) - Number(b.min)));
+      if (v.err) errors.push({ row: g.first, code, msg: v.err }); else ok[code] = v.rc; });
     if (errors.length) { this.setState({ rateCardUploadErrors: errors }); return; }
     const cycleMonth = this.state.activeCycleMonth.rlh;
-    Object.keys(bySc).forEach(code => {
-      const dBase = peekClassD(this.engineStore, 'rlh', 'scMaster', cycleMonth, code) || {};
-      const slabs = bySc[code].slabs.slice().sort((a, b) => a.min - b.min);
-      setClassDField(this.engineStore, 'rlh', 'scMaster', cycleMonth, code, 'rateCard', { mg: bySc[code].mg, mgThreshold: bySc[code].mgThreshold, slabs }, dBase);
-    });
+    Object.keys(ok).forEach(code => { const dBase = peekClassD(this.engineStore, 'rlh', 'scMaster', cycleMonth, code) || {}; setClassDField(this.engineStore, 'rlh', 'scMaster', cycleMonth, code, 'rateCard', ok[code], dBase); });
     this.refreshScs();
     this.setState({ rateCardUploadErrors: [] });
-    this.showToast('Rate Card updated for ' + Object.keys(bySc).length + ' SC' + (Object.keys(bySc).length === 1 ? '' : 's'), '#128A3E');
+    this.showToast('Rate Card updated for ' + Object.keys(ok).length + ' SC' + (Object.keys(ok).length === 1 ? '' : 's'), '#128A3E');
   }
+
   // Dock Profile (2026-09-10) — SC-wise hourly dock availability for Route Scheduler's Step 2.
   // Computed fresh each time the modal opens (not stored): base capacity = SC Master's own RLH
   // Docks; non-operating hours (from Operating Hours) force 0; each NLH trailer landing and each
@@ -12021,6 +12028,8 @@ class NDCApp extends React.Component {
     const list = (a, n) => a.slice(0, n || 8).join(', ') + (a.length > (n || 8) ? ' +' + (a.length - (n || 8)) + ' more' : '');
     const missingCap = (draft.scCodes || []).filter(code => { const sc = scs.find(s => s.code === code); return !sc || !sc.sortCap || !sc.volCap || !sc.htp; });
     if (missingCap.length) errors.push({ title: 'Sort Capacity / Volume Capacity / HTP missing in SC Master', detail: list(missingCap) });
+    const missingRc = (draft.scCodes || []).filter(code => { const sc = scs.find(s => s.code === code) || {}; const rc = sc.rateCard; return !(rc && ((Number(rc.mg) > 0) || (rc.slabs || []).length)); });
+    if (missingRc.length) errors.push({ title: 'Rate Card missing in SC Master (mandatory)', detail: list(missingRc) });
     if (eligible.length === 0) errors.push({ title: 'No DCs selected for this run', detail: 'Select DCs in Step 1' });
     const noVol = eligible.filter(dc => !this.mapVolumeInfoForDc(dc.code, draft.volFileName, dc.capacity).hasVolume).map(dc => dc.code);
     if (noVol.length) errors.push({ title: noVol.length + ' DC' + (noVol.length === 1 ? '' : 's') + ' with no volume in "' + draft.volFileName + '"', detail: list(noVol) + ' — clear them in Step 1 or fix the volume plan' });
@@ -12412,6 +12421,7 @@ class NDCApp extends React.Component {
     const pr = s.pocRoles || normalizeScPocRoles(s);
     const missingPocs = SC_POC_CATEGORIES.filter(c => c.required && !pr[c.key]);
     if (missingPocs.length) out.push({ key: 'pocs', label: missingPocs.length + ' mandatory POC' + (missingPocs.length === 1 ? '' : 's') });
+    const rc = s.rateCard; if (!rc || !((Number(rc.mg) > 0) || (rc.slabs || []).length)) out.push({ key: 'rateCard', label: 'Rate Card' }); // mandatory (2026-10-27, #65)
     return out;
   }
   // ===== Master template I/O helpers (2026-10-15) =====
@@ -12881,10 +12891,10 @@ class NDCApp extends React.Component {
     // 2026-10-14 — Migrations merged back into one tab with Additions & Closures (one combined
     // CSV already fed all three). A stale 'migrations' step falls back to the merged tab.
     const nstep = (st.nodeStep === 'migrations') ? 'changes' : (st.nodeStep || 'active');
-    const nodeChangeCount = (d.migrations || []).length + (d.migrationPipeline || []).filter(m => m.status === 'PendingAlignment' || m.status === 'RejectedByPlanner').length;
+    const nodeChangeCount = (d.migrations || []).length; // V4.0 2026-10-27: user-uploaded migrations only (pipeline not shown here)
     const nodeStepMeta = [
       ['active', 'AutoDML Actions', (d.autodmlNodes || []).length, remaining.length > 0, 'Flagged LMSC → LMDC links from AutoDML — resolve before planning.'],
-      ['changes', 'Migrations', nodeChangeCount, nodeChangeCount > 0, 'SC-to-SC migrations this cycle, plus the not-yet-aligned pipeline from SC-DC Mapping. New LMDCs and closures are managed in LMDC Master.'],
+      ['changes', 'Migrations', nodeChangeCount, nodeChangeCount > 0, 'SC-to-SC migrations uploaded this cycle. New LMDCs and closures are managed in LMDC Master.'],
     ];
     const nodeSteps = nodeStepMeta.map(s => ({ label: s[1], tip: s[4], attention: s[3], active: nstep === s[0], color: nstep === s[0] ? '#003F98' : '#5A5E66', weight: nstep === s[0] ? '700' : '500', bg: nstep === s[0] ? '#fff' : 'transparent', bd: nstep === s[0] ? '#D7DCE5' : 'transparent', onClick: () => this.setState({ nodeStep: s[0] }) }));
     const anFiltered = d.scs.filter(s => zf(s.zone) && tf(scTypeOf(s)) && (!q || s.code.toLowerCase().indexOf(q) >= 0 || s.name.toLowerCase().indexOf(q) >= 0));
@@ -13040,7 +13050,7 @@ class NDCApp extends React.Component {
         pocOpen: pocOpenRow === s.code, pocOpenRect: pocOpenRect,
         opHoursConfigured: (rf.nonOperating.length > 0 || rf.breaks.length > 0),
         onOpenOpHours: () => this.openOpHoursModal(s.code),
-        rateCardConfigured: !!(s.rateCard && (s.rateCard.mg > 0 || (s.rateCard.slabs || []).length > 0)),
+        rateCardConfigured: !!(s.rateCard && (s.rateCard.mg > 0 || (s.rateCard.slabs || []).length > 0)), rateCardMissing: s.isActive !== false && s.nodeKind !== 'MDC' && !(s.rateCard && (s.rateCard.mg > 0 || (s.rateCard.slabs || []).length > 0)),
         onOpenRateCard: () => this.openRateCardModal(s.code),
         togglePoc: (e) => { if (pocOpenRow === s.code) { this.setState({ pocOpenRow: null }); return; } const r = e.currentTarget.getBoundingClientRect(); this.setState({ pocOpenRow: s.code, pocOpenRect: { top: r.bottom + 4, left: Math.min(r.left, window.innerWidth - 270) } }); },
         // 2026-08-25 rewrite — delete/undo now go through the engine's effective-month existence
@@ -13129,7 +13139,9 @@ class NDCApp extends React.Component {
       const lmscConflict = multiConflictByDc[l.code];
       const lmdcMiss = this.lmdcMissingFields(l);
       return {
-        code: l.code, needsAction: lmdcMiss.length > 0, missTitle: lmdcMiss.length ? 'Needs action — missing: ' + lmdcMiss.join(', ') : '',
+        code: l.code, needsAction: lmdcMiss.length > 0,
+        missTitle: (() => { if (!lmdcMiss.length) return ''; const own = l.source === 'AutoDML' ? ['Coordinates', 'Capacity'] : []; const u = lmdcMiss.filter(x => own.indexOf(x) < 0), a = lmdcMiss.filter(x => own.indexOf(x) >= 0);
+          return 'Needs action' + (u.length ? ' — missing user inputs: ' + u.join(', ') : '') + (a.length ? ' — missing from AutoDML: ' + a.join(', ') : ''); })(),
         missCoords: lmdcMiss.indexOf('Coordinates') >= 0, missCap: lmdcMiss.indexOf('Capacity') >= 0, missPins: lmdcMiss.indexOf('Pincodes') >= 0,
         srcManual: l.source === 'Manual', lmscCode: l.lmscCode || 'Pending', pending: !!l.pending, coords: (l.lat || l.lng) ? (l.lat.toFixed(4) + ', ' + l.lng.toFixed(4)) : '\u2014',
         lmscConflict: !!lmscConflict, lmscConflictWith: lmscConflict ? lmscConflict.secondSc : null,
@@ -13484,8 +13496,8 @@ class NDCApp extends React.Component {
       nodeStats: nodeStats, autodmlFilterCards: autodmlFilterCards, nodeRows: autodmlPager.pageRows, autodmlPager: autodmlPager, nodeShown: nodeShown, nodeEmpty: nodeEmpty, nodeCountLabel: nodeCountLabel,
       nodeLmscSearch: st.nodeLmscSearch || '', onNodeLmscSearch: (e) => this.setState({ nodeLmscSearch: e.target.value, pgAutodml: 1 }), nodeFilterDirty: nodeFilterDirty, clearNodeFilters: clearNodeFilters, onDownloadNodeCsv: () => this.downloadNodeCsv(nodeRows),
       autodmlCards, nodeAdditions, nodeClosures: d.nodeClosures, migrations: d.migrations,
-      nodeChanges: (() => { const fromOf = {}; (d.migrations || []).forEach(m => { fromOf[m.dc] = m.from; }); (d.migrationPipeline || []).forEach(m => { if (!fromOf[m.dc]) fromOf[m.dc] = m.from; });
-        return nodeChangesAll.filter(n => n.flag === 'Migration').map(n => Object.assign({}, n, { fromSc: fromOf[n.lmdcCode] || '\u2014', toSc: n.lmscCode })); })(),
+      nodeChanges: (() => { const fromOf = {}; (d.migrations || []).forEach(m => { fromOf[m.dc] = m.from; });
+        return nodeChanges.filter(n => n.flag === 'Migration').map(n => Object.assign({}, n, { fromSc: fromOf[n.lmdcCode] || '\u2014', toSc: n.lmscCode })); })(),
       nodeLmdcAddCount: (d.nodeAdditions || []).length, nodeLmdcCloseCount: (d.nodeClosures || []).length,
       onOpenLmdcMaster: () => this.setState({ inputsTab: 'masters', mastersTab: 'lmdc' }),
       migrationsTemplate: () => this.downloadTemplate('Migrations', [{ k: 'LMDC Code' }, { k: 'From LMSC' }, { k: 'To LMSC' }]), migPipelineRows, migPipelineCount: migPipelineRows.length,
@@ -13659,35 +13671,20 @@ class NDCApp extends React.Component {
   buildRateCardModal() {
     const m = this.state.rateCardModal || {};
     if (!m.open) return { open: false };
+    const v = this.rateCardValidate(!!m.hasMg, m.mg, m.mgThreshold, m.slabs);
     return {
-      open: true, code: m.code, readOnly: !!m.readOnly,
-      mg: m.mg != null ? m.mg : '',
-      onMgChange: (e) => this.rateCardSetMg(e),
-      mgThreshold: m.mgThreshold != null ? m.mgThreshold : '',
-      onMgThresholdChange: (e) => this.rateCardSetMgThreshold(e),
-      slabs: m.slabs || [],
-      // 2026-09-30 table rows: MG row + contiguous slab rows (from = previous upper).
-      ...(() => {
-        const fmt = (n) => (n == null || n === '' || isNaN(+n)) ? '' : Number(n).toLocaleString('en-IN');
-        const mgN = +m.mg || 0, thrN = +m.mgThreshold || 0;
-        const mgCps = (mgN > 0 && thrN > 0) ? (mgN / thrN).toFixed(2) : '';
-        let prev = thrN || 0;
-        const rows = (m.slabs || []).map((s, i, arr) => {
-          const from = prev; const hasMax = String(s.max || '') !== '' && !isNaN(+s.max);
-          if (hasMax) prev = +s.max;
-          const isLast = i === arr.length - 1;
-          return { idx: i, fromLabel: fmt(from) || '0', max: s.max, cost: s.cost, isLast,
-            cumLabel: hasMax ? fmt(s.max) : (isLast ? ('Above ' + (fmt(from) || '0')) : '—'),
-            maxPh: isLast ? 'blank = Above' : 'upper volume' };
-        });
-        return { mgCpsLabel: mgCps ? ('₹' + mgCps) : '—', mgCumLabel: thrN > 0 ? fmt(thrN) : '—', rcRows: rows };
-      })(),
+      open: true, code: m.code, readOnly: !!m.readOnly, hasMg: !!m.hasMg,
+      onToggleMg: () => !m.readOnly && this.setState({ rateCardModal: Object.assign({}, m, { hasMg: !m.hasMg }) }),
+      mg: m.mg != null ? m.mg : '', onMgChange: (e) => this.rateCardSetMg(e),
+      mgThreshold: m.mgThreshold != null ? m.mgThreshold : '', onMgThresholdChange: (e) => this.rateCardSetMgThreshold(e),
+      rcRows: (m.slabs || []).map((s, i, arr) => ({ idx: i, n: i + 1, min: s.min, max: s.max, cost: s.cost, maxPh: i === arr.length - 1 ? 'blank = and above' : 'shipments' })),
+      hasRows: (m.slabs || []).length > 0, issue: v.err || '', ok: !v.err,
       onSlabField: (idx, field) => this.rateCardSetSlabField(idx, field),
-      onAddSlab: () => this.rateCardAddSlab(),
-      onRemoveSlab: (idx) => this.rateCardRemoveSlab(idx),
+      onAddSlab: () => this.rateCardAddSlab(), onRemoveSlab: (idx) => this.rateCardRemoveSlab(idx),
       onSave: () => this.saveRateCardModal(), onClose: () => this.closeRateCardModal(),
     };
   }
+
   buildSpeedProfileModal() {
     const st = this.state;
     const scCode = st.speedProfileSC;
