@@ -4314,3 +4314,53 @@ RNG-based approximation. Read the method's own comment block first; the short ve
     - Regression: SC-DC 34/34, Design Review 28/28 and 26/26, wizard 38/38 and 19/19,
       Configurations / Speed 23/23, SC Master 10/10, edge 7/7. 0 runtime errors; 0 JSX `\u`.
   - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
+
+- **2026-10-28 — Migrations tab without pipeline; LMDC user inputs on AutoDML rows; Rate Card
+  remodel (MG optional, explicit slabs, mandatory).**
+  1. **Node Inputs › Migrations** shows **only user-uploaded migrations**: the "Pipeline — not yet
+     aligned" section is removed, and the tab count = uploaded migrations. The table reads
+     `d.nodeChangesUnified` Migration rows only, with no Aligned-pipeline overlay. The SC-DC pipeline
+     still exists and still feeds Route Planner's "Include pipeline DCs" toggle.
+  2. **LMDC user inputs on AutoDML-synced rows**:
+     - AutoDML supplies only LMSC / coordinates / capacity; POCs and pincodes are always user
+       inputs, required on every row (as already enforced by `lmdcMissingFields()`).
+     - The row tooltip now splits "missing user inputs" from "missing from AutoDML"; the banner says
+       synced rows are included.
+     - Demo seed: GGNS-303 (pincodes), NOIS-305 (ZH POC) and AGRS-307 (CH POC + pincodes) are
+       synced rows with gaps.
+  3. **SC Rate Card (#65)**:
+     - **MG row optional** (switch): Shipments / month (up to) + MG Rate (₹ / month) only.
+     - **Slabs** with explicit Min and Max shipments / month + Rate (₹ / shipment); "+ Add slab"
+       pre-fills Min from the previous Max (or the MG volume, or 0).
+     - One validator, `rateCardValidate()`, for the modal and the CSV:
+       - slabs ascending, no overlap;
+       - with MG, the first slab's Min ≥ the MG volume;
+       - only the last slab open-ended; Max > Min; rate > 0;
+       - an MG row or ≥ 1 slab is required.
+     - The modal shows the live issue and Save is disabled until valid. It's rebuilt (MG card +
+       slab grid); view-only mode is unchanged.
+     - **Mandatory**:
+       - `scMissingFields()` adds "Rate Card" (SC needs action, red Rate Card icon);
+       - SC-DC pre-validation errors on SCs without one.
+     - **Demo**: Rate Cards seeded for 79 of 82 SCs (≈60% with MG), written for every month from
+       genesis (2020-01) to today. Resolved SCs carry an empty `{mg: 0, slabs: []}` placeholder,
+       which counts as "none". BBSS / DHNS / GHYS stay unconfigured.
+     - **CSV** (by position): SC Code, MG Rate (Rs per month), MG Shipments per Month, Min / Max
+       Shipments per Month, Rate per Shipment. MG columns optional; MG-only rows allowed; grouped
+       per SC, sorted by Min, then validated. Export writes MG-only cards as one row.
+  - **Verification**:
+    - new jsdom suite **28/28**:
+      - pipeline gone, table = 3 uploaded migrations while 169 pipeline entries are hidden;
+      - 3 synced LMDCs flagged with the split tooltip;
+      - 79/82 seeded Rate Cards, mix of MG / slab-only;
+      - mandatory flag + red cell;
+      - validator: empty, overlap, open-ended not last, Max ≤ Min, missing rate, MG-volume floor;
+      - saves with and without MG;
+      - CSV template, overlap rejected, MG-only and slab-only applied, export round-trip;
+      - SC-DC pre-validation error.
+    - Regression:
+      - SC-DC 34/34 (two checks updated to the new rules: pipeline absent; Rate Card turns MG on);
+      - LMDC 25/25; Design Review 28/28 and 26/26; wizard 38/38 and 19/19;
+      - Configurations / Speed 23/23; SC Master 10/10; edge 7/7.
+    - Boot / cycle-switch / render timings unchanged. 0 runtime errors; 0 JSX `\u`.
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
