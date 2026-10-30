@@ -4364,3 +4364,61 @@ RNG-based approximation. Read the method's own comment block first; the short ve
       - Configurations / Speed 23/23; SC Master 10/10; edge 7/7.
     - Boot / cycle-switch / render timings unchanged. 0 runtime errors; 0 JSX `\u`.
   - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
+
+- **2026-10-30 — SC-DC Connections text; SC Master Status / Rate Card; SC-DC Mapping summary,
+  validations and Run Queue.**
+  1. **SC-DC Connections › Migrations**: the upload card text is migrations-only ("one row per LMDC
+     changing SC … a row replaces any earlier migration for the same LMDC"; the old "single CSV —
+     additions, closures & migrations / override" text is gone). The "New LMDCs and closures live in
+     LMDC Master" row and the tooltip mention are removed.
+  2. **SC Master**:
+     - **Status moved to the last column**, after Edit. Header and row cells moved; `scGridCols` /
+       `scGridMinW` reordered (19 tracks, 120px last).
+     - **Rate Card**: the MG switch is removed. MG is two plain optional fields; MG applies when
+       either is filled (`rateCardHasMg()`). **New rule**: with no MG, slab 1 must start at 0.
+  3. **SC-DC Mapping wizard**:
+     - **Ideal <> Actual SC Delta** in 1 km steps (stepper ±1, input `step="1"`, rounded).
+     - **Map hover cards** (`NdcSpokeMap` hover state; items carry `info` lines):
+       - SC — name, location, volume (selected DCs' planned volume) vs Vol cap, Sort cap, mapped
+         DCs;
+       - DC — mapped to SC + distance, location, volume and capacity;
+       - unmapped DC — "Unmapped (new DC)", location, volume and capacity.
+     - **Step 3 Plan Summary** is now one section: PLAN (Volume plan, SCs, DCs selected, Planned
+       volume) and CONSTRAINTS (New Node Addition mode, Cross-SC Migration Penalty ρ, Single Pin –
+       Single SC, Ideal <> Actual SC Delta threshold); the stat strip is gone.
+     - **Unmapped DCs table** under the SC list: DC Code, Location, Volume, Capacity, Mapped
+       pincodes (or a note when New Node Addition is off).
+     - **New pre-validation errors** (block Trigger):
+       - every selected DC needs non-zero planned volume;
+       - mandatory SC parameters (`scMissingFields` + HTP; replaces the separate Sort / Vol / HTP and
+         Rate Card checks);
+       - mandatory LMDC parameters (`lmdcMissingFields`);
+       - total DCs < Σ floor(Sort Cap × Max Sort Cap Util %);
+       - total planned volume < Σ Vol Cap × Vol Util Max %.
+       - Error details name the SC / DC and what's missing.
+  4. **Run Queue** (Input Selection / Run Queue strip, like Route Planner):
+     - a table of every SC-DC run this cycle, newest first: **DAG ID**
+       (`scdc_mapping__<yyyymmddThhmmss>__<run id>`, set at trigger; seeded runs derive one), Run
+       Name, SCs, DCs, Triggered, **Status In Progress / Failed / Completed** (pulse dot while
+       running);
+     - Trigger opens it. A solver error marks the run **Failed** with the message.
+     - **View results** opens the run in Design Review › Node Mapping (To Review, or Finalised when
+       committed); "Open Design Review" opens the list.
+  - **Environment note**: the working environment was reset before this round. The build was
+    restored from the 2026-10-28 package (checksum-identical), and the test suites were rebuilt as
+    one shared harness (`h.js`) + this round's suite + a combined regression suite.
+  - **Verification**:
+    - this round **31/31**:
+      - Migrations text; SC grid 19 cells with Status last;
+      - Rate Card no toggle, no-MG-starts-at-0, MG either-field;
+      - Δ ±1; SC / DC / unmapped hover cards;
+      - merged summary rows; unmapped table;
+      - each of the 5 validations, then a clean trigger;
+      - queue DAG ID / In Progress → Completed; View results → Design Review; forced solver error →
+        Failed.
+    - Combined regression **18/18** on this build and on the 2026-10-28 build (suite sanity): SC
+      readiness, Configurations, LMDC derive / flags / grid, migrations upload, solver moves, review
+      L1 / L2 / CSV / Accept all / Simulate / commit / Finalised, wizard, Speed Profile, cycle
+      switch, empty month.
+    - 0 runtime errors; 0 JSX `\u`; identifier scan clean.
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
