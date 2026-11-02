@@ -1387,6 +1387,7 @@ All modules
 </details>
 <div style={css(`flex:1;`)} />
 <span style={css(`font-size:12px; color:#5A5E66;`)}>Showing <strong style={css(`color:#14171F;`)}>{lmdcShown}</strong> of <strong style={css(`color:#14171F;`)}>{lmdcTotal}</strong> LMDCs</span>
+<button onClick={onAddLmdcOpen} disabled={rlhCyclePast} title={rlhCyclePast ? "Past cycle — read-only. Switch to the current cycle to add." : "Add an LMDC"} style={css(`display:inline-flex; align-items:center; gap:6px; height:36px; padding:0 14px; border:none; background:#003F98; color:#fff; font-family:inherit; font-size:12.5px; font-weight:600; border-radius:8px; cursor:${rlhCyclePast ? 'not-allowed' : 'pointer'}; opacity:${rlhCyclePast ? '0.45' : '1'};`)} onMouseEnter={(e) => hoverOn(e, `background:#00337D;`)} onMouseLeave={(e) => hoverOff(e, `display:inline-flex; align-items:center; gap:6px; height:36px; padding:0 14px; border:none; background:#003F98; color:#fff; font-family:inherit; font-size:12.5px; font-weight:600; border-radius:8px; cursor:${rlhCyclePast ? 'not-allowed' : 'pointer'}; opacity:${rlhCyclePast ? '0.45' : '1'};`, `background:#00337D;`)}><svg width={"15"} height={"15"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M12 5v14M5 12h14"} strokeLinecap={"round"} /></svg>Add LMDC</button>
 </div>
 {(hasLmdcUploadErrors) ? (<>
 <div style={css(`margin-bottom:14px; padding:12px 14px; background:#FBF1DF; border:1px solid #EDD9AF; border-radius:8px;`)}>
@@ -2073,13 +2074,13 @@ All modules
                  FM / FMSC volumes belong to future NLH / FM-carting tabs, not here. */}
 {(isStep1) ? (<>
 <div style={css(`font-size:15px; font-weight:700; color:#14171F;`)}>Select LMDC volume file</div>
-<div style={css(`font-size:12px; color:#5A5E66; margin:2px 0 12px;`)}>Showing the last 4 uploaded LMDC Landing files for this cycle. Pick one to activate for RLH route planning, then select sort centres below.</div>
+<div style={css(`font-size:12px; color:#5A5E66; margin:2px 0 12px;`)}>LMDC Landing files from Volume Inputs for this cycle. Search by file name and pick one for RLH route planning, then select sort centres below.</div>
 {/* 2.3: Search bar for volume file selection */}
 <div style={css(`display:flex; align-items:center; gap:7px; height:36px; padding:0 11px; border:1px solid #E6EBF2; border-radius:8px; background:#fff; max-width:360px; margin-bottom:12px;`)}>
 <svg width={"15"} height={"15"} viewBox={"0 0 24 24"} fill={"none"} stroke={"#5A5E66"} strokeWidth={"1.8"}><path d={"M11 4a7 7 0 105 12 7 7 0 00-5-12zM21 21l-4.5-4.5"} strokeLinecap={"round"} /></svg>
 <input value={creationVolSearch} onInput={onVolSearch} placeholder={"Search volume files…"} style={css(`border:none; outline:none; font-family:inherit; font-size:12.5px; color:#14171F; background:transparent; flex:1;`)} />
 </div>
-{/* Files (LMDC Landing only, last 4) */}
+{/* Files (LMDC Landing, from Volume Inputs — rlhVolumeLibrary) */}
 {(planTypeHasFiles) ? (<>
 <div style={css(`display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:12px; margin-bottom:22px;`)}>
 {(volOptions || []).map((o, __i41) => (<React.Fragment key={__i41}>
@@ -3119,7 +3120,7 @@ NLH cycle: {schedNlhMonthLabel}
 {/* ===== STEP 1 — Volume & SC Selection ===== */}
 {(mapStep === 1) ? (<>
 <div style={css(`font-size:15px; font-weight:700; color:#14171F;`)}>Select volume plan</div>
-<div style={css(`font-size:12px; color:#5A5E66; margin:2px 0 12px;`)}>Showing the last 4 uploaded LMDC Landing files for this cycle. Pick one — Step 2 checks every DC in this run against it.</div>
+<div style={css(`font-size:12px; color:#5A5E66; margin:2px 0 12px;`)}>LMDC Landing files from Volume Inputs for this cycle. Search by file name and pick one — every DC in this run is checked against it.</div>
 <div style={css(`display:flex; align-items:center; gap:7px; height:36px; padding:0 11px; border:1px solid #E6EBF2; border-radius:8px; background:#fff; max-width:360px; margin-bottom:12px;`)}>
 <svg width={"15"} height={"15"} viewBox={"0 0 24 24"} fill={"none"} stroke={"#5A5E66"} strokeWidth={"1.8"}><path d={"M11 4a7 7 0 105 12 7 7 0 00-5-12zM21 21l-4.5-4.5"} strokeLinecap={"round"} /></svg>
 <input value={mapVolSearch} onInput={onMapVolSearch} placeholder={"Search volume files…"} style={css(`border:none; outline:none; font-family:inherit; font-size:12.5px; color:#14171F; background:transparent; flex:1;`)} />
@@ -3180,7 +3181,7 @@ NLH cycle: {schedNlhMonthLabel}
 <div style={css(`display:flex; align-items:center; background:${s.selected ? '#EAF3EF' : '#fff'};`)}>
 <button onClick={s.onClick} style={css(`flex:1; display:grid; grid-template-columns:26px 1.3fr 1fr 80px 80px 70px; border:none; background:transparent; cursor:pointer; font-family:inherit; padding:9px 12px; text-align:left; align-items:center; min-width:0;`)}>
 <div style={css(`width:18px; height:18px; border-radius:5px; border:2px solid ${s.selected ? mapAccent : '#C3C9D4'}; background:${s.selected ? mapAccent : '#fff'}; display:flex; align-items:center; justify-content:center; flex-shrink:0;`)}>{(s.selected) ? (<><svg width={"11"} height={"11"} viewBox={"0 0 24 24"} fill={"none"} stroke={"#fff"} strokeWidth={"3"}><path d={"M20 6L9 17l-5-5"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg></>) : null}</div>
-<div style={css(`min-width:0;`)}><div style={css(`font-size:12.5px; font-weight:600; color:#14171F;`)}>{s.code} — {s.name}</div><div style={css(`font-size:10.5px; color:#8E96A3;`)}>{s.zone}</div></div>
+<div style={css(`min-width:0;`)}><div style={css(`font-size:12.5px; font-weight:600; color:#14171F;`)}>{s.code} — {s.name}</div><div style={css(`font-size:10.5px; color:#8E96A3;`)}>{s.zone}{(s.hasZeroVol) ? (<><span style={css(`color:#D14B4B; font-weight:700;`)} title={"Untick these DCs (expand the SC) to exclude them from the run, or update the volume file in Volume Inputs"}> · {s.zeroVolLabel}</span></>) : null}</div></div>
 <div style={css(`font-size:11.5px; color:#5A5E66; font-variant-numeric:tabular-nums;`)}>{s.loc}</div>
 <div style={css(`font-size:12px; text-align:right; color:#14171F; font-variant-numeric:tabular-nums;`)}>{s.sortCap}</div>
 <div style={css(`font-size:12px; text-align:right; color:#14171F; font-variant-numeric:tabular-nums;`)}>{s.volCap}</div>
@@ -3378,20 +3379,29 @@ NLH cycle: {schedNlhMonthLabel}
 </div>
 <button onClick={onMapRunPreValidation} style={css(`height:34px; padding:0 16px; border:none; background:${mapAccent}; color:#fff; font-family:inherit; font-size:12.5px; font-weight:600; border-radius:8px; cursor:pointer; flex-shrink:0; white-space:nowrap;`)}>{mapPvRan ? 'Re-run check' : 'Run Pre-Validation Check'}</button>
 </div>
-{(mapPvRan && (mapValFlags || []).length > 0) ? (<>
+{(mapPvRan && (mapPvGroups || []).length > 0) ? (<>
 <div style={css(`background:#fff; border:1px solid #E6EBF2; border-radius:10px; overflow:hidden; margin-bottom:14px;`)}>
 <div style={css(`display:flex; align-items:center; gap:8px; padding:11px 16px; border-bottom:1px solid #E6EBF2; background:#F9FAFB;`)}>
 <span style={css(`font-size:13px; font-weight:700; color:#14171F;`)}>Validation</span>
 {(mapValErrCount > 0) ? (<><span style={css(`display:inline-flex; padding:2px 8px; border-radius:999px; font-size:10.5px; font-weight:700; background:#FBEAEA; color:#D14B4B;`)}>{mapValErrCount} Error</span></>) : null}
 {(mapValWarnCount > 0) ? (<><span style={css(`display:inline-flex; padding:2px 8px; border-radius:999px; font-size:10.5px; font-weight:700; background:#FBF1DF; color:#C77B00;`)}>{mapValWarnCount} Warning</span></>) : null}
 {(mapValErrCount > 0) ? (<><span style={css(`font-size:11.5px; color:#D14B4B; margin-left:4px;`)}>— Resolve errors to trigger</span></>) : null}
-{(mapPvCanAck) ? (<><button onClick={onMapAckWarnings} style={css(`margin-left:auto; height:28px; padding:0 12px; border:1px solid #C77B00; background:#fff; color:#C77B00; font-family:inherit; font-size:11.5px; font-weight:700; border-radius:6px; cursor:pointer;`)}>Accept all warnings</button></>) : null}
+{(mapPvCanAck) ? (<><label style={css(`margin-left:auto; display:inline-flex; align-items:center; gap:6px; font-size:11.5px; color:#5A5E66;`)}><button onClick={onMapPvToggleWarnAll} role={"checkbox"} aria-checked={mapPvWarnAllSelected ? 'true' : 'false'} aria-label={"All SCs with warnings"} style={css(`width:16px; height:16px; flex-shrink:0; border-radius:4px; border:1.5px solid ${mapPvWarnAllSelected ? mapAccent : '#C3C9D4'}; background:${mapPvWarnAllSelected ? mapAccent : '#fff'}; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; padding:0;`)}>{(mapPvWarnAllSelected) ? (<><svg width={"10"} height={"10"} viewBox={"0 0 24 24"} fill={"none"} stroke={"#fff"} strokeWidth={"3"}><path d={"M20 6L9 17l-5-5"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg></>) : null}</button>All SCs with warnings ({mapPvWarnSelCount} selected)</label><button onClick={onMapAckWarnings} style={css(`margin-left:8px; height:28px; padding:0 12px; border:1px solid #C77B00; background:#fff; color:#C77B00; font-family:inherit; font-size:11.5px; font-weight:700; border-radius:6px; cursor:pointer;`)}>Accept all warnings</button></>) : null}
 {(mapPvAcked) ? (<><span style={css(`margin-left:auto; font-size:11.5px; font-weight:600; color:#128A3E;`)}>Warnings accepted</span></>) : null}
 </div>
-{(mapValFlags || []).map((vf, __iMvf) => (<React.Fragment key={__iMvf}>
-<div style={css(`display:flex; align-items:flex-start; gap:12px; padding:10px 16px; border-top:1px solid #F2F5FA;`)}>
-<span style={css(`display:inline-flex; padding:2px 8px; border-radius:999px; font-size:10.5px; font-weight:700; background:${vf.sevBg}; color:${vf.sevFg}; flex-shrink:0; margin-top:1px;`)}>{vf.sevLabel}</span>
-<div style={css(`flex:1; min-width:0;`)}><div style={css(`font-size:12.5px; color:#14171F; font-weight:600;`)}>{vf.title}</div><div style={css(`font-size:12px; color:#5A5E66; margin-top:2px;`)}>{vf.detail}</div></div>
+{(mapPvGroups || []).map((g, __iPvg) => (<React.Fragment key={__iPvg}>
+<div style={css(`padding:10px 16px; border-top:1px solid #F2F5FA;`)}>
+<div style={css(`display:flex; align-items:center; gap:9px;`)}>
+{(g.canSelect) ? (<><button onClick={g.onToggle} role={"checkbox"} aria-checked={g.selected ? 'true' : 'false'} aria-label={"Select " + g.label + " to accept its warnings"} style={css(`width:16px; height:16px; flex-shrink:0; border-radius:4px; border:1.5px solid ${g.selected ? mapAccent : '#C3C9D4'}; background:${g.selected ? mapAccent : '#fff'}; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; padding:0;`)}>{(g.selected) ? (<><svg width={"10"} height={"10"} viewBox={"0 0 24 24"} fill={"none"} stroke={"#fff"} strokeWidth={"3"}><path d={"M20 6L9 17l-5-5"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg></>) : null}</button></>) : null}
+<span style={css(`font-size:12.5px; font-weight:700; color:#14171F;`)}>{g.label}</span>
+<span style={css(`display:inline-flex; padding:2px 8px; border-radius:999px; font-size:10.5px; font-weight:700; background:${g.statusBg}; color:${g.statusFg};`)}>{g.statusLabel}</span>
+</div>
+{(g.items || []).map((it, __iPvi) => (<React.Fragment key={__iPvi}>
+<div style={css(`display:flex; align-items:flex-start; gap:10px; margin:6px 0 0 25px;`)}>
+<span style={css(`display:inline-flex; padding:1px 7px; border-radius:999px; font-size:10px; font-weight:700; background:${it.sevBg}; color:${it.sevFg}; flex-shrink:0; margin-top:1px;`)}>{it.sevLabel}</span>
+<span style={css(`font-size:12px; color:#3A3F47; line-height:1.45;`)}>{it.text}</span>
+</div>
+</React.Fragment>))}
 </div>
 </React.Fragment>))}
 </div>
@@ -3412,15 +3422,19 @@ NLH cycle: {schedNlhMonthLabel}
 </div>
 </div>
 <div style={css(`border:1px solid #E6EBF2; border-radius:8px; overflow:hidden;`)}>
-<div style={css(`display:grid; grid-template-columns:1fr 100px 100px 90px; background:#F7F9FC; padding:8px 12px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em;`)}>
-<div>SC</div><div style={css(`text-align:right;`)}>SORT CAP</div><div style={css(`text-align:right;`)}>VOL CAP</div><div style={css(`text-align:center;`)}>STATUS</div>
+<div style={css(`display:grid; grid-template-columns:1fr 110px 80px 90px 70px 70px 90px 140px; gap:6px; background:#F7F9FC; padding:8px 12px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em;`)}>
+<div>SC</div><div>LOCATION</div><div style={css(`text-align:right;`)}>SORT CAP</div><div style={css(`text-align:right;`)}>VOL CAP</div><div style={css(`text-align:right;`)}>MIN VOL %</div><div style={css(`text-align:right;`)}>MAX VOL %</div><div style={css(`text-align:right;`)}>MAX SORT CAP %</div><div style={css(`text-align:center;`)}>VALIDATION STATUS</div>
 </div>
 {(mapPreviewScs || []).map((s, __iMps) => (<React.Fragment key={__iMps}>
-<div style={css(`display:grid; grid-template-columns:1fr 100px 100px 90px; padding:9px 12px; border-top:1px solid #EEF1F6; align-items:center;`)}>
+<div style={css(`display:grid; grid-template-columns:1fr 110px 80px 90px 70px 70px 90px 140px; gap:6px; padding:9px 12px; border-top:1px solid #EEF1F6; align-items:center;`)}>
 <div style={css(`font-size:12.5px; color:#14171F;`)}>{s.code} — {s.name}</div>
+<div style={css(`font-size:12px; color:#5A5E66; font-variant-numeric:tabular-nums;`)}>{s.loc}</div>
 <div style={css(`font-size:12px; text-align:right; color:#14171F;`)}>{s.sortCap || '—'}</div>
 <div style={css(`font-size:12px; text-align:right; color:#14171F;`)}>{s.volCap || '—'}</div>
-<div style={css(`text-align:center;`)}><span style={css(`padding:2px 8px; border-radius:999px; font-size:10px; font-weight:600; background:${s.missingCap ? '#FBEAEA' : '#E7F4EC'}; color:${s.missingCap ? '#D14B4B' : '#128A3E'};`)}>{s.missingCap ? 'Missing data' : 'Ready'}</span></div>
+<div style={css(`font-size:12px; text-align:right; color:#14171F;`)}>{s.volMin}%</div>
+<div style={css(`font-size:12px; text-align:right; color:#14171F;`)}>{s.volMax}%</div>
+<div style={css(`font-size:12px; text-align:right; color:#14171F;`)}>{s.sortMax}%</div>
+<div style={css(`text-align:center;`)}>{(s.hasStatus) ? (<><span style={css(`padding:2px 8px; border-radius:999px; font-size:10px; font-weight:600; background:${s.statusBg}; color:${s.statusFg};`)}>{s.statusLabel}</span></>) : null}</div>
 </div>
 </React.Fragment>))}
 </div>
@@ -9885,12 +9899,12 @@ class NDCApp extends React.Component {
     this.setState({
       rateCardModal: {
         open: true, code: scCode, readOnly: !!readOnly, // readOnly: SC-DC Mapping Step 2's view (2026-10-22)
-        mg: rc.mg != null ? String(rc.mg) : '',
+        mg: rc.mg > 0 ? String(rc.mg) : '', // 2026-11-02: a stored 0 (default) = no MG — opened blank, so a slab-only card saves
         // 2026-09-18 addition (item 1) — MG Threshold: the monthly shipment-volume ceiling at or
         // below which MG applies (CPS = MG ÷ that month's total actual volume) instead of the
         // slab table below. Per direct product clarification, both sides of this are monthly —
         // no separate daily-volume check.
-        mgThreshold: rc.mgThreshold != null ? String(rc.mgThreshold) : '',
+        mgThreshold: rc.mg > 0 && rc.mgThreshold != null ? String(rc.mgThreshold) : '',
         hasMg: !!(rc.mg > 0), // 2026-10-27: MG row optional
         slabs: (rc.slabs || []).map(s => ({ min: s.min != null ? String(s.min) : '', max: s.max != null ? String(s.max) : '', cost: s.cost != null ? String(s.cost) : '' })),
       },
@@ -11325,6 +11339,14 @@ class NDCApp extends React.Component {
   }
   // openLmdcForm(l) (2026-10-15) — opens the Edit LMDC form pre-filled from the LMDC (operational
   // fields + POCs). Saved by saveLmdcEdit(code), which validates POCs together with the rest.
+  // openLmdcAddForm() (2026-11-02, #71) — "+ Add LMDC": the Edit LMDC form in add mode (lmdcEditCode =
+  // '__new__'), for a new Manual LMDC. Saved by saveLmdcEdit('__new__') with the same rules as a Manual
+  // row; LMSC is optional (#69 / story: a new DC syncs its SC when activated on AutoDML).
+  openLmdcAddForm() {
+    if (this.isRlhCyclePast()) { this.showToast('This cycle is in the past — Design Inputs are read-only.', '#C77B00'); return; }
+    this.setState({ lmdcEditCode: '__new__', lmdcEditDraft: { newCode: '', open: 'Default', close: 'Default', d0Cutoff: 'Default', maxVehicle: 'Default', unloadMin: 'Default',
+      rlhMode: 'Direct Vehicle', mdcCode: '', laneName: '', cutoff: '', tat: '', lmZh: '', lmCh: '', lmAm: [''], pincodes: '', lmscCode: '', lat: '', lng: '', capacity: '' } });
+  }
   openLmdcForm(l) {
     const lp = normalizeLmdcPocs(l);
     this.setState({ lmdcEditCode: l.code, lmdcEditDraft: { open: l.open, close: l.close, d0Cutoff: l.d0Cutoff, maxVehicle: l.maxVehicle, unloadMin: String(l.unloadMin),
@@ -11336,11 +11358,18 @@ class NDCApp extends React.Component {
     if (this.isRlhCyclePast()) { this.setState({ lmdcEditCode: null, lmdcEditDraft: {} }); this.showToast('This cycle is in the past — Design Inputs are read-only.', '#C77B00'); return; }
     const st = this.state;
     const f = st.lmdcEditDraft || {};
+    const isNew = code === '__new__'; let newCode = null;
+    if (isNew) { // 2026-11-02 (#71): Add LMDC
+      newCode = String(f.newCode || '').trim().toUpperCase();
+      if (!newCode) { this.showToast('Enter an LMDC Code', '#C77B00'); return; }
+      if (/[\s,;]/.test(newCode)) { this.showToast('LMDC Code can’t contain spaces, commas or semicolons', '#C77B00'); return; }
+      if ((st.data.lmdcs || []).some(x => x.code === newCode) || (this.engineStore.autodmlLmdc || {})[newCode]) { this.showToast(newCode + ' already exists in LMDC Master — edit that row instead', '#C77B00'); return; }
+    }
     // POCs (2026-10-15) — validated with the rest of the form; ZH / CH mandatory, AM list optional.
     const pocChk = this.pocFormValidate(LMDC_POC_CATEGORIES, f);
     if (pocChk.errs.length) { this.showToast(pocChk.errs[0] + (pocChk.errs.length > 1 ? ' (+' + (pocChk.errs.length - 1) + ' more)' : ''), '#C77B00'); return; }
     // V4.0 2026-10-27 (#63) — required details: pincodes always; for Manual LMDCs also coordinates and capacity.
-    const thisL0 = (st.data.lmdcs || []).find(x => x.code === code) || {}, isManual0 = thisL0.source === 'Manual';
+    const thisL0 = (st.data.lmdcs || []).find(x => x.code === code) || {}, isManual0 = isNew || thisL0.source === 'Manual';
     const miss0 = []; const nodePatch0 = {};
     if (!(f.pincodes || '').split(/[;,]/).map(s => s.trim()).filter(Boolean).length) miss0.push('Pincodes');
     if (isManual0) {
@@ -11389,7 +11418,7 @@ class NDCApp extends React.Component {
       let cutoff = f.cutoff || null;
       if (lane) {
         const d = st.data;
-        const thisRow = (d.lmdcs || []).find(l => l.code === code) || {};
+        const thisRow = (d.lmdcs || []).find(l => l.code === code) || { lmscCode: nodePatch0.lmscCode };
         const sibling = (d.lmdcs || []).find(l => l.code !== code && l.lmscCode === thisRow.lmscCode && l.rlhMode === rlhMode && (rlhMode === 'MDC' ? l.mdcCode === lane : l.laneName === lane));
         if (sibling && sibling.cutoff && sibling.cutoff !== cutoff) { laneCorrected = true; cutoff = sibling.cutoff; }
       }
@@ -11397,12 +11426,18 @@ class NDCApp extends React.Component {
     } else {
       patch.mdcCode = null; patch.laneName = null; patch.cutoff = null; patch.tat = null;
     }
+    if (isNew) { // create the Manual LMDC, then write the form's fields like any edit
+      addLmdc(this.engineStore, newCode, cycleMonth);
+      ensureClassDMaterialized(this.engineStore, 'rlh', 'lmdc', cycleMonth, newCode, Object.assign({ code: newCode, name: newCode, lmscCode: null, zone: null, lat: null, lng: null, capacity: null, active: true, pending: true, pincodes: [],
+        open: 'Default', close: 'Default', d0Cutoff: 'Default', maxVehicle: 'Default', unloadMin: 'Default', rlhMode: 'Direct Vehicle' }, nodePatch0));
+      code = newCode;
+    }
     const existing = peekClassD(this.engineStore, 'rlh', 'lmdc', cycleMonth, code) || {};
     Object.assign(patch, { lmZh: pocChk.roles.lmZh, lmCh: pocChk.roles.lmCh, lmAm: pocChk.roles.lmAm, lmAm1: null, lmAm2: null });
     Object.keys(patch).forEach(field => setClassDField(this.engineStore, 'rlh', 'lmdc', cycleMonth, code, field, patch[field], existing));
     this.refreshLmdcs();
     this.setState({ lmdcEditCode: null, lmdcEditDraft: {} });
-    this.showToast(laneCorrected ? (code + ' updated \u2014 Cutoff corrected to match Lane ' + (patch.laneName || patch.mdcCode) + "'s existing " + patch.cutoff) : (code + ' updated'), laneCorrected ? '#C77B00' : '#128A3E');
+    this.showToast(isNew && !laneCorrected ? (code + ' added to LMDC Master (Manual)') : laneCorrected ? (code + (isNew ? ' added' : ' updated') + ' \u2014 Cutoff corrected to match Lane ' + (patch.laneName || patch.mdcCode) + "'s existing " + patch.cutoff) : (code + ' updated'), laneCorrected ? '#C77B00' : '#128A3E');
   }
   // 2026-08-26 (#11) — LMDC Master gets the same Deactivate/Reactivate pattern as SC Master,
   // now that it has real per-DC existence tracking to back it.
@@ -11953,6 +11988,13 @@ class NDCApp extends React.Component {
   // that don't pass it; when explicitly false, brand-new unmapped DCs are excluded from the run
   // entirely — the solver then only ever reassigns DCs that already have a real AutoDML link,
   // never proposes a first placement for a new addition.
+  // rlhVolumeLibrary() (2026-11-02, #72) — the LMDC Landing files listed in Design Inputs › Volume Inputs:
+  // files uploaded this session + the seeded library, with Replace corrections applied, validated and
+  // error-free only. One source for the Volume Inputs list and SC-DC Mapping's volume-plan picker.
+  rlhVolumeLibrary() {
+    const st = this.state, d = st.data, ed = st.volEdits || {};
+    return (st.uploadedVol || []).concat(d.volumeFiles || []).map(f => ed[f.name] ? Object.assign({}, f, ed[f.name]) : f).filter(f => f.validated && !f.errorCount).filter(f => f.type === 'LMDC Landing');
+  }
   mapComputeEligibleDcs(scCodes, includeNewAdditions) {
     const includeNew = includeNewAdditions !== false;
     const d = this.state.data;
@@ -11995,7 +12037,7 @@ class NDCApp extends React.Component {
     const q = (v) => { const s = String(v == null ? '' : v); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
     const rows = eligible.filter(dc => !this.mapVolumeInfoForDc(dc.code, draft.volFileName, dc.capacity).hasVolume).map(dc => {
       const sc = (d.scs || []).find(s => s.code === dc.currentSc) || {}; const add = addByCode[dc.code];
-      return [dc.currentSc || '', dc.currentSc ? (sc.name || '') : '(unmapped)', dc.code, add ? add.name : '', 0, dc.capacity || 0, add ? 'Addition' : 'AutoDML'].map(q).join(',');
+      return [dc.currentSc || '', dc.currentSc ? (sc.name || '') : '(unmapped)', dc.code, add ? add.name : '', 0, dc.capacity || 0, add ? 'Manual' : 'AutoDML'].map(q).join(','); // 2026-11-02: Manual = LMDC Master's label
     });
     const head = 'SC Code,SC Name,DC Code,DC Name,Planned Volume,Capacity,Source\n';
     this.downloadText('sc-dc-mapping-zero-volume-dcs.csv', head + rows.join('\n') + (rows.length ? '\n' : ''));
@@ -12113,29 +12155,42 @@ class NDCApp extends React.Component {
     const eligible = this.mapComputeEligibleDcs(draft.scCodes || [], params.newNodeAddition);
     const errors = [], warnings = [];
     const list = (a, n) => a.slice(0, n || 8).join(', ') + (a.length > (n || 8) ? ' +' + (a.length - (n || 8)) + ' more' : '');
+    // 2026-11-02 (#74): every issue is also filed under a group — its SC, '__unmapped' (unmapped DCs in the
+    // run) or '__run' (run-level totals) — so Step 3 shows errors / warnings SC-wise with a status per SC.
+    const scOfDc = {}; eligible.forEach(dc => { scOfDc[dc.code] = dc.currentSc || '__unmapped'; });
+    const grp = {}; const gAdd = (k, sev, msg) => { grp[k] = grp[k] || { errors: [], warnings: [] }; grp[k][sev].push(msg); };
+    const byGroup = (codes) => { const m = {}; codes.forEach(c => { const k = scOfDc[c] || '__unmapped'; (m[k] = m[k] || []).push(c); }); return m; };
+    const nDcs = (n) => n + ' DC' + (n === 1 ? '' : 's');
     const missingCap = (draft.scCodes || []).filter(code => { const sc = scs.find(s => s.code === code); return !sc || !sc.sortCap || !sc.volCap || !sc.htp; });
     const scMissDet = (draft.scCodes || []).map(code => { const sc = scs.find(s => s.code === code); if (!sc) return code + ' — not in SC Master';
       const mf = this.scMissingFields(sc).filter(x => x.key !== 'rateCard').map(x => x.label); if (!sc.htp) mf.push('HTP'); return mf.length ? code + ' — ' + mf.join(', ') : null; }).filter(Boolean);
     // 2026-11-02: Rate Card gets its own error (story copy), naming the SCs.
     const rcMiss = (draft.scCodes || []).filter(code => { const sc = scs.find(s => s.code === code); return sc && this.scMissingFields(sc).some(x => x.key === 'rateCard'); });
     if (rcMiss.length) errors.push({ title: 'Rate Card missing in SC Master (mandatory)', detail: list(rcMiss) + ' — add it in Design Inputs › Sort Centre Master' });
+    rcMiss.forEach(c => gAdd(c, 'errors', 'Rate Card missing in SC Master (mandatory)'));
+    (draft.scCodes || []).forEach(code => { const sc = scs.find(s => s.code === code); if (!sc) { gAdd(code, 'errors', 'Not in SC Master'); return; }
+      const mf = this.scMissingFields(sc).filter(x => x.key !== 'rateCard').map(x => x.label); if (!sc.htp) mf.push('HTP'); if (mf.length) gAdd(code, 'errors', 'Missing in SC Master: ' + mf.join(', ')); });
     if (scMissDet.length) errors.push({ title: scMissDet.length + ' SC' + (scMissDet.length === 1 ? '' : 's') + ' missing mandatory parameters (SC Master)', detail: list(scMissDet, 5) });
-    if (eligible.length === 0) errors.push({ title: 'No DCs selected for this run', detail: 'Select DCs in Step 1' });
+    if (eligible.length === 0) { errors.push({ title: 'No DCs selected for this run', detail: 'Select DCs in Step 1' }); gAdd('__run', 'errors', 'No DCs selected for this run — select DCs in Step 1'); }
     // 2026-10-30 run validations: every DC needs non-zero planned volume; mandatory SC and DC parameters;
     // total DCs < Σ Sort Cap × Max Sort Cap Util %; total planned volume < Σ Vol Cap × Vol Util Max %.
     const volOf = {}; eligible.forEach(dc => { const vi = this.mapVolumeInfoForDc(dc.code, draft.volFileName, dc.capacity); volOf[dc.code] = vi.hasVolume ? vi.volumePlanned : 0; });
     const noVol = eligible.filter(dc => !(volOf[dc.code] > 0)).map(dc => dc.code);
+    Object.entries(byGroup(noVol)).forEach(([k, c]) => gAdd(k, 'errors', nDcs(c.length) + ' with zero planned volume: ' + list(c)));
     if (noVol.length) errors.push({ title: noVol.length + ' DC' + (noVol.length === 1 ? '' : 's') + ' with zero planned volume in "' + draft.volFileName + '"', detail: list(noVol) + ' — clear them in Step 1 or fix the volume plan' });
     const lmByCode0 = {}; (d.lmdcs || []).forEach(l => { lmByCode0[l.code] = l; });
     const dcMiss = eligible.map(dc => { const l = lmByCode0[dc.code]; const mf = l ? this.lmdcMissingFields(l) : ['not in LMDC Master']; return mf.length ? dc.code + ' — ' + mf.join(', ') : null; }).filter(Boolean);
+    eligible.forEach(dc => { const l = lmByCode0[dc.code]; const mf = l ? this.lmdcMissingFields(l) : ['not in LMDC Master']; if (mf.length) gAdd(scOfDc[dc.code], 'errors', dc.code + ' missing in LMDC Master: ' + mf.join(', ')); });
     if (dcMiss.length) errors.push({ title: dcMiss.length + ' DC' + (dcMiss.length === 1 ? '' : 's') + ' missing mandatory parameters (LMDC Master)', detail: list(dcMiss, 5) + ' — fill them in or untick these DCs in Step 1' });
     const spV = (code) => Object.assign({}, this.mapScParamDefaults(), (draft.scParams || {})[code]);
     const selScObjs = (draft.scCodes || []).map(code => scs.find(s => s.code === code)).filter(Boolean);
     const dcCapTot = selScObjs.reduce((a, s) => a + Math.floor((Number(s.sortCap) || 0) * spV(s.code).sortCapUtilMax / 100), 0);
     const volCapTot = selScObjs.reduce((a, s) => a + (Number(s.volCap) || 0) * spV(s.code).volUtilMax / 100, 0);
     const volTot = eligible.reduce((a, dc) => a + (volOf[dc.code] || 0), 0);
-    if (eligible.length && !(eligible.length < dcCapTot)) errors.push({ title: 'Selected DCs exceed total sort capacity', detail: eligible.length.toLocaleString('en-IN') + ' DCs vs Σ Sort Cap × Max Sort Cap Util % = ' + dcCapTot.toLocaleString('en-IN') + ' — add SCs, raise Max Sort Cap Util % in Step 2, or untick DCs' });
-    if (volTot > 0 && !(volTot < volCapTot)) errors.push({ title: 'Planned volume exceeds total volume capacity', detail: Math.round(volTot).toLocaleString('en-IN') + ' vs Σ Vol Cap × Vol Util Max % = ' + Math.round(volCapTot).toLocaleString('en-IN') + ' — add SCs, raise Vol Util Max % in Step 2, or untick DCs' });
+    if (eligible.length && !(eligible.length < dcCapTot)) { errors.push({ title: 'Selected DCs exceed total sort capacity', detail: eligible.length.toLocaleString('en-IN') + ' DCs vs Σ Sort Cap × Max Sort Cap Util % = ' + dcCapTot.toLocaleString('en-IN') + ' — add SCs, raise Max Sort Cap Util % in Step 2, or untick DCs' });
+      gAdd('__run', 'errors', 'Selected DCs (' + eligible.length.toLocaleString('en-IN') + ') must be below Σ Sort Cap × Max Sort Cap % (' + dcCapTot.toLocaleString('en-IN') + ')'); }
+    if (volTot > 0 && !(volTot < volCapTot)) { errors.push({ title: 'Planned volume exceeds total volume capacity', detail: Math.round(volTot).toLocaleString('en-IN') + ' vs Σ Vol Cap × Vol Util Max % = ' + Math.round(volCapTot).toLocaleString('en-IN') + ' — add SCs, raise Vol Util Max % in Step 2, or untick DCs' });
+      gAdd('__run', 'errors', 'Planned volume (' + Math.round(volTot).toLocaleString('en-IN') + ') must be below Σ Vol Cap × Vol Max % (' + Math.round(volCapTot).toLocaleString('en-IN') + ')'); }
     let preview = null;
     if (!errors.length) {
       preview = computeMappingResultPure(d, { id: 'PREVIEW', scCodes: draft.scCodes, dcCodes: eligible.map(dc => dc.code), volFileName: draft.volFileName, params });
@@ -12144,23 +12199,41 @@ class NDCApp extends React.Component {
       preview.perSc.forEach(p => {
         const sc = scs.find(s => s.code === p.code) || {}, lim = sp(p.code);
         const vu = sc.volCap ? Math.round(p.volume / sc.volCap * 100) : 0, su = sc.sortCap ? Math.round(p.dcsServed / sc.sortCap * 100) : 0; // sort = DC destinations
-        if (vu < lim.volUtilMin || vu > lim.volUtilMax) volOut.push(p.code + ' ' + vu + '% (' + lim.volUtilMin + '–' + lim.volUtilMax + '%)');
-        if (su > lim.sortCapUtilMax) sortOver.push(p.code + ' ' + su + '% (max ' + lim.sortCapUtilMax + '%)');
+        if (vu < lim.volUtilMin || vu > lim.volUtilMax) { volOut.push(p.code + ' ' + vu + '% (' + lim.volUtilMin + '–' + lim.volUtilMax + '%)'); gAdd(p.code, 'warnings', 'Projected volume utilisation ' + vu + '% — outside ' + lim.volUtilMin + '–' + lim.volUtilMax + '%'); }
+        if (su > lim.sortCapUtilMax) { sortOver.push(p.code + ' ' + su + '% (max ' + lim.sortCapUtilMax + '%)'); gAdd(p.code, 'warnings', 'Projected sort capacity utilisation ' + su + '% — above ' + lim.sortCapUtilMax + '%'); }
       });
       if (volOut.length) warnings.push({ title: 'Projected volume utilisation outside the SC’s Min–Max range', detail: list(volOut, 6) });
       if (sortOver.length) warnings.push({ title: 'Projected sort capacity utilisation above the SC’s maximum', detail: list(sortOver, 6) });
+      Object.entries(byGroup(preview.unservedDcs.map(u => u.code))).forEach(([k, c]) => gAdd(k, 'warnings', nDcs(c.length) + ' would be left unserved: ' + list(c)));
       if (preview.unservedDcs.length) warnings.push({ title: preview.unservedDcs.length + ' DC' + (preview.unservedDcs.length === 1 ? '' : 's') + ' with zero capacity — will be left unserved', detail: list(preview.unservedDcs.map(u => u.code)) });
       const lmByCode = {}; (d.lmdcs || []).forEach(l => { lmByCode[l.code] = l; });
       const noPin = eligible.filter(dc => !((lmByCode[dc.code] || {}).pincodes || []).length).map(dc => dc.code);
+      if (params.singlePinSingleSc !== false) Object.entries(byGroup(noPin)).forEach(([k, c]) => gAdd(k, 'warnings', nDcs(c.length) + ' without pincodes — Single Pin – Single SC can’t group them: ' + list(c)));
       if (params.singlePinSingleSc !== false && noPin.length) warnings.push({ title: noPin.length + ' DC' + (noPin.length === 1 ? '' : 's') + ' without pincodes — Single Pin – Single SC can’t group them', detail: list(noPin) });
       const newCount = eligible.filter(dc => !dc.currentSc).length;
+      if (params.newNodeAddition !== false && newCount === 0) gAdd('__run', 'warnings', 'New Node Addition is on but no new DCs are selected — this run will propose no changes');
       if (params.newNodeAddition !== false && newCount === 0) warnings.push({ title: 'New Node Addition is on but no new DCs are selected — mapped DCs don’t move, so this run will propose no changes', detail: 'Turn New Node Addition off in Step 2 to re-optimise mapped DCs' });
     }
     const moves = preview ? preview.dcRows.filter(r => r.needsDecision).length : 0;
     const volume = preview ? preview.totalVolume : 0;
-    this.setState({ mapPreVal: { sig: this.mapInputSig(), errors, warnings, ack: false, moves, volume, dcCount: eligible.length, ranAt: new Date().toLocaleTimeString() } });
+    const groups = (draft.scCodes || []).concat(['__unmapped', '__run']).filter(k => grp[k] || (draft.scCodes || []).indexOf(k) >= 0).map(k => Object.assign({ key: k }, grp[k] || { errors: [], warnings: [] }));
+    this.setState({ mapPreVal: { sig: this.mapInputSig(), errors, warnings, groups, ackGroups: {}, ack: false, moves, volume, dcCount: eligible.length, ranAt: new Date().toLocaleTimeString() }, mapPvWarnSel: null });
   }
-  mapAckWarnings() { this.setState({ mapPreVal: Object.assign({}, this.state.mapPreVal, { ack: true }) }); }
+  // 2026-11-02 (#74): "Accept all warnings" accepts the warnings of the ticked groups (SCs / Unmapped DCs /
+  // run); every group starts ticked. Trigger needs every group's warnings accepted (pv.ack).
+  mapPvWarnKeys() { const pv = this.state.mapPreVal || {}; return (pv.groups || []).filter(g => g.warnings.length && !(pv.ackGroups || {})[g.key]).map(g => g.key); }
+  mapPvWarnSelected() { const sel = this.state.mapPvWarnSel; return this.mapPvWarnKeys().filter(k => !sel || sel[k]); }
+  mapPvToggleWarnSel(key) { const cur = {}; this.mapPvWarnSelected().forEach(k => { cur[k] = true; }); if (cur[key]) delete cur[key]; else cur[key] = true; this.setState({ mapPvWarnSel: cur }); }
+  mapPvToggleWarnSelAll() { const all = this.mapPvWarnKeys(), on = this.mapPvWarnSelected().length === all.length; const m = {}; if (!on) all.forEach(k => { m[k] = true; }); this.setState({ mapPvWarnSel: m }); }
+  mapAckWarnings() {
+    const pv = this.state.mapPreVal; if (!pv) return;
+    if (!pv.groups) { this.setState({ mapPreVal: Object.assign({}, pv, { ack: true }) }); return; }
+    const pick = this.mapPvWarnSelected();
+    if (!pick.length) { this.showToast('Select at least one SC with warnings to accept', '#C77B00'); return; }
+    const ackGroups = Object.assign({}, pv.ackGroups); pick.forEach(k => { ackGroups[k] = true; });
+    const ack = pv.groups.filter(g => g.warnings.length).every(g => ackGroups[g.key]);
+    this.setState({ mapPreVal: Object.assign({}, pv, { ackGroups, ack }), mapPvWarnSel: null });
+  }
   mapTriggerState() {
     const pv = this.state.mapPreVal;
     const fresh = !!pv && pv.sig === this.mapInputSig();
@@ -12908,7 +12981,7 @@ class NDCApp extends React.Component {
     // 2026-07-10 — only ever-valid files live in the library, full stop: this covers both the
     // upload-gating above (new invalid files are never added) and any pre-existing/seeded records
     // that might carry validated:false — neither should ever surface here.
-    const allVol = (st.uploadedVol || []).concat(d.volumeFiles).map(f => volEditsMap[f.name] ? Object.assign({}, f, volEditsMap[f.name]) : f).filter(f => f.validated && !f.errorCount).filter(f => f.type === 'LMDC Landing'); // 2026-08-26 fix — belt-and-suspenders: even if seed data still carries other types, RLH's own screen only ever shows LMDC
+    const allVol = this.rlhVolumeLibrary(); // 2026-08-26 fix — belt-and-suspenders: even if seed data still carries other types, RLH's own screen only ever shows LMDC
     const pickVolFile = (type) => {
       if (this.isRlhCyclePast()) { this.showToast('This cycle is in the past — Design Inputs are read-only.', '#C77B00'); return; }
       const inp = document.createElement('input');
@@ -13655,11 +13728,13 @@ class NDCApp extends React.Component {
       opHoursExportCsv: () => this.opHoursExportCsv(),
       lmdcNeedsActionCount, hasLmdcNeedsAction: lmdcNeedsActionCount > 0,
       lmdcRows, lmdcPager, lmdcShown: lmdcRows.length, lmdcTotal: lmdcFiltered.length, lmdcZoneSel, lmdcModeSel,
+      onAddLmdcOpen: () => this.openLmdcAddForm(),
       lmdcSearch: st.lmdcSearch || '', onLmdcSearch: (e) => this.setState({ lmdcSearch: e.target.value, pgLmdc: 1 }),
       lmdcVehNames, downloadLmdcCsv, lmdcTemplate, lmdcTimeSlots: LMDC_TIME_SLOTS, lmdcD0Options: LMDC_D0_OPTIONS, lmdcUnloadOptions: LMDC_UNLOAD_OPTIONS, lmdcSysDefaults: this.lmdcSystemDefaults(),
       lmdcForm: (() => {
         const code = st.lmdcEditCode; if (!code) return { open: false };
-        const l = (d.lmdcs || []).find(x => x.code === code); if (!l) return { open: false };
+        const isNewL = code === '__new__'; // 2026-11-02 (#71): Add LMDC
+        const l = isNewL ? { code: '', source: 'Manual' } : (d.lmdcs || []).find(x => x.code === code); if (!l) return { open: false };
         const f = st.lmdcEditDraft || {};
         const fld = (label, key, kind, options, extra) => Object.assign({ label, req: false, value: f[key] == null ? '' : f[key], onInput: ldSet(key), isSelect: kind === 'select', isText: kind === 'text', options: options || [], ph: '' }, extra || {});
         const mode = f.rlhMode || 'Direct Vehicle';
@@ -13672,11 +13747,11 @@ class NDCApp extends React.Component {
           // V4.0 restore (2026-10-20) — Pincodes, re-fitted from the archived inline cell into this form.
           fld('Pincodes', 'pincodes', 'text', null, { ph: 'e.g. 110001, 110002 (comma or semicolon separated)', missing: !String(f.pincodes || '').trim() })];
         const nodeEditable = l.source === 'Manual'; const blank = (k) => f[k] == null || String(f[k]).trim() === '';
-        const node = nodeEditable ? [fld('LMSC', 'lmscCode', 'select', [''].concat((d.scs || []).filter(s => s.nodeKind !== 'MDC').map(s => s.code))), fld('Latitude', 'lat', 'text', null, { ph: 'e.g. 28.6139', missing: blank('lat') }),
-          fld('Longitude', 'lng', 'text', null, { ph: 'e.g. 77.2090', missing: blank('lng') }), fld('Capacity', 'capacity', 'text', null, { ph: 'e.g. 6000', missing: blank('capacity') || !(Number(f.capacity) > 0) })] : [];
-        return { open: true, title: 'Edit LMDC \u2014 ' + code,
+        const node = nodeEditable ? (isNewL ? [fld('LMDC Code', 'newCode', 'text', null, { ph: 'e.g. BLR-801', missing: blank('newCode') })] : []).concat([fld('LMSC', 'lmscCode', 'select', [''].concat((d.scs || []).filter(s => s.nodeKind !== 'MDC').map(s => s.code))), fld('Latitude', 'lat', 'text', null, { ph: 'e.g. 28.6139', missing: blank('lat') }),
+          fld('Longitude', 'lng', 'text', null, { ph: 'e.g. 77.2090', missing: blank('lng') }), fld('Capacity', 'capacity', 'text', null, { ph: 'e.g. 6000', missing: blank('capacity') || !(Number(f.capacity) > 0) })]) : [];
+        return { open: true, title: isNewL ? 'Add LMDC' : 'Edit LMDC \u2014 ' + code,
           core: [['LMDC Code', l.code], ['LMSC', l.lmscCode || '\u2014'], ['Location', (Number(l.lat) || 0).toFixed(4) + ', ' + (Number(l.lng) || 0).toFixed(4)], ['Capacity', l.capacity != null ? Number(l.capacity).toLocaleString('en-IN') : '\u2014']].map(x => ({ label: x[0], value: x[1] })),
-          nodeEditable, node, coreHint: nodeEditable ? '· Manual LMDC (not in AutoDML) — enter its node parameters' : '· from AutoDML (read-only; AutoDML values always win)',
+          nodeEditable, node, coreHint: isNewL ? '· New Manual LMDC — enter its code and node parameters; LMSC is optional' : nodeEditable ? '· Manual LMDC (not in AutoDML) — enter its node parameters' : '· from AutoDML (read-only; AutoDML values always win)',
           rlh, ops, modeHint: mode === 'Direct Vehicle' ? 'Direct Vehicle \u2014 no lane fields.' : (mode + ' \u2014 lane, cutoff and TAT are optional; one cutoff per lane on an LMSC.'),
           pocGroups: this.pocFormGroups(LMDC_POC_CATEGORIES, f, (patch) => this.setState({ lmdcEditDraft: Object.assign({}, this.state.lmdcEditDraft || {}, patch) })),
           onSave: () => this.saveLmdcEdit(code), onClose: () => this.setState({ lmdcEditCode: null, lmdcEditDraft: {} }) };
@@ -14035,7 +14110,7 @@ class NDCApp extends React.Component {
     const activePlanType = PLAN_TYPES.find(t => t.value === planInputType) || PLAN_TYPES[0];
     // 2.3: Filter to LMDC Landing only (already done via planInputType), last 4, and search by name.
     const volSearchQ = (st.creationVolSearch || '').toLowerCase();
-    const volOptionsAll = d.volumeFiles.filter(f => f.type === planInputType).slice(-4); // last 4 LMDC Landing files
+    const volOptionsAll = this.rlhVolumeLibrary(); // 2026-11-02 (#75): every LMDC Landing file in Volume Inputs, as SC-DC Mapping (#72); was seeded files only, last 4
     const volOptions = volOptionsAll.filter(f => !volSearchQ || f.name.toLowerCase().indexOf(volSearchQ) >= 0).map(f => ({ name: f.name, rows: fmtInt(f.rows), vol: fmtL(f.vol), selected: st.creationVolume === f.name,
       bd: st.creationVolume === f.name ? '#003F98' : '#E6EBF2', bg: st.creationVolume === f.name ? '#F3F7FE' : '#FFFFFF', dotBg: st.creationVolume === f.name ? '#003F98' : '#FFFFFF', dotBd: st.creationVolume === f.name ? '#003F98' : '#C3C9D4', dotOp: st.creationVolume === f.name ? '1' : '0',
       // G11 — switching the volume file invalidates prior DC drops (coverage differs). Reset them + re-check.
@@ -19188,7 +19263,7 @@ class NDCApp extends React.Component {
     // get their own dedicated section below the SC list (point 2) — they don't belong to any one
     // SC, so nesting them under a row would misrepresent them.
     const mapVolSearchQ = (st.mapVolSearch || '').toLowerCase();
-    const mapVolOptionsAll = (d.volumeFiles || []).filter(f => f.type === 'LMDC Landing').slice(-4);
+    const mapVolOptionsAll = this.rlhVolumeLibrary(); // 2026-11-02 (#72): every LMDC Landing file in Volume Inputs (was seeded files only, last 4)
     const mapVolOptions = mapVolOptionsAll.filter(f => !mapVolSearchQ || f.name.toLowerCase().indexOf(mapVolSearchQ) >= 0).map(f => {
       const sel = draft.volFileName === f.name;
       return {
@@ -19237,7 +19312,7 @@ class NDCApp extends React.Component {
             vol: vi.hasVolume ? fmtInt(vi.volumePlanned) : '0', volFg: vi.hasVolume ? '#14171F' : '#D14B4B', volWeight: vi.hasVolume ? '400' : '700',
             cap: fmtInt(l.capacity),
             volFlag: vi.hasVolume ? 'OK' : '0 volume', volFlagBg: vi.hasVolume ? '#E7F4EC' : '#FBEAEA', volFlagFg: vi.hasVolume ? '#128A3E' : '#D14B4B',
-            src: addition ? 'Addition' : 'AutoDML', srcBg: addition ? '#EAEEFB' : '#F2F5FA', srcFg: addition ? '#2F4FC6' : '#5A5E66',
+            src: l.source === 'Manual' ? 'Manual' : 'AutoDML', srcBg: l.source === 'Manual' ? '#EAEEFB' : '#F2F5FA', srcFg: l.source === 'Manual' ? '#2F4FC6' : '#5A5E66', // 2026-11-02: same label as LMDC Master
             pinsLabel, pinsTitle: pins.length ? pins.join(', ') : 'No pincodes on file for this DC',
             // Point 2 — delete icon only on zero-volume rows, to pull an unusable DC out of this run.
             included: !mapDroppedDcs[l.code], onToggleInclude: () => this.mapToggleDcIncluded(l.code),
@@ -19248,6 +19323,9 @@ class NDCApp extends React.Component {
           loc: (s.lat != null && s.lng != null) ? (s.lat.toFixed(2) + ', ' + s.lng.toFixed(2)) : '—',
           sortCap: s.sortCap ? fmtInt(s.sortCap) : '—', volCap: s.volCap ? fmtInt(s.volCap) : '—',
           dcCount: scDcs.length,
+          // 2026-11-02 (#72): SC-level zero-volume flag — this SC's DCs still in the run with no volume in the plan.
+          ...(() => { const sel = (draft.scCodes || []).indexOf(s.code) >= 0; const z = (sel && draft.volFileName) ? scDcs.filter(l => !mapDroppedDcs[l.code] && !this.mapVolumeInfoForDc(l.code, draft.volFileName, l.capacity).hasVolume).length : 0;
+            return { zeroVolCount: z, hasZeroVol: z > 0, zeroVolLabel: z + ' DC' + (z === 1 ? '' : 's') + ' no volume' }; })(),
           dcSelLabel: (draft.scCodes || []).indexOf(s.code) >= 0 && scSelCount !== scDcs.length ? (scSelCount + ' / ' + scDcs.length) : String(scDcs.length),
           allIncluded: scSelCount === scDcs.length && scDcs.length > 0, someIncluded: scSelCount > 0 && scSelCount < scDcs.length,
           onToggleAllDcs: () => this.mapSetDcsIncluded(scDcs.map(l => l.code), scSelCount !== scDcs.length),
@@ -19355,11 +19433,29 @@ class NDCApp extends React.Component {
       // fmtInt (2026-09-16 fix) — this table rendered raw unformatted numbers ("62000") while
       // every other SC table in this wizard comma-formats them ("62,000"). Real inconsistency
       // caught via a live click-through comparison, not a hypothetical.
-      return { code, name: sc.name, sortCap: sc.sortCap ? fmtInt(sc.sortCap) : 0, volCap: sc.volCap ? fmtInt(sc.volCap) : 0, missingCap };
+      const spx = Object.assign({}, this.mapScParamDefaults(), (draft.scParams || {})[code]);
+      return { code, name: sc.name, sortCap: sc.sortCap ? fmtInt(sc.sortCap) : 0, volCap: sc.volCap ? fmtInt(sc.volCap) : 0, missingCap,
+        loc: (sc.lat != null && sc.lng != null) ? (Number(sc.lat).toFixed(2) + ', ' + Number(sc.lng).toFixed(2)) : '—', volMin: spx.volUtilMin, volMax: spx.volUtilMax, sortMax: spx.sortCapUtilMax };
     });
     const mapAnyMissingCap = mapPreviewScs.some(s => s.missingCap);
     // Step 3 gate (2026-10-22): Trigger needs a fresh, error-free check with warnings accepted.
     const mts = this.mapTriggerState(), mpv = mts.pv || { errors: [], warnings: [] };
+    // 2026-11-02 (#74): status per group — blank until a fresh check, then Validation failures / Warnings to
+    // accept / Ready to trigger.
+    const pvGroupOf = {}; (mts.fresh ? (mpv.groups || []) : []).forEach(g => { pvGroupOf[g.key] = g; });
+    const pvStatus = (key) => { if (!mts.fresh || !mpv.groups) return { statusLabel: '', hasStatus: false }; const g = pvGroupOf[key] || { errors: [], warnings: [] };
+      const s = g.errors.length ? ['Validation failures', '#FBEAEA', '#D14B4B'] : (g.warnings.length && !(mpv.ackGroups || {})[key]) ? ['Warnings to accept', '#FBF1DF', '#C77B00'] : ['Ready to trigger', '#E7F4EC', '#128A3E'];
+      return { statusLabel: s[0], statusBg: s[1], statusFg: s[2], hasStatus: true }; };
+    mapPreviewScs.forEach(s => Object.assign(s, pvStatus(s.code)));
+    const pvSel = {}; this.mapPvWarnSelected().forEach(k => { pvSel[k] = true; });
+    const mapPvGroups = (mts.fresh ? (mpv.groups || []) : []).map(g => {
+      const sc = (d.scs || []).find(s => s.code === g.key);
+      const canSelect = mts.fresh && !mpv.errors.length && g.warnings.length > 0 && !(mpv.ackGroups || {})[g.key];
+      return Object.assign({ key: g.key, label: g.key === '__run' ? 'Run — all selected SCs' : g.key === '__unmapped' ? 'Unmapped DCs' : (g.key + (sc ? ' — ' + sc.name : '')),
+        items: g.errors.map(t => ({ sevLabel: 'Error', sevBg: '#FBEAEA', sevFg: '#D14B4B', text: t })).concat(g.warnings.map(t => ({ sevLabel: 'Warning', sevBg: '#FBF1DF', sevFg: '#C77B00', text: t }))),
+        canSelect, selected: canSelect && !!pvSel[g.key], onToggle: () => this.mapPvToggleWarnSel(g.key) }, pvStatus(g.key));
+    });
+    const mapPvWarnSelCount = this.mapPvWarnSelected().length, mapPvWarnKeyCount = this.mapPvWarnKeys().length;
     // Step 3 plan summary + unmapped table (2026-10-30); computed only on Step 3
     let mapSumPlan = [], mapSumConstraints = [], mapSumUnmapped = [], mapSumUnmappedNote = '';
     if (step === 3) {
@@ -19470,6 +19566,7 @@ class NDCApp extends React.Component {
       mapSumPlan, mapSumConstraints, mapSumUnmapped, mapSumUnmappedNote,
       mapPvState, mapPvRan: mpv.sig != null && mts.fresh, mapValFlags, mapValErrCount: mts.fresh ? mpv.errors.length : 0, mapValWarnCount: mts.fresh ? mpv.warnings.length : 0,
       mapPvCanAck: mts.fresh && !mpv.errors.length && mpv.warnings.length > 0 && !mpv.ack, mapPvAcked: mts.fresh && !!mpv.ack && mpv.warnings.length > 0,
+      mapPvGroups, mapPvWarnAllSelected: mapPvWarnKeyCount > 0 && mapPvWarnSelCount === mapPvWarnKeyCount, mapPvWarnSelCount, onMapPvToggleWarnAll: () => this.mapPvToggleWarnSelAll(),
       mapPvMoves: mts.fresh ? fmtInt(mpv.moves) : '—', mapPvVolume: mts.fresh ? fmtInt(mpv.volume) : '—', mapPvRanAt: mpv.ranAt || '',
       onMapRunPreValidation: () => this.mapRunPreValidation(), onMapAckWarnings: () => this.mapAckWarnings(),
       onMapBack: () => this.mapBack(), onMapNext: () => this.mapNext(),
