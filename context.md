@@ -4422,3 +4422,125 @@ RNG-based approximation. Read the method's own comment block first; the short ve
       switch, empty month.
     - 0 runtime errors; 0 JSX `\u`; identifier scan clean.
   - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
+- **2026-11-02 — User-story verification, theme 1: SC Master Rate Cards.**
+  - **Verified as already matching**:
+    - the Rate Card field (modal + bulk card beside SC Master / Operating Hours, with Download
+      Template / Current Data / Upload);
+    - mandatory for active SCs: "needs action" flag, sorted first;
+    - icon column showing configured / missing (required);
+    - optional MG row (Shipments / month up to + MG Rate ₹ / month);
+    - Min–Max slabs; "+ Add slab" pre-fills Min from the previous Max; open-ended last slab.
+  - **Changed (decision #68 — Rate Card is contiguous; partial uploads; 5-column CSV)**:
+    1. **No gaps** (`rateCardValidate`): slab 1 starts at 0 (no MG) or exactly where the MG row
+       ends; each slab starts exactly at the previous Max. A gap blocks Save and fails the SC in
+       the upload, e.g. "Slab 1: shipments 1,00,000–1,20,000 have no rate — start this slab at
+       1,00,000, where the MG row ends." A closed last slab is still allowed. All 79 seeded Rate
+       Cards already comply.
+    2. **Upload applies the SCs that pass** (each replaces that SC's Rate Card); an SC with any
+       failing row is left unchanged. Banner: "N rows flagged in Rate Card upload — those SCs were
+       not updated". Toast: "Rate Card updated for N SCs · M rows flagged" / "… nothing applied".
+    3. **CSV = 5 columns by position**: SC Code, Min Shipments per Month, Max Shipments per Month,
+       Rate (₹ per shipment; MG row ₹ per month), Row Type (MG / Slab; blank = Slab). One row per
+       slab; the optional MG row has Min 0 and Max = MG volume, at most one per SC. Template,
+       Download Current Data (`rateCardCsvHeader()`) and the parser share the format. Row errors
+       point at the failing row (a slab error at that slab's own row). Replaces the 6-column
+       format with MG columns repeated per row.
+    4. **SC-DC trigger**: a dedicated pre-validation error "Rate Card missing in SC Master
+       (mandatory)" naming the SCs; Rate Card no longer appears in the generic "missing mandatory
+       parameters (SC Master)" error.
+    5. **Modal note** under MG: "Within the MG volume, CPS = MG Rate ÷ that month's volume. Slabs
+       then price each shipment above it." (CPS still has no consumer.)
+  - **Verification**: theme suite `s1.js` **26/26** (no-gap rules incl. en-IN copy, overlap, closed
+    last slab; modal Save disabled on a gap; CPS note; partial apply / unchanged failing SC / banner /
+    toasts; trigger error and generic error; template header + clean upload; export → re-import
+    round-trips every seeded Rate Card; duplicate MG, bad Row Type, MG Min ≠ 0, gap row attribution,
+    blank Row Type = Slab). Regression `r2.js` **18/18**. 0 runtime errors; 0 JSX `\u`; no new
+    render identifiers; SC grid 19 tracks unchanged.
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`. `engine.js` / `index.html`
+    unchanged (`engine.js?v=20261020` stays).
+- **2026-11-02 — User-story verification, theme 2: LMDC Master.**
+  - **Verified as already matching**:
+    - lists every AutoDML-synced LMDC plus user-input (Manual) LMDCs (seed: 12,604 + 5);
+    - Download Template / Current Data / Upload;
+    - upload creates new DCs with their parameters, edits any row (blank cell = no change);
+    - pincodes via the Edit LMDC form and the upload; many-to-many (no uniqueness rule);
+    - AutoDML merge: for a DC in AutoDML the file's LMSC / coordinates / capacity are replaced by
+      AutoDML's, other fields apply (#62);
+    - a new DC needs no LMSC; when its code appears in the AutoDML feed it becomes an AutoDML row
+      with AutoDML's node parameters and leaves the additions list;
+    - readiness: active rows missing pincodes / coordinates / capacity / LM ZH / LM CH are "needs
+      action" and sort first (#63).
+  - **Changed (decision #69 — LMDC upload uses ACTIVE TRUE / FALSE; pincodes are 6-digit and
+    comma separated)**:
+    1. **ACTIVE column replaces STATUS** in the template, Download Current Data and the upload:
+       TRUE / FALSE (case-insensitive); FALSE = closure, TRUE re-activates; blank = no change (a new
+       LMDC starts active). Other values flag the row ("Active "No" is not TRUE or FALSE"). Older
+       files with STATUS Active / Inactive still load. The template's ACTIVE dropdown lists TRUE /
+       FALSE (`LMDC_TEMPLATE_B64` rebuilt; Validation sheet S3:S4).
+    2. **Pincodes**: `lmdcParsePincodes()` (shared by upload and form) — comma separated (`;` and `|`
+       still accepted), trimmed, de-duplicated, each a 6-digit number. Upload: a bad pincode flags
+       the row (`Pincodes "56001", "ABC123" are not a 6-digit number`). Edit LMDC form: Save is
+       blocked with the same message. Download Current Data and the template description use
+       `560001, 560002`.
+    3. **Seed fix**: `seedPincodesFor()` produced 7-digit pincodes (3-digit prefix + 4-digit suffix).
+       Now the prefix's first 2 digits + the same suffix — a one-to-one remap, so pincode sharing,
+       Single Pin grouping and the seeded runs are unchanged (Sep 2026: 248 / 199 moves, 169
+       pipeline entries).
+  - **Verification**: theme suite `s2.js` **17/17** (listing; seeded pincodes 6-digit; template; export
+    ACTIVE / comma pincodes; new DC without LMSC + dedupe; AutoDML merge; FALSE = closure, TRUE
+    re-activates, STATUS alias; bad ACTIVE / bad pincodes flagged; `;` accepted; many-to-many; form
+    blocks a bad pincode and saves a deduped comma list). `s1.js` 26/26, `r2.js` 18/18, 0 runtime
+    errors, 0 JSX `\u`, no new render identifiers. Test note: the LMDC upload takes > 0.7 s in jsdom
+    (12.6k-row refresh) — poll for the upload toast rather than a fixed wait.
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
+- **2026-11-02 — User-story verification, theme 3: SC-DC Connections → Migrations only; Route Planner
+  reads additions / closures from LMDC Master.**
+  - **Verified as already matching**: SC-DC Connections = AutoDML Actions + Migrations (#64); the upload
+    and template take Migrations only (LMDC Code, From LMSC, To LMSC); migration rules and AutoDML
+    Actions unchanged; Route Planner Step 1's per-SC DC count already came from LMDC Master
+    (`buildScDcCounts`: rows minus closures, mapped Manual additions included).
+  - **Changed (decision #70 — Route Planner's DC list is real, from LMDC Master)**:
+    1. **`rpScDcIndex()` / `rpScDcList()` / `rpRunDcs()`** — one resolver for an SC's DCs: LMDC Master
+       rows whose effective SC (Aligned migration overrides `lmscCode`) is the SC, minus closures; with
+       "Include pipeline DCs" on, Pending / Rejected pipeline DCs too. `rpRunDcs` = that list minus the
+       DCs dropped in Step 1, with planned volume from the chosen plan via `mapVolumeInfoForDc` (#61,
+       same as SC-DC Mapping). Cached per data snapshot.
+    2. **Step 1 expanded DC table** = the SC's real rows (was six synthetic `<city>-210…` rows): real
+       code / name / capacity / D0 Cutoff / Open / Close, Source AutoDML / Manual / Pipeline; flag 0
+       volume / Over capacity / OK; no-volume rows first; scrolls (max 420 px, sticky header). Header:
+       "LMDCs · N in this run · from LMDC Master (closures excluded)".
+    3. **Drops are by DC code** (`droppedDcBySC[sc] = [codes]`, was row indices), with undo
+       (`rpDropDcs`). Same actions as before: the per-DC drop icon and "Restore dropped". (Bulk "Drop N
+       zero-volume DCs" / "Drop all zero-volume DCs" buttons were added and then removed the same day —
+       see the working rule below.)
+    4. **Volume gap** (Step 1 callout, per-SC "N DCs no vol", Trigger gate, Step 4 "zero or missing
+       volume" error) = real no-volume DCs still in the run (was seed `zeroVolDc` / `missVolDc`; Step 4
+       previously ignored drops). Callout copy: "N DCs have no planned volume in <plan>." No plan
+       chosen → no gap.
+    5. **Download Zero-Volume DCs** = real rows across the selected SCs (drops excluded), same columns,
+       Source = AutoDML / Manual / Pipeline; needs a volume plan.
+    6. **Counts downstream** use DCs in the run: Step 2 Nodes column (`previewCards[].dcCount`), Step 4
+       sort-capacity breach and DC-concentration warning, Step 3 vehicle cards, batch DC total (was the
+       SC's seeded `dcCount`).
+    7. **Pre-plan checklist** points 4–5: "New DCs are added in LMDC Master and join their SC once
+       mapped to it." / "Closed DCs are marked ACTIVE = FALSE in LMDC Master; co-loading and MDC DCs are
+       set by RLH Mode there."
+    8. **Seed fix**: addition BLR-742 was mapped to BLRS (not in SC Master); now MYSS.
+  - **Behaviour note**: with the shared volume basis about 1 in 7 DCs has no volume in a plan (DELS: 28
+    of 124 in the Sep plan), so every selected SC now shows a real volume gap until those DCs are
+    dropped (one by one) or the plan is updated.
+  - **Not changed**: Route Planner runs themselves are still simulated (`triggerRuns()` doesn't read the
+    DC list; §0.8 open item); SC-DC Mapping's DC counts already came from LMDC Master.
+  - **Verification**: theme suite `s3.js` **22/22** (tabs, migrations-only copy and template; checklist;
+    real DELS table = LMDC rows incl. Manual DEL-913, no synthetic codes, zero-volume first, D0 /
+    capacity from LMDC Master; BLR-742 on MYSS; real Zero-Volume CSV; gap blocks Trigger + Step 4 flag;
+    drop one / drop zero-volume per SC / drop all / restore; Step 2 Nodes = DCs in run; an ACTIVE =
+    FALSE upload removes the DC from Route Planner; pipeline DCs with the toggle). `s1` 26/26, `s2`
+    17/17, `r2` 18/18, 0 runtime errors, 0 JSX `\u`.
+    After the bulk-drop removal: `s3` **23/23** (adds "no bulk drop buttons"; gap cleared via per-DC
+    drops), `r2` 18/18.
+  - **Live check after deploy**: Step 1 expanded table scroll / sticky header (jsdom can't check layout).
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
+  - **Working rule (2026-11-02, user)**: build only the actions (buttons / icons) the user stories
+    describe — no extra action controls, even convenience ones. Explanatory text, layout and copy fixes
+    are fine; anything clickable that a story doesn't name is proposed first, not built.
