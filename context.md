@@ -4544,3 +4544,161 @@ RNG-based approximation. Read the method's own comment block first; the short ve
   - **Working rule (2026-11-02, user)**: build only the actions (buttons / icons) the user stories
     describe — no extra action controls, even convenience ones. Explanatory text, layout and copy fixes
     are fine; anything clickable that a story doesn't name is proposed first, not built.
+- **2026-11-02 — Fixes after deploy (round 4): Rate Card without MG; Add LMDC.**
+  1. **Rate Card — MG optional (bug fix)**: for an SC with no Rate Card the modal opened with MG Rate
+     pre-filled "0" (the stored default `rateCard.mg = 0`), which counted as MG present and demanded an
+     MG volume ("MG row: enter shipments per month (more than 0)"), so a slab-only card from 0 couldn't
+     be saved without clearing it. `openRateCardModal` now opens MG Rate and MG volume blank unless
+     `mg > 0`. Slab-only cards from 0 save; MG cards are unchanged. (`engine.js` default untouched.)
+  2. **"Add LMDC" (decision #71)** — a button on LMDC Master beside "Showing N of M LMDCs", same style as
+     SC Master's "Add SC" (disabled on past cycles). Opens the Edit LMDC form in add mode
+     (`openLmdcAddForm()`, `lmdcEditCode = '__new__'`): LMDC Code + LMSC (optional) / Latitude /
+     Longitude / Capacity, RLH Mode block, operational fields, Pincodes, POCs. `saveLmdcEdit('__new__')`
+     checks the code first (required; no spaces, commas or semicolons; not already in LMDC Master or
+     AutoDML; uppercased), then the Manual-row rules (POCs, 6-digit pincodes, coordinates, capacity > 0),
+     creates the Manual LMDC (`addLmdc` + `ensureClassDMaterialized`) and writes the fields like an edit.
+     Toast "<CODE> added to LMDC Master (Manual)". Without an LMSC it is an unmapped addition; with one
+     it joins that SC (Route Planner list, counts). Lane-cutoff sibling check uses the new row's LMSC.
+  - **Verification**: `s4.js` **23/23** (MG blank on open, slab-only save + re-open, MG cards intact,
+    readiness cleared; button + add-mode form; empty / existing / spaced code, missing node params, bad
+    pincode, missing ZH blocked; add without LMSC → unmapped addition, not flagged; add with LMSC + lane;
+    appears in Route Planner; edit mode unchanged; past cycle blocked). `s1` 26/26, `s2` 17/17, `s3`
+    23/23, `r2` 18/18; 0 runtime errors; 0 JSX `\u`; new render identifier `onAddLmdcOpen` returned by
+    `inputsVals()`.
+  - **Re-verified** against the deployed 2026-11-02 build before shipping: on it, the `s4.js` MG checks fail
+    (bug reproduced); on this build every suite passes again (`s4` 23/23, `s1` 26/26, `s2` 17/17, `s3`
+    23/23, `r2` 18/18). One new button vs the deployed build (Add LMDC) — no other action controls.
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
+- **2026-11-02 — User-story verification, theme 5: Design Creation › Node Mapping › SC-DC Mapping, Step 1
+  (Input Selection).**
+  - **Verified as already matching**:
+    - Node Mapping tier in Design Creation with the SC-DC Mapping sub-tab, opening the wizard on Step 1;
+    - volume-plan picker with a file-name search;
+    - SC multi-select with a hard minimum of 2 (`mapCanNext1`; Trigger can't be reached with fewer);
+    - zone chips, "Select all SCs", "Select all <Zone> SCs" (when a zone is on), "Clear SCs";
+    - SC row: Location (coordinates), Sort Cap, Vol Cap, mapped DCs (selected / total), from SC Master
+      and LMDC Master;
+    - expandable DC group = active LMDCs whose LMSC is the SC (Manual rows with that LMSC included),
+      minus Inactive (ACTIVE = FALSE) rows;
+    - DC rows: DC Code, Name, Volume (chosen plan), Capacity, Vol Flag, Source, Pincodes; per-DC
+      checkboxes and a per-SC select-all;
+    - Unmapped DCs in their own section with Select all / Clear;
+    - "Download Zero-Volume DCs" CSV (zero-volume DCs still in the run, unmapped included when New Node
+      Addition is on).
+  - **Changed (decision #72 — the SC-DC volume picker lists Volume Inputs' LMDC Landing files)**:
+    1. **Picker source** = `rlhVolumeLibrary()`, the same list Design Inputs › Volume Inputs shows
+       (uploaded this session + seeded, Replace corrections applied, validated and error-free only, LMDC
+       Landing only). Was the seeded files only, last 4 — so a file uploaded in Volume Inputs never
+       appeared, and the unvalidated "June 2026 · Finalised (carry)" did. No count cap. Copy: "LMDC
+       Landing files from Volume Inputs for this cycle. Search by file name and pick one — every DC in
+       this run is checked against it." Volume Inputs' own list now reads the same method.
+       (Route Planner's picker still lists the seeded files, last 4 — unchanged, not in this theme.)
+    2. **SC-level zero-volume flag**: a selected SC's row shows "· N DCs no volume" (red) next to its
+       zone — its DCs still in the run with no volume in the chosen plan; the tooltip says to untick
+       them (expand the SC) or update the volume file. Unticking clears it. Flag text only — no new
+       action; the existing global "N DCs missing volume" banner stays.
+    3. **Source label** "Manual" for user-input DCs (was "Addition") in the DC table and the Zero-Volume
+       CSV, matching LMDC Master.
+  - **Verification**: theme suite `s5.js` **24/24** (wizard entry; picker = Volume Inputs library, an
+    uploaded file appears, unvalidated excluded, search; 1 SC blocked / 2 allowed; zone chips + Select
+    all / zone / Clear; SC row values; DC group incl. Manual DEL-913, minus inactive; volume from the
+    plan; SC-level flag value + render, none on unselected SCs, untick / per-SC all / clear; unmapped
+    section Select all / Clear; Zero-Volume CSV count + Source; ACTIVE = FALSE removes a DC). `s1`
+    26/26, `s2` 17/17, `s3` 23/23, `s4` 23/23, `r2` 18/18; 0 runtime errors; 0 JSX `\u`; no new
+    buttons this round.
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
+- **2026-11-02 — User-story verification, theme 6: SC-DC Mapping Step 2 (Operating Mode). No code change.**
+  - **Verified as matching**:
+    - global controls, applied to every SC in the run: New Node Addition On / Off (default On; On places
+      new DCs only, Off re-optimises mapped DCs, #56); Cross-SC Migration Penalty ρ slider 0–1, step 0.01,
+      default 0.2 ("Higher = fewer cross-SC moves"); Single Pin – Single SC (default On); Ideal <> Actual
+      SC Delta in km (default 50, −/+ 1 km, amber above 50, not blocking);
+    - per-SC table: location, Sort Cap, Vol Cap, DCs mapped; Vol Min (default 0), Vol Max (default
+      100%), Sort Cap (default 100%), each with a column-header "(ALL)" stepper applying live to every
+      row and a per-row override; Rate Card view-only from SC Master;
+    - Map view: selected SCs, mapped DCs drawn to their current SC, unmapped DCs as points; SC hover =
+      location, volume vs Vol Cap, Sort Cap, mapped DCs; DC hover = mapped SC (or Unmapped), location,
+      volume;
+    - Run Name optional (blank → "Cluster: A + B + …"), shown beside the run's DAG ID in Run Queue.
+  - **Decision #73 — ρ and Vol Min are DS-model inputs.** Both are user inputs pushed to the DS model,
+    which uses them in its modelling; the prototype's simulated solver (`computeMappingResultPure`) does
+    not model either and isn't meant to. What the prototype must do — and does — is capture them on the
+    triggered run exactly as entered (`mappingRun.params.rho`, `mappingRun.scParams[sc].volUtilMin`,
+    alongside the other params) and show them before Trigger (Plan Summary shows ρ). Closes open item
+    #2 ("wire ρ into the solver"). Vol Min keeps its existing preview warning (V7).
+  - **Verification**: theme suite `s6.js` **18/18** (global + per-SC defaults; ρ slider attributes; Δ ±1
+    and amber; per-SC table values; header steppers + row override; Rate Card column; map view; Plan
+    Summary ρ; pre-validation clean after unticking flagged DCs; warnings accepted → ready; a triggered
+    run carries ρ, the global params and per-SC Vol Min / Max / Sort Cap; blank Run Name → default name +
+    DAG ID). Build unchanged since theme 5.
+  - **Test note**: React batches setState — `mapSetVolFile` / `mapSetScs` / `mapSetParam` followed by a
+    write of `mapDraft` must be awaited in between, or the later write overwrites the earlier one.
+- **2026-11-02 — User-story verification, theme 7: SC-DC Mapping Step 3 (Validate & Trigger).**
+  - **Verified as already matching**: Plan Summary PLAN (Volume plan, SCs, DCs selected, Planned volume)
+    and CONSTRAINTS (New Node Addition mode, ρ, Single Pin – Single SC, Δ threshold); the Unmapped DCs
+    table (code, location, volume, capacity, mapped pincodes); Pre-Validation Check mandatory before
+    Trigger (fresh signature, preview solve); errors block Trigger; "Accept all warnings" → "Warnings
+    accepted"; "Ready to trigger" banner; "Trigger run" creates the run and opens the Run Queue; the four
+    run validations (non-zero volume per DC; mandatory SC / DC parameters; DCs < Σ Sort Cap × Max Sort Cap
+    %; volume < Σ Vol Cap × Vol Max %) — V1–V6.
+  - **Changed (decision #74 — Step 3 validation is SC-wise)**:
+    1. **Grouped results**: `mapRunPreValidation()` also files each issue under a group — its SC, "Unmapped
+       DCs", or "Run — all selected SCs" (no DCs selected, the Σ Sort Cap / Σ Vol Cap totals, New Node
+       with no new DCs) — stored as `mapPreVal.groups` (`{key, errors[], warnings[]}`; every selected SC
+       listed, in order). DC-level issues (zero volume, missing LMDC parameters, unserved, no pincodes) go
+       to the DC's SC. The flat `errors` / `warnings` lists stay (counts, older checks).
+    2. **Validation panel** lists every group with an in-line status and its own Error / Warning lines
+       (replaces the flat flag list); shown whenever a fresh check exists.
+    3. **Status per SC / group**: blank until a fresh check; then **Validation failures** (errors) / **Warnings
+       to accept** / **Ready to trigger**. Also in the Plan Summary SC table. Inputs changing after the
+       check blank it again.
+    4. **Warning acceptance by SC**: each group with warnings has a checkbox (all ticked by default) and the
+       header has "All SCs with warnings (N selected)". "Accept all warnings" accepts the ticked groups
+       (`mapPreVal.ackGroups`); none ticked → toast "Select at least one SC with warnings to accept". Trigger
+       needs every group's warnings accepted (`mapPreVal.ack`); then "Warnings accepted". Not selectable
+       while any error exists.
+    5. **Plan Summary SC table** columns: SC, Location, Sort Cap, Vol Cap, Min Vol %, Max Vol %, Max Sort
+       Cap %, Validation Status (was SC, Sort Cap, Vol Cap and a static "Ready / Missing data").
+  - **Verification**: theme suite `s7.js` **27/27** (PLAN / CONSTRAINTS; SC table values + headers; status
+    blank before the check; unmapped table; groups per SC in order; DELS "Validation failures" with only
+    its own DCs; AGRS-307 filed under AGRS; in-line table status; no acceptance while errors; errors block
+    Trigger; Σ Sort Cap and Σ Vol Cap run-level errors; stale check blanks statuses; warnings ticked by
+    default → "Warnings to accept"; select-all; empty selection toast; accept one SC → only it turns Ready,
+    still not ready; accept the rest → "Warnings accepted" + banner; table all Ready; Trigger → queue).
+    `s1` 26/26, `s2` 17/17, `s3` 23/23, `s4` 23/23, `s5` 24/24, `s6` 18/18, `r2` 18/18; 0 runtime
+    errors; 0 JSX `\u`; new controls = the story's warning checkboxes only.
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
+- **2026-11-02 — User-story verification, theme 8: SC-DC Mapping Run Queue. No code change.**
+  - **Verified as matching**: Run Queue lists every run this cycle, newest first, by DAG ID
+    (`scdc_mapping__<yyyymmddThhmmss>__<run id>`) and Run Name, with SCs, DCs, Triggered and Status;
+    Trigger opens the queue with the new run In Progress; it moves to Completed; a solver error marks it
+    Failed with the message (no View results); same queue pattern as Route Planner / Route Scheduler
+    (Route Planner adds a Queued state for its concurrency limit; SC-DC runs start In Progress);
+    "View results" on a completed run opens that run's L2 detail in Design Review › Node Mapping; "Open
+    Design Review" (queue header) opens Design Review › Node Mapping on the run list (L1 cards).
+  - **Verification**: theme suite `s8.js` **12/12** (seeded rows by DAG ID + Run Name; headers; new run on
+    top In Progress with a DAG ID; → Completed; View results shown and opens the run's L2; Open Design
+    Review → Node Mapping list; forced solver error → Failed with message, no View results). Build
+    unchanged since theme 7.
+  - **Test note**: the queue tick calls the instance method `computeMappingResult` — stub that (not the
+    global `computeMappingResultPure`) to force a failure. Clear `mapDroppedDcs` before recomputing a run's
+    exclusions, or previously excluded DCs are re-included.
+- **2026-11-02 — Open points after themes 1–8.**
+  1. **Decision #75 — Route Planner's volume picker lists Volume Inputs' LMDC Landing files**
+     (`rlhVolumeLibrary()`, same as SC-DC Mapping #72): uploaded this session + seeded, Replace corrections
+     applied, validated and error-free only; no count cap (was the seeded files only, last 4, so an
+     uploaded file never appeared). Copy: "LMDC Landing files from Volume Inputs for this cycle. Search by
+     file name and pick one for RLH route planning, then select sort centres below." Search unchanged.
+  2. Step 3 status wording "Warnings to accept" — left as built (user: skip for now).
+  3. **"Open Design Review" confirmed as built**: a global button on the SC-DC Run Queue header, shown
+     whatever the queue holds (empty, in progress, done); it opens Design Review › Node Mapping on the
+     run list, not a specific run. "View results" stays the per-run way into a run.
+  - **Verification**: suite `s9.js` **11/11** (RP picker = Volume Inputs library, unvalidated file
+    excluded; copy; uploaded file appears, no cap; search; select; DELS DC volumes from the uploaded plan;
+    SC-DC picker shows the same files; Open Design Review on the header → Node Mapping list with no run
+    opened; shown with an empty queue and with a run in progress). All suites: `s1` 26, `s2` 17, `s3` 23,
+    `s4` 23, `s5` 24, `s6` 18, `s7` 27, `s8` 12, `r2` 18 — all passing, 0 runtime errors, 0 JSX `\u`.
+  - **Note**: this change was first made by an interrupted attempt at this request; it was reviewed line by
+    line (3 lines: picker source, caption, comment — `planInputType` was always 'LMDC Landing', so the
+    filter is unchanged) and re-verified before shipping.
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
