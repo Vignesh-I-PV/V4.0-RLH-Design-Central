@@ -4816,3 +4816,25 @@ RNG-based approximation. Read the method's own comment block first; the short ve
     All suites: `s1` 26, `s2` 17, `s3` 23, `s4` 23, `s5` 24, `s6` 18, `s7` 27, `s8` 12, `s9` 11, `s10` 21,
     `s11` 19, `s12` 39, `s13` 18, `r2` 18 — all passing, 0 runtime errors, 0 JSX `\u`, no new buttons.
   - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
+- **2026-11-02 — KRD reconciliation (SC-DC Mapping section of "[KRD] RLH Design Tool (May-Oct'26)").**
+  Checked the KRD's SC-DC Mapping section against the build. Items 1–4 (Rate Card Row Type "True" vs MG /
+  Slab; range gaps flagged vs blocked; Simulate "six" vs four cards; per-SC Max Vol / Max Sort Cap blockers
+  missing from the KRD) and the third unserved reason ("Zero capacity") are being updated in the KRD by the
+  user. Prototype fixes:
+  1. **Decision #80 — zero-volume DCs disable Step 1 Next** (KRD §3 validation table, row 5). `mapCanNext1`
+     now also requires `mapVolMissingCount === 0`; `mapNext()` carries the same guard (toast). The reason shows
+     beside the disabled Next (`mapNextBlockReason`: "Select at least 2 SCs" / "Pick a volume plan" / "Select at
+     least 1 DC" / "N selected DCs have zero volume — untick them or update the volume file"). Step 3's V3 error
+     stays as a backstop.
+  2. **SC × SC movement matrix on the Finalised view** (KRD §3.3 "Committed plan") — same markup as the Finalise
+     preview.
+  3. **Bug fix: `effectiveSc` ignored the MapTo decision** (#78), so the SC × SC matrix (and the stage-2 SC
+     sections built on it) counted a DC sent to its ideal / an alternative SC as staying put. It now follows
+     MapTo first. (`finalEff` / `mapRunViews` already did.)
+  - **Verification**: suite `s14.js` **12/12** (Next blocked with 53 zero-volume DCs, reason rendered, handler
+    guard, untick → Next enabled, other reasons; matrix follows Map to SC 52→51 / 45→46; matrix in preview; SC
+    lists follow; Finalised view shows the matrix with the move kept; still view-only). `s5` updated for #80
+    ("2 SCs: allowed" now requires zero-volume DCs unticked) — 25/25. All suites: `s1` 26, `s2` 17, `s3` 23,
+    `s4` 23, `s5` 25, `s6` 18, `s7` 27, `s8` 12, `s9` 11, `s10` 21, `s11` 19, `s12` 39, `s13` 18, `s14` 12,
+    `r2` 18 — all passing, 0 runtime errors, 0 JSX `\u`, no new buttons.
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.

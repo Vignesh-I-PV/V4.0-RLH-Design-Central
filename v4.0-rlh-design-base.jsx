@@ -3463,6 +3463,7 @@ NLH cycle: {schedNlhMonthLabel}
 <div style={css(`display:flex; align-items:center; justify-content:space-between; margin-top:28px; padding-top:20px; border-top:1px solid #E6EBF2;`)}>
 <button onClick={onMapBack} style={css(`height:38px; padding:0 18px; border:1px solid #E6EBF2; background:#fff; color:#5A5E66; font-family:inherit; font-size:13px; font-weight:600; border-radius:8px; cursor:${mapStep > 1 ? 'pointer' : 'default'}; opacity:${mapStep > 1 ? '1' : '0.4'};`)} disabled={mapStep === 1}>Back</button>
 {(mapStep < 3) ? (<>
+{(mapStep === 1 && !mapCanNext1 && mapNextBlockReason) ? (<><span style={css(`font-size:12px; color:#C77B00; font-weight:600; align-self:center; margin-right:10px;`)}>{mapNextBlockReason}</span></>) : null}
 <button onClick={onMapNext} disabled={mapStep === 1 && !mapCanNext1} style={css(`height:38px; padding:0 22px; border:none; background:${(mapStep === 1 && !mapCanNext1) ? '#C3C9D4' : mapAccent}; color:#fff; font-family:inherit; font-size:13px; font-weight:600; border-radius:8px; cursor:${(mapStep === 1 && !mapCanNext1) ? 'not-allowed' : 'pointer'};`)}>Next</button>
 </>) : (<>
 <button onClick={onMapTrigger} disabled={mapTriggerBlocked} style={css(`height:38px; padding:0 22px; border:none; background:${mapTriggerBlocked ? '#C3C9D4' : mapAccent}; color:#fff; font-family:inherit; font-size:13px; font-weight:600; border-radius:8px; cursor:${mapTriggerBlocked ? 'not-allowed' : 'pointer'};`)}>Trigger run</button>
@@ -4508,6 +4509,22 @@ NLH cycle: {schedNlhMonthLabel}
 </NdcDcSection>
 </div>
 </React.Fragment>))}
+</div>
+{/* 2026-11-02 (#80): the committed plan shows the SC × SC movement matrix too (KRD §3.3) */}
+<div style={css(`margin-top:18px;`)}>
+<div style={css(`font-size:11px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; margin-bottom:8px;`)}>SC × SC MOVEMENT</div>
+<div style={css(`border:1px solid #E6EBF2; border-radius:8px; overflow-x:auto; margin-bottom:20px;`)}>
+<div style={css(`display:grid; grid-template-columns:110px repeat(${(reviewMapMatrixScs || []).length}, 90px); background:#F7F9FC;`)}>
+<div style={css(`padding:8px 12px; font-size:10px; font-weight:700; color:#5A5E66;`)}>FROM \\ TO</div>
+{(reviewMapMatrixScs || []).map((c, __iFmc) => (<React.Fragment key={__iFmc}><div style={css(`padding:8px 8px; font-size:10px; font-weight:700; color:#5A5E66; text-align:center;`)}>{c}</div></React.Fragment>))}
+</div>
+{(reviewMapMatrixRows || []).map((row, __iFmrow) => (<React.Fragment key={__iFmrow}>
+<div style={css(`display:grid; grid-template-columns:110px repeat(${(reviewMapMatrixScs || []).length}, 90px); border-top:1px solid #EEF1F6;`)}>
+<div style={css(`padding:8px 12px; font-size:11.5px; font-weight:600; color:#14171F;`)}>{row.fromCode}</div>
+{(row.cells || []).map((cell, __iFmcell) => (<React.Fragment key={__iFmcell}><div style={css(`padding:8px 8px; font-size:11.5px; text-align:center; color:${cell.isDiagonal ? '#D0D5DD' : (cell.count > 0 ? '#14171F' : '#C3C9D4')}; background:${cell.isDiagonal ? '#FAFBFD' : 'transparent'};`)}>{cell.isDiagonal ? '—' : cell.count}</div></React.Fragment>))}
+</div>
+</React.Fragment>))}
+</div>
 </div>
 </>) : null}
 {/* closes {(reviewMapOpenCard) ? (<> ... two-pane right-panel content ... </>) : (<>empty
@@ -12207,6 +12224,10 @@ class NDCApp extends React.Component {
     if (step === 1 && !this.state.mapDraft.volFileName) { this.showToast('Pick a volume plan first — it’s what DC coverage gets checked against.', '#C77B00'); return; }
     if (step === 1 && (this.state.mapDraft.scCodes || []).length < 2) { this.showToast('Pick at least 2 SCs — a single-SC "cluster" isn’t supported here, use RLH Route Planner instead.', '#C77B00'); return; }
     if (step === 1 && this.mapComputeEligibleDcs(this.state.mapDraft.scCodes || [], (this.state.mapDraft.params || {}).newNodeAddition).length < 1) { this.showToast('No DCs are linked to the selected SC(s) yet — check SC-DC Connections.', '#C77B00'); return; }
+    if (step === 1) { // 2026-11-02 (#80): same zero-volume rule as the Next button
+      const d0 = this.state.mapDraft; const zero = this.mapComputeEligibleDcs(d0.scCodes || [], (d0.params || {}).newNodeAddition).filter(dc => !this.mapVolumeInfoForDc(dc.code, d0.volFileName, dc.capacity).hasVolume).length;
+      if (zero > 0) { this.showToast(zero + ' selected DC' + (zero === 1 ? ' has' : 's have') + ' zero volume in the chosen plan — untick ' + (zero === 1 ? 'it' : 'them') + ' or update the volume file.', '#C77B00'); return; }
+    }
     this.setState({ mapStep: Math.min(3, step + 1) });
   }
   mapBack() { this.setState({ mapStep: Math.max(1, this.state.mapStep - 1) }); }
@@ -19464,7 +19485,10 @@ class NDCApp extends React.Component {
     const mapEligibleDcs = mapScCount >= 2 ? this.mapComputeEligibleDcs(draft.scCodes, (draft.params || {}).newNodeAddition) : [];
     const mapVolMissingCodes = mapEligibleDcs.map(dc => ({ code: dc.code, hasVolume: this.mapVolumeInfoForDc(dc.code, draft.volFileName, dc.capacity).hasVolume })).filter(r => !r.hasVolume).map(r => r.code);
     const mapVolMissingCount = mapVolMissingCodes.length;
-    const mapCanNext1 = mapScCount >= 2 && mapHasVolFile && mapEligibleDcs.length >= 1;
+    // 2026-11-02 (#80): a selected DC with zero / no volume in the chosen plan disables Next (KRD §3 row 5).
+    const mapCanNext1 = mapScCount >= 2 && mapHasVolFile && mapEligibleDcs.length >= 1 && mapVolMissingCount === 0;
+    const mapNextBlockReason = mapScCount < 2 ? 'Select at least 2 SCs' : !mapHasVolFile ? 'Pick a volume plan' : mapEligibleDcs.length < 1 ? 'Select at least 1 DC'
+      : mapVolMissingCount > 0 ? mapVolMissingCount + ' selected DC' + (mapVolMissingCount === 1 ? ' has' : 's have') + ' zero volume — untick ' + (mapVolMissingCount === 1 ? 'it' : 'them') + ' or update the volume file' : '';
 
     // ===== Step 2 — Operating Mode (renamed from "Operating Parameters"). D0 penalty/span-cost is
     // gone. HW + Cross-SC Migration Penalty stay global, shown side by side at the top. Tolerance /
@@ -19652,7 +19676,7 @@ class NDCApp extends React.Component {
       mapRho: (draft.params || {}).rho != null ? draft.params.rho : 0.2, onMapRho: (e) => this.mapSetParam('rho', +e.target.value),
       mapNewNodeAdditionOn, onMapNewNodeAdditionToggle: () => this.mapSetParam('newNodeAddition', !mapNewNodeAdditionOn),
       mapSinglePinSingleScOn, onMapSinglePinSingleScToggle: () => this.mapSetParam('singlePinSingleSc', !mapSinglePinSingleScOn),
-      mapDelta, mapDeltaWarn: mapToleranceAnyWarn,
+      mapDelta, mapDeltaWarn: mapToleranceAnyWarn, mapNextBlockReason,
       onMapDeltaDown: () => this.mapSetParam('tolerance', Math.max(0, mapDelta - 1)), onMapDeltaUp: () => this.mapSetParam('tolerance', mapDelta + 1), // 1 km steps (2026-10-30)
       onMapDeltaInput: (e) => this.mapSetParam('tolerance', Math.max(0, Math.round(+e.target.value || 0))),
       mapNewNodeSub: mapNewNodeAdditionOn ? 'Place new DCs only — mapped DCs stay on their SC' : 'Off — re-optimise mapped DCs across the selected SCs',
@@ -19766,6 +19790,7 @@ class NDCApp extends React.Component {
     // Pivot Summary (live, updates as decisions are made) and the Finalise/Stage-2 builder (same
     // logic, computed once at Finalise and then locked once committed).
     const effectiveSc = (r) => {
+      const dm = dec[r.code]; if (dm && dm.decision === 'MapTo' && dm.sc) return dm.sc; // 2026-11-02 fix: follow Map to Ideal / alternative SC (#78)
       if (r.isUnchanged) return r.oldSc;
       if (r.isUnserved) return r.oldSc; // no move happens either way — kept if it had a prior SC, else nowhere
       const d0 = dec[r.code];
