@@ -1403,12 +1403,12 @@ All modules
 </>) : null}
 <div style={css(`display:flex; flex-direction:column; height:calc(100vh - 340px); min-height:360px; border:1px solid #E6EBF2; border-radius:8px; overflow:hidden; background:#fff;`)}>
 <div style={css(`flex:1; min-height:0; overflow:auto;`)}>
-<div style={css(`min-width:1810px;`)}>
+<div style={css(`min-width:1940px;`)}>
 {(hasLmdcNeedsAction) ? (<><div role={"status"} style={css(`display:flex; align-items:center; gap:9px; padding:10px 14px; margin-bottom:12px; background:#FBEAEA; border:1px solid #F0C6C6; border-radius:8px;`)}><svg width={"15"} height={"15"} viewBox={"0 0 24 24"} fill={"none"} stroke={"#D14B4B"} strokeWidth={"2"} style={css(`flex-shrink:0;`)}><path d={"M12 9v4m0 4h.01M10.3 3.9L2.4 18a2 2 0 001.7 3h15.8a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg><span style={css(`font-size:12.5px; font-weight:700; color:#D14B4B;`)}>{lmdcNeedsActionCount} LMDC{lmdcNeedsActionCount === 1 ? '' : 's'} need action</span><span style={css(`font-size:12px; color:#5A5E66;`)}>— user inputs (ZH / CH POCs, pincodes) are required on every row, AutoDML-synced ones included; new LMDCs also need coordinates and capacity. Listed first — hover a row for what’s missing, then edit it or re-upload.</span></div></>) : null}
 {/* min-width = sum of the 16 grid tracks below (1810px). Keep in sync when adding/removing a
     column — a stale value leaves the header background short of its own content (2026-09-16 bug).
     PINCODES column removed 2026-10-14 with SC-DC Mapping; restored in V4.0 on 2026-10-20. */}
-<div style={css(`display:grid; grid-template-columns:110px 90px 150px 90px 100px 120px 80px 70px 100px 100px 110px 180px 160px 140px 140px 70px; background:#E6EBF2; position:sticky; top:0; z-index:6;`)}>
+<div style={css(`display:grid; grid-template-columns:110px 90px 150px 90px 100px 120px 80px 70px 100px 100px 110px 180px 160px 140px 140px 70px 130px; background:#E6EBF2; position:sticky; top:0; z-index:6;`)}>
 <div style={css(`padding:9px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; white-space:nowrap;`)}>LMDC CODE</div>
 <div style={css(`padding:9px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; white-space:nowrap;`)} title={"Owning Sort Centre \u2014 sourced from AutoDML's active link for this DC"}>LMSC</div>
 <div style={css(`padding:9px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; white-space:nowrap;`)} title={"Latitude, Longitude"}>LOCATION</div>
@@ -1430,9 +1430,10 @@ All modules
 <div style={css(`padding:9px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; white-space:nowrap; border-left:1px solid #D0D5DD;`)} title={"Many-to-many with LMDCs — feeds SC-DC Mapping's same-pincode-same-SC constraint"}>PINCODES</div>
 <div style={css(`padding:9px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; white-space:nowrap; border-left:1px solid #D0D5DD;`)} title={"LM POCs for this DC \u2014 ZH, CH and one AM required, second AM optional. Feeds Route Scheduler's LM reviewer assignment."}>LM POCS</div>
 <div style={css(`padding:9px 10px;`)} />
+<div style={css(`padding:9px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; white-space:nowrap;`)} title={"Active / Inactive — an Inactive LMDC is a closure (same as ACTIVE = FALSE in the upload)"}>STATUS</div>
 </div>
 {(lmdcRows || []).map((l, __i42) => (<React.Fragment key={__i42}>
-<div style={css(`display:grid; grid-template-columns:110px 90px 150px 90px 100px 120px 80px 70px 100px 100px 110px 180px 160px 140px 140px 70px; align-items:center; border-top:1px solid #EEF1F6; background:${l.needsAction ? '#FFF5F5' : (l.editing ? '#F7F9FC' : 'transparent')}; box-shadow:${l.needsAction ? 'inset 3px 0 0 #D14B4B' : 'none'};`)} title={l.missTitle}>
+<div style={css(`display:grid; grid-template-columns:110px 90px 150px 90px 100px 120px 80px 70px 100px 100px 110px 180px 160px 140px 140px 70px 130px; align-items:center; border-top:1px solid #EEF1F6; background:${l.needsAction ? '#FFF5F5' : (l.editing ? '#F7F9FC' : 'transparent')}; box-shadow:${l.needsAction ? 'inset 3px 0 0 #D14B4B' : 'none'};`)} title={l.missTitle}>
 <div style={css(`padding:10px 10px; font-size:12px; font-weight:700; color:#003F98; white-space:nowrap; display:flex; align-items:center; gap:5px;`)}>{l.code}{(l.srcManual) ? (<><span title={"Added by a user — not in AutoDML"} style={css(`padding:1px 6px; border-radius:999px; font-size:9.5px; font-weight:700; background:#EAEEFB; color:#2F4FC6;`)}>Manual</span></>) : null}</div>
 <div style={css(`padding:10px 10px; font-size:12px; white-space:nowrap;`)}>{(l.lmscConflict) ? (<><span title={l.lmscConflictTip} style={css(`display:inline-flex; align-items:center; gap:4px; padding:2px 7px; border-radius:999px; font-size:10.5px; font-weight:700; background:#FBEAEA; color:#D14B4B; cursor:help;`)}><svg width={"11"} height={"11"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M12 9v4m0 4h.01M10.3 3.9L2.4 18a2 2 0 001.7 3h15.8a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg>Conflict</span></>) : (<><span style={css(`color:${l.lmscCode === 'Pending' ? '#8E96A3' : '#14171F'}; font-style:${l.lmscCode === 'Pending' ? 'italic' : 'normal'};`)}>{l.lmscCode}</span></>)}</div>
 <div style={css(`padding:10px 10px; font-size:11px; color:#5A5E66; font-variant-numeric:tabular-nums; white-space:nowrap;`)}>{l.missCoords ? (<><span style={css(`color:#D14B4B; font-weight:700;`)}>Missing</span></>) : l.coords}</div>
@@ -1470,10 +1471,13 @@ All modules
 </div>
 {(l.notEditing) ? (<><div style={css(`padding:7px 10px; display:flex; gap:4px; justify-content:flex-end;`)}>
 <button onClick={l.onEdit} disabled={rlhCyclePast} aria-label={"Edit " + l.code} title={"Edit"} style={css(`width:28px; height:28px; border:1px solid #E6EBF2; background:#fff; border-radius:6px; cursor:${rlhCyclePast ? 'not-allowed' : 'pointer'}; opacity:${rlhCyclePast ? '0.4' : '1'}; display:flex; align-items:center; justify-content:center; color:#5A5E66;`)} onMouseEnter={(e) => hoverOn(e, `border-color:#003F98; color:#003F98;`)} onMouseLeave={(e) => hoverOff(e, `width:28px; height:28px; border:1px solid #E6EBF2; background:#fff; border-radius:6px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#5A5E66;`, `border-color:#003F98; color:#003F98;`)}><svg aria-hidden={"true"} width={"13"} height={"13"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"}><path d={"M14 6l4 4M4 20l4-1 9.5-9.5a2 2 0 00-3-3L5 16z"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg></button>
-{/* 2026-08-26 fix (#11) — Deactivate/Reactivate, same pattern as SC Master, now that LMDC rows have real per-DC existence tracking. */}
-{(l.rowIsActive) ? (<><button onClick={l.onDeactivate} disabled={rlhCyclePast} aria-label={"Deactivate " + l.code} title={"Deactivate"} style={css(`width:28px; height:28px; border:1px solid #E6EBF2; background:#fff; border-radius:6px; cursor:${rlhCyclePast ? 'not-allowed' : 'pointer'}; opacity:${rlhCyclePast ? '0.4' : '1'}; display:flex; align-items:center; justify-content:center; color:#5A5E66;`)} onMouseEnter={(e) => hoverOn(e, `border-color:#C77B00; color:#C77B00;`)} onMouseLeave={(e) => hoverOff(e, `width:28px; height:28px; border:1px solid #E6EBF2; background:#fff; border-radius:6px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#5A5E66;`, `border-color:#C77B00; color:#C77B00;`)}><svg aria-hidden={"true"} width={"13"} height={"13"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"}><path d={"M12 2v10M18.4 6.6a9 9 0 11-12.8 0"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg></button></>) : (<><button onClick={l.onReactivate} disabled={rlhCyclePast} aria-label={"Reactivate " + l.code} title={"Reactivate"} style={css(`width:28px; height:28px; border:1px solid #E6EBF2; background:#fff; border-radius:6px; cursor:${rlhCyclePast ? 'not-allowed' : 'pointer'}; opacity:${rlhCyclePast ? '0.4' : '1'}; display:flex; align-items:center; justify-content:center; color:#128A3E;`)} onMouseEnter={(e) => hoverOn(e, `border-color:#128A3E; background:#E7F4EC;`)} onMouseLeave={(e) => hoverOff(e, `width:28px; height:28px; border:1px solid #E6EBF2; background:#fff; border-radius:6px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#128A3E;`, `border-color:#128A3E; background:#E7F4EC;`)}><svg aria-hidden={"true"} width={"13"} height={"13"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M20 6L9 17l-5-5"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg></button></>)}
+{/* 2026-11-02 (#76): activation moved to the Status switch (last column), as on SC Master. */}
 </div></>) : null}
 {(l.editing) ? (<><div style={css(`padding:5px 6px; display:flex; gap:4px; justify-content:flex-end;`)}><button onClick={l.onSaveRow} disabled={rlhCyclePast} title={"Save"} aria-label={"Save " + l.code} style={css(`width:28px; height:28px; border:none; background:#003F98; color:#fff; border-radius:6px; cursor:${rlhCyclePast ? 'not-allowed' : 'pointer'}; opacity:${rlhCyclePast ? '0.45' : '1'}; display:flex; align-items:center; justify-content:center;`)}><svg aria-hidden={"true"} width={"13"} height={"13"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2.2"}><path d={"M20 6L9 17l-5-5"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg></button><button onClick={l.onCancelRow} title={"Cancel"} aria-label={"Cancel editing " + l.code} style={css(`width:28px; height:28px; border:1px solid #C3C9D4; background:#fff; color:#5A5E66; border-radius:6px; cursor:pointer; display:flex; align-items:center; justify-content:center;`)}><svg aria-hidden={"true"} width={"13"} height={"13"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M6 6l12 12M18 6L6 18"} strokeLinecap={"round"} /></svg></button></div></>) : null}
+<div style={css(`padding:7px 10px; display:flex; align-items:center; gap:8px;`)}>
+<button role={"switch"} aria-checked={l.rowIsActive} onClick={l.onToggleActive} disabled={rlhCyclePast} aria-label={(l.rowIsActive ? "Deactivate " : "Activate ") + l.code} title={rlhCyclePast ? "Past cycle — read-only. Switch to the current cycle to edit." : (l.rowIsActive ? "Active — switch off to mark this LMDC Inactive (closure)" : "Inactive — switch on to reactivate")} style={css(`position:relative; width:34px; height:20px; flex-shrink:0; border:none; border-radius:999px; padding:0; background:${l.rowIsActive ? '#128A3E' : '#C3C9D4'}; cursor:${rlhCyclePast ? 'not-allowed' : 'pointer'}; opacity:${rlhCyclePast ? '0.4' : '1'}; transition:background 120ms ease;`)}><span style={css(`position:absolute; top:2px; left:${l.rowIsActive ? '16px' : '2px'}; width:16px; height:16px; border-radius:50%; background:#fff; box-shadow:0 1px 2px rgba(0,0,0,0.25); transition:left 120ms ease;`)} /></button>
+<span style={css(`font-size:11.5px; font-weight:600; color:${l.rowIsActive ? '#128A3E' : '#8E96A3'};`)}>{l.rowIsActive ? 'Active' : 'Inactive'}</span>
+</div>
 </div>
 </React.Fragment>))}
 </div>
@@ -1845,7 +1849,7 @@ All modules
 <div style={css(`display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:16px 18px;`)}>
 {(lmdcForm.node || []).map((fl, __iLN) => (<React.Fragment key={__iLN}>
 <div>
-<div style={css(`font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#5A5E66; margin-bottom:6px;`)}>{fl.label}</div>
+<div style={css(`font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#5A5E66; margin-bottom:6px;`)}>{fl.label}{(fl.req) ? (<><span style={css(`color:#D14B4B;`)}> *</span></>) : null}</div>
 {(fl.isSelect) ? (<><select value={fl.value} onChange={fl.onInput} disabled={rlhCyclePast} style={css(`width:100%; height:38px; padding:0 10px; border:1px solid ${fl.missing ? '#D14B4B' : '#C3C9D4'}; border-radius:8px; font-family:inherit; font-size:13px; color:#14171F; outline:none; background:#fff; box-sizing:border-box;`)}>{(fl.options || []).map((o, __iLNo) => (<React.Fragment key={__iLNo}><option value={o}>{o || 'Not mapped yet'}</option></React.Fragment>))}</select></>) : null}
 {(fl.isText) ? (<><input value={fl.value} onInput={fl.onInput} placeholder={fl.ph} disabled={rlhCyclePast} style={css(`width:100%; height:38px; padding:0 10px; border:1px solid ${fl.missing ? '#D14B4B' : '#C3C9D4'}; border-radius:8px; font-family:inherit; font-size:13px; color:#14171F; outline:none; background:#fff; box-sizing:border-box;`)} /></>) : null}
 {(fl.missing) ? (<><div style={css(`font-size:10.5px; color:#D14B4B; margin-top:3px; font-weight:600;`)}>Required</div></>) : null}
@@ -1876,9 +1880,10 @@ All modules
 <div style={css(`display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px 18px;`)}>
 {(lmdcForm.ops || []).map((fl, __iLO) => (<React.Fragment key={__iLO}>
 <div>
-<div style={css(`font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#5A5E66; margin-bottom:6px;`)}>{fl.label}</div>
+<div style={css(`font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#5A5E66; margin-bottom:6px;`)}>{fl.label}{(fl.req) ? (<><span style={css(`color:#D14B4B;`)}> *</span></>) : null}</div>
 {(fl.isSelect) ? (<><select value={fl.value} onChange={fl.onInput} disabled={rlhCyclePast} style={css(`width:100%; height:38px; padding:0 10px; border:1px solid ${fl.missing ? '#D14B4B' : '#C3C9D4'}; border-radius:8px; font-family:inherit; font-size:13px; color:#14171F; outline:none; background:#fff; box-sizing:border-box;`)}>{(fl.options || []).map((o, __iLOo) => (<React.Fragment key={__iLOo}><option value={o}>{o === '' ? '—' : o}</option></React.Fragment>))}</select></>) : null}
-{(fl.isText) ? (<><input value={fl.value} onInput={fl.onInput} placeholder={fl.ph} disabled={rlhCyclePast} style={css(`width:100%; height:38px; padding:0 10px; border:1px solid #C3C9D4; border-radius:8px; font-family:inherit; font-size:13px; color:#14171F; outline:none; background:#fff; box-sizing:border-box;`)} /></>) : null}
+{(fl.isText) ? (<><input value={fl.value} onInput={fl.onInput} placeholder={fl.ph} disabled={rlhCyclePast} style={css(`width:100%; height:38px; padding:0 10px; border:1px solid ${fl.missing ? '#D14B4B' : '#C3C9D4'}; border-radius:8px; font-family:inherit; font-size:13px; color:#14171F; outline:none; background:#fff; box-sizing:border-box;`)} /></>) : null}
+{(fl.missing) ? (<><div style={css(`font-size:10.5px; color:#D14B4B; margin-top:3px; font-weight:600;`)}>Required</div></>) : null}
 </div>
 </React.Fragment>))}
 </div>
@@ -3314,26 +3319,26 @@ NLH cycle: {schedNlhMonthLabel}
 <div style={css(`text-align:right; padding-bottom:6px;`)}>VOL CAP</div>
 <div style={css(`text-align:right; padding-bottom:6px;`)}>DCs</div>
 <div>
-<div style={css(`margin-bottom:3px; white-space:nowrap;`)}>VOL MIN (ALL)</div>
+<div style={css(`margin-bottom:3px; white-space:nowrap;`)}>VOL MIN % (ALL)</div>
 <div style={css(`display:flex; align-items:center; gap:0; border:1px solid #C3C9D4; border-radius:5px; width:fit-content; background:#fff;`)}>
 <button onClick={onMapHeaderVolUtilMinDown} title={"Apply -5 to all selected SCs"} style={css(`width:20px; height:22px; border:none; border-right:1px solid #C3C9D4; background:transparent; cursor:pointer; font-size:13px; color:#5A5E66; display:flex; align-items:center; justify-content:center;`)}>{"−"}</button>
-<span style={css(`width:28px; text-align:center; font-size:11px; font-variant-numeric:tabular-nums;`)}>{mapHeaderVolUtilMin}</span>
+<span style={css(`width:34px; text-align:center; font-size:11px; font-variant-numeric:tabular-nums;`)}>{mapHeaderVolUtilMin}%</span>
 <button onClick={onMapHeaderVolUtilMinUp} title={"Apply +5 to all selected SCs"} style={css(`width:20px; height:22px; border:none; border-left:1px solid #C3C9D4; background:transparent; cursor:pointer; font-size:13px; color:#5A5E66; display:flex; align-items:center; justify-content:center;`)}>+</button>
 </div>
 </div>
 <div>
-<div style={css(`margin-bottom:3px; white-space:nowrap;`)}>VOL MAX (ALL)</div>
+<div style={css(`margin-bottom:3px; white-space:nowrap;`)}>VOL MAX % (ALL)</div>
 <div style={css(`display:flex; align-items:center; gap:0; border:1px solid #C3C9D4; border-radius:5px; width:fit-content; background:#fff;`)}>
 <button onClick={onMapHeaderVolUtilMaxDown} title={"Apply -5 to all selected SCs"} style={css(`width:20px; height:22px; border:none; border-right:1px solid #C3C9D4; background:transparent; cursor:pointer; font-size:13px; color:#5A5E66; display:flex; align-items:center; justify-content:center;`)}>{"−"}</button>
-<span style={css(`width:28px; text-align:center; font-size:11px; font-variant-numeric:tabular-nums;`)}>{mapHeaderVolUtilMax}</span>
+<span style={css(`width:34px; text-align:center; font-size:11px; font-variant-numeric:tabular-nums;`)}>{mapHeaderVolUtilMax}%</span>
 <button onClick={onMapHeaderVolUtilMaxUp} title={"Apply +5 to all selected SCs"} style={css(`width:20px; height:22px; border:none; border-left:1px solid #C3C9D4; background:transparent; cursor:pointer; font-size:13px; color:#5A5E66; display:flex; align-items:center; justify-content:center;`)}>+</button>
 </div>
 </div>
 <div>
-<div style={css(`margin-bottom:3px; white-space:nowrap;`)}>SORT CAP (ALL)</div>
+<div style={css(`margin-bottom:3px; white-space:nowrap;`)}>SORT CAP % (ALL)</div>
 <div style={css(`display:flex; align-items:center; gap:0; border:1px solid #C3C9D4; border-radius:5px; width:fit-content; background:#fff;`)}>
 <button onClick={onMapHeaderSortCapUtilMaxDown} title={"Apply -5 to all selected SCs"} style={css(`width:20px; height:22px; border:none; border-right:1px solid #C3C9D4; background:transparent; cursor:pointer; font-size:13px; color:#5A5E66; display:flex; align-items:center; justify-content:center;`)}>{"−"}</button>
-<span style={css(`width:28px; text-align:center; font-size:11px; font-variant-numeric:tabular-nums;`)}>{mapHeaderSortCapUtilMax}</span>
+<span style={css(`width:34px; text-align:center; font-size:11px; font-variant-numeric:tabular-nums;`)}>{mapHeaderSortCapUtilMax}%</span>
 <button onClick={onMapHeaderSortCapUtilMaxUp} title={"Apply +5 to all selected SCs"} style={css(`width:20px; height:22px; border:none; border-left:1px solid #C3C9D4; background:transparent; cursor:pointer; font-size:13px; color:#5A5E66; display:flex; align-items:center; justify-content:center;`)}>+</button>
 </div>
 </div>
@@ -3346,9 +3351,9 @@ NLH cycle: {schedNlhMonthLabel}
 <div style={css(`font-size:11.5px; text-align:right; color:#14171F; font-variant-numeric:tabular-nums;`)}>{s.sortCap}</div>
 <div style={css(`font-size:11.5px; text-align:right; color:#14171F; font-variant-numeric:tabular-nums;`)}>{s.volCap}</div>
 <div style={css(`font-size:11.5px; text-align:right; color:#14171F; font-variant-numeric:tabular-nums;`)}>{s.dcCount}</div>
-<input type={"number"} min={"0"} step={"5"} value={s.volUtilMin} onInput={s.onVolUtilMin} style={css(`width:58px; height:26px; border:1px solid #E6EBF2; border-radius:5px; padding:0 7px; font-family:inherit; font-size:12px; box-sizing:border-box;`)} />
-<input type={"number"} min={"0"} step={"5"} value={s.volUtilMax} onInput={s.onVolUtilMax} style={css(`width:58px; height:26px; border:1px solid ${s.volUtilOver100 ? '#EDD9AF' : '#E6EBF2'}; background:${s.volUtilOver100 ? '#FFFBF3' : '#fff'}; border-radius:5px; padding:0 7px; font-family:inherit; font-size:12px; box-sizing:border-box;`)} />
-<input type={"number"} min={"0"} step={"5"} value={s.sortCapUtilMax} onInput={s.onSortCapUtilMax} style={css(`width:68px; height:26px; border:1px solid ${s.sortCapUtilOver100 ? '#EDD9AF' : '#E6EBF2'}; background:${s.sortCapUtilOver100 ? '#FFFBF3' : '#fff'}; border-radius:5px; padding:0 7px; font-family:inherit; font-size:12px; box-sizing:border-box;`)} />
+<div style={css(`display:flex; align-items:center; gap:4px;`)}><input type={"number"} min={"0"} step={"5"} value={s.volUtilMin} onInput={s.onVolUtilMin} style={css(`width:58px; height:26px; border:1px solid #E6EBF2; border-radius:5px; padding:0 7px; font-family:inherit; font-size:12px; box-sizing:border-box;`)} /><span style={css(`font-size:11.5px; color:#5A5E66;`)}>%</span></div>
+<div style={css(`display:flex; align-items:center; gap:4px;`)}><input type={"number"} min={"0"} step={"5"} value={s.volUtilMax} onInput={s.onVolUtilMax} style={css(`width:58px; height:26px; border:1px solid ${s.volUtilOver100 ? '#EDD9AF' : '#E6EBF2'}; background:${s.volUtilOver100 ? '#FFFBF3' : '#fff'}; border-radius:5px; padding:0 7px; font-family:inherit; font-size:12px; box-sizing:border-box;`)} /><span style={css(`font-size:11.5px; color:#5A5E66;`)}>%</span></div>
+<div style={css(`display:flex; align-items:center; gap:4px;`)}><input type={"number"} min={"0"} step={"5"} value={s.sortCapUtilMax} onInput={s.onSortCapUtilMax} style={css(`width:68px; height:26px; border:1px solid ${s.sortCapUtilOver100 ? '#EDD9AF' : '#E6EBF2'}; background:${s.sortCapUtilOver100 ? '#FFFBF3' : '#fff'}; border-radius:5px; padding:0 7px; font-family:inherit; font-size:12px; box-sizing:border-box;`)} /><span style={css(`font-size:11.5px; color:#5A5E66;`)}>%</span></div>
 <button onClick={s.onViewRateCard} title={s.rateCardTitle} style={css(`height:26px; padding:0 9px; border:1px solid ${s.rateCardSet ? mapAccent : '#E6EBF2'}; background:#fff; color:${s.rateCardSet ? mapAccent : '#8E96A3'}; font-family:inherit; font-size:11px; font-weight:600; border-radius:5px; cursor:pointer; white-space:nowrap;`)}>{s.rateCardSet ? 'View' : 'Not set'}</button>
 </div>
 </React.Fragment>))}
@@ -12195,15 +12200,25 @@ class NDCApp extends React.Component {
     if (!errors.length) {
       preview = computeMappingResultPure(d, { id: 'PREVIEW', scCodes: draft.scCodes, dcCodes: eligible.map(dc => dc.code), volFileName: draft.volFileName, params });
       const sp = (code) => Object.assign({}, this.mapScParamDefaults(), (draft.scParams || {})[code]);
-      const volOut = [], sortOver = [];
+      // 2026-11-02 (#77): per SC, on the preview solve — mapped volume below Vol Cap × Min Vol % is a warning;
+      // above Vol Cap × Max Vol %, or mapped DCs above Sort Cap × Max Sort Cap %, is an error (blocks Trigger).
+      const volLow = [], volHigh = [], sortOver = [];
+      const n = (x) => Math.round(x).toLocaleString('en-IN');
       preview.perSc.forEach(p => {
         const sc = scs.find(s => s.code === p.code) || {}, lim = sp(p.code);
-        const vu = sc.volCap ? Math.round(p.volume / sc.volCap * 100) : 0, su = sc.sortCap ? Math.round(p.dcsServed / sc.sortCap * 100) : 0; // sort = DC destinations
-        if (vu < lim.volUtilMin || vu > lim.volUtilMax) { volOut.push(p.code + ' ' + vu + '% (' + lim.volUtilMin + '–' + lim.volUtilMax + '%)'); gAdd(p.code, 'warnings', 'Projected volume utilisation ' + vu + '% — outside ' + lim.volUtilMin + '–' + lim.volUtilMax + '%'); }
-        if (su > lim.sortCapUtilMax) { sortOver.push(p.code + ' ' + su + '% (max ' + lim.sortCapUtilMax + '%)'); gAdd(p.code, 'warnings', 'Projected sort capacity utilisation ' + su + '% — above ' + lim.sortCapUtilMax + '%'); }
+        if (sc.volCap) {
+          const minV = sc.volCap * lim.volUtilMin / 100, maxV = sc.volCap * lim.volUtilMax / 100;
+          if (p.volume < minV) { volLow.push(p.code + ' ' + n(p.volume) + ' < ' + n(minV)); gAdd(p.code, 'warnings', 'Mapped volume ' + n(p.volume) + ' is below Vol Cap × Min Vol % (' + n(sc.volCap) + ' × ' + lim.volUtilMin + '% = ' + n(minV) + ')'); }
+          if (p.volume > maxV) { volHigh.push(p.code + ' ' + n(p.volume) + ' > ' + n(maxV)); gAdd(p.code, 'errors', 'Mapped volume ' + n(p.volume) + ' exceeds Vol Cap × Max Vol % (' + n(sc.volCap) + ' × ' + lim.volUtilMax + '% = ' + n(maxV) + ')'); }
+        }
+        if (sc.sortCap) {
+          const maxD = Math.floor(sc.sortCap * lim.sortCapUtilMax / 100); // sort = DC destinations
+          if (p.dcsServed > maxD) { sortOver.push(p.code + ' ' + p.dcsServed + ' > ' + maxD); gAdd(p.code, 'errors', 'Mapped DCs ' + p.dcsServed + ' exceed Sort Cap × Max Sort Cap % (' + n(sc.sortCap) + ' × ' + lim.sortCapUtilMax + '% = ' + maxD + ')'); }
+        }
       });
-      if (volOut.length) warnings.push({ title: 'Projected volume utilisation outside the SC’s Min–Max range', detail: list(volOut, 6) });
-      if (sortOver.length) warnings.push({ title: 'Projected sort capacity utilisation above the SC’s maximum', detail: list(sortOver, 6) });
+      if (volLow.length) warnings.push({ title: 'Mapped volume below the SC’s Vol Cap × Min Vol %', detail: list(volLow, 6) });
+      if (volHigh.length) errors.push({ title: 'Mapped volume above the SC’s Vol Cap × Max Vol %', detail: list(volHigh, 6) });
+      if (sortOver.length) errors.push({ title: 'Mapped DCs above the SC’s Sort Cap × Max Sort Cap %', detail: list(sortOver, 6) });
       Object.entries(byGroup(preview.unservedDcs.map(u => u.code))).forEach(([k, c]) => gAdd(k, 'warnings', nDcs(c.length) + ' would be left unserved: ' + list(c)));
       if (preview.unservedDcs.length) warnings.push({ title: preview.unservedDcs.length + ' DC' + (preview.unservedDcs.length === 1 ? '' : 's') + ' with zero capacity — will be left unserved', detail: list(preview.unservedDcs.map(u => u.code)) });
       const lmByCode = {}; (d.lmdcs || []).forEach(l => { lmByCode[l.code] = l; });
@@ -13333,6 +13348,7 @@ class NDCApp extends React.Component {
         capacity: l.capacity > 0 ? fmtInt(l.capacity) : '0', zeroCap: l.capacity === 0,
         active: l.active, statusLabel: l.active ? 'Active' : 'Inactive',
         rowIsActive, onDeactivate: () => this.deactivateLmdc(l.code), onReactivate: () => this.reactivateLmdc(l.code),
+        onToggleActive: () => (rowIsActive ? this.deactivateLmdc(l.code) : this.reactivateLmdc(l.code)), // 2026-11-02 (#76): Status switch
         open: l.open, close: l.close, d0Cutoff: l.d0Cutoff, maxVehicle: l.maxVehicle, unloadMin: l.unloadMin,
         // LM Contacts (2026-09-12, items 2/3) — replaced the old shared pocs list with 4 named
         // per-DC roles. lmContactsComplete checks the 3 mandatory ones (ZH/CH/AM-1); AM-2 is
@@ -13745,10 +13761,10 @@ class NDCApp extends React.Component {
         const ops = [fld('Open Time', 'open', 'select', LMDC_TIME_SLOTS), fld('Close Time', 'close', 'select', LMDC_TIME_SLOTS), fld('D0 Cutoff', 'd0Cutoff', 'select', LMDC_D0_OPTIONS),
           fld('Max Vehicle Size', 'maxVehicle', 'select', lmdcVehNames), fld('Unloading Time (min)', 'unloadMin', 'select', LMDC_UNLOAD_OPTIONS),
           // V4.0 restore (2026-10-20) — Pincodes, re-fitted from the archived inline cell into this form.
-          fld('Pincodes', 'pincodes', 'text', null, { ph: 'e.g. 110001, 110002 (comma or semicolon separated)', missing: !String(f.pincodes || '').trim() })];
+          fld('Pincodes', 'pincodes', 'text', null, { req: true, ph: 'e.g. 110001, 110002 (comma separated, 6-digit)', missing: !String(f.pincodes || '').trim() })]; // 2026-11-02: red * (Save already required it)
         const nodeEditable = l.source === 'Manual'; const blank = (k) => f[k] == null || String(f[k]).trim() === '';
-        const node = nodeEditable ? (isNewL ? [fld('LMDC Code', 'newCode', 'text', null, { ph: 'e.g. BLR-801', missing: blank('newCode') })] : []).concat([fld('LMSC', 'lmscCode', 'select', [''].concat((d.scs || []).filter(s => s.nodeKind !== 'MDC').map(s => s.code))), fld('Latitude', 'lat', 'text', null, { ph: 'e.g. 28.6139', missing: blank('lat') }),
-          fld('Longitude', 'lng', 'text', null, { ph: 'e.g. 77.2090', missing: blank('lng') }), fld('Capacity', 'capacity', 'text', null, { ph: 'e.g. 6000', missing: blank('capacity') || !(Number(f.capacity) > 0) })]) : [];
+        const node = nodeEditable ? (isNewL ? [fld('LMDC Code', 'newCode', 'text', null, { req: true, ph: 'e.g. BLR-801', missing: blank('newCode') })] : []).concat([fld('LMSC', 'lmscCode', 'select', [''].concat((d.scs || []).filter(s => s.nodeKind !== 'MDC').map(s => s.code))), fld('Latitude', 'lat', 'text', null, { req: true, ph: 'e.g. 28.6139', missing: blank('lat') }),
+          fld('Longitude', 'lng', 'text', null, { req: true, ph: 'e.g. 77.2090', missing: blank('lng') }), fld('Capacity', 'capacity', 'text', null, { req: true, ph: 'e.g. 6000', missing: blank('capacity') || !(Number(f.capacity) > 0) })]) : [];
         return { open: true, title: isNewL ? 'Add LMDC' : 'Edit LMDC \u2014 ' + code,
           core: [['LMDC Code', l.code], ['LMSC', l.lmscCode || '\u2014'], ['Location', (Number(l.lat) || 0).toFixed(4) + ', ' + (Number(l.lng) || 0).toFixed(4)], ['Capacity', l.capacity != null ? Number(l.capacity).toLocaleString('en-IN') : '\u2014']].map(x => ({ label: x[0], value: x[1] })),
           nodeEditable, node, coreHint: isNewL ? '· New Manual LMDC — enter its code and node parameters; LMSC is optional' : nodeEditable ? '· Manual LMDC (not in AutoDML) — enter its node parameters' : '· from AutoDML (read-only; AutoDML values always win)',

@@ -4702,3 +4702,30 @@ RNG-based approximation. Read the method's own comment block first; the short ve
     line (3 lines: picker source, caption, comment — `planInputType` was always 'LMDC Landing', so the
     filter is unchanged) and re-verified before shipping.
   - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
+- **2026-11-02 — Fixes after the post-deploy checklist.**
+  1. **LMDC form required markers**: the Edit / Add LMDC form now shows a red * on required fields —
+     Pincodes (Save already required it), and in the node section LMDC Code (add), Latitude, Longitude,
+     Capacity; LMSC stays optional. An empty required text field gets a red border and "Required".
+  2. **Decision #76 — LMDC Status is a switch, as on SC Master**: a STATUS column, last, with an Active /
+     Inactive switch (`onToggleActive` → `deactivateLmdc` / `reactivateLmdc`; off = closure, same as
+     ACTIVE = FALSE in the upload); disabled on past cycles. Replaces the Deactivate / Reactivate icons
+     in the actions cell. **LMDC Master grid = 17 tracks** (was 16), `min-width:1940px` (was 1810px).
+  3. **% on the Step 2 per-SC controls**: headers read VOL MIN % / VOL MAX % / SORT CAP % (ALL), header
+     values show "%", and each per-SC input has a "%" suffix. Vol Min was already a % of Vol Cap.
+  4. **Decision #77 — per-SC capacity checks (Step 3, on the preview solve)**: mapped volume below Vol
+     Cap × Min Vol % → **warning** ("Mapped volume X is below Vol Cap × Min Vol % (cap × m% = y)"); mapped
+     volume above Vol Cap × Max Vol % → **error**; mapped DCs above Sort Cap × Max Sort Cap % → **error**
+     (both block Trigger). Replaces V7 (volume outside Min–Max, warning) and V8 (sort above max, warning).
+     V9–V11 (unserved, no pincodes, New Node without new DCs) stay warnings.
+  - **Verification**: suite `s10.js` **21/21** (required flags + rendered red * on Pincodes and the add
+    form's node fields only; empty Pincodes red border + "Required"; header 17 columns with STATUS last;
+    every row a switch; old icons gone; switch off → closure, rendered "Inactive", on → active; past cycle
+    disabled; % headers, values and 9 suffixes; Min Vol warning with formula; Max Vol and Max Sort Cap
+    errors; Trigger blocked). `r2` updated for the 17-track LMDC grid. All suites pass: `s1` 26, `s2` 17,
+    `s3` 23, `s4` 23, `s5` 24, `s6` 18, `s7` 27, `s8` 12, `s9` 11, `s10` 21, `r2` 18 — 0 runtime errors,
+    0 JSX `\u`. Buttons: −1 net (one switch replaces two icons).
+  - **Note**: this was first built by an interrupted attempt at this request; reviewed as a diff against
+    the last verified package (92 lines) and re-verified before shipping. A stray test line that wrote a
+    global was removed from `s10.js`.
+  - **Test note**: `s4` and `s8` need more than 90 s — run them alone (250 s+).
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
