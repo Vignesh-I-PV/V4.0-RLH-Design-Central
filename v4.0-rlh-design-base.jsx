@@ -4240,8 +4240,12 @@ NLH cycle: {schedNlhMonthLabel}
 <span style={css(`font-size:13px; font-weight:700; color:#14171F; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;`)}>{c.name}</span>
 <span style={css(`padding:2px 8px; border-radius:999px; font-size:9.5px; font-weight:600; background:${c.statusBg}; color:${c.statusFg}; flex-shrink:0;`)}>{c.statusLabel}</span>
 </div>
-<div style={css(`font-size:10.5px; color:#8E96A3; margin-bottom:10px;`)}>{c.id}</div>
-<div style={css(`display:flex; gap:12px; font-size:11.5px; color:#5A5E66; margin-bottom:12px;`)}><span><strong style={css(`color:#14171F;`)}>{c.scCount}</strong> SCs</span><span><strong style={css(`color:#14171F;`)}>{c.dcCount}</strong> DCs</span><span style={css(`color:${c.movements > 0 ? '#C77B00' : '#5A5E66'};`)}><strong>{c.movements}</strong> moves</span><span style={css(`color:${c.unmapped > 0 ? '#D14B4B' : '#5A5E66'};`)}><strong>{c.unmapped}</strong> unmapped</span></div>
+<div title={c.dagId} style={css(`font-size:10.5px; color:#8E96A3; margin-bottom:10px; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;`)}>{c.dagId}</div>
+<div style={css(`font-size:9.5px; font-weight:700; color:#8E96A3; letter-spacing:0.05em; margin-bottom:4px;`)}>INPUTS</div>
+<div style={css(`display:flex; flex-wrap:wrap; gap:4px 12px; font-size:11.5px; color:#5A5E66; margin-bottom:9px;`)}><span><strong style={css(`color:#14171F;`)}>{c.scCount}</strong> SCs</span><span><strong style={css(`color:#14171F;`)}>{c.dcCount}</strong> DCs</span><span><strong style={css(`color:#14171F;`)}>{c.volume}</strong> vol</span><span>ρ <strong style={css(`color:#14171F;`)}>{c.rho}</strong></span><span>New Node <strong style={css(`color:#14171F;`)}>{c.newAdditionLabel}</strong></span><span>Δ <strong style={css(`color:#14171F;`)}>{c.toleranceLabel}</strong></span></div>
+<div style={css(`font-size:9.5px; font-weight:700; color:#8E96A3; letter-spacing:0.05em; margin-bottom:4px;`)}>OUTPUTS</div>
+<div style={css(`display:flex; flex-wrap:wrap; gap:4px 12px; font-size:11.5px; color:#5A5E66; margin-bottom:6px;`)}><span style={css(`color:${c.movements > 0 ? '#C77B00' : '#5A5E66'};`)}><strong>{c.movements}</strong> movements</span><span style={css(`color:${c.unmapped > 0 ? '#D14B4B' : '#5A5E66'};`)}><strong>{c.unmapped}</strong> unmapped</span><span><strong style={css(`color:#14171F;`)}>{c.pctChanged}%</strong> DCs changed</span></div>
+<div style={css(`display:flex; flex-direction:column; gap:2px; font-size:11.5px; color:#5A5E66; margin-bottom:12px;`)}><span>Avg distance <strong style={css(`color:${c.avgDistFg};`)}>{c.avgDistLabel}</strong></span><span>Vol-weighted distance <strong style={css(`color:${c.wavgDistFg};`)}>{c.wavgDistLabel}</strong></span></div>
 <div style={css(`display:flex; gap:6px; padding-top:10px; border-top:1px solid #EEF1F6;`)}>
 <button onClick={c.onMapClick} title={"Map of this plan"} style={css(`display:inline-flex; align-items:center; gap:5px; height:26px; padding:0 9px; border:1px solid #E6EBF2; background:#fff; color:#1F6F5C; font-family:inherit; font-size:11px; font-weight:700; border-radius:6px; cursor:pointer;`)}><svg width={"12"} height={"12"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg>Map</button>
 <button onClick={c.onCsvClick} title={"Download this plan as CSV"} style={css(`display:inline-flex; align-items:center; gap:5px; height:26px; padding:0 9px; border:1px solid #E6EBF2; background:#fff; color:#1F6F5C; font-family:inherit; font-size:11px; font-weight:700; border-radius:6px; cursor:pointer;`)}><svg width={"12"} height={"12"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M12 4v12M7 11l5 5 5-5M5 20h14"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg>CSV</button>
@@ -4263,6 +4267,7 @@ NLH cycle: {schedNlhMonthLabel}
 <span style={css(`font-size:16px; font-weight:700; color:#14171F;`)}>{reviewMapOpenCard.name}</span>
 <span style={css(`display:inline-flex; align-items:center; gap:8px;`)}><button onClick={onReviewMapOpenMapThis} title={"Map of this plan"} style={css(`display:inline-flex; align-items:center; gap:6px; height:30px; padding:0 12px; border:1px solid #E6EBF2; background:#fff; color:${reviewMapAccent}; font-family:inherit; font-size:12px; font-weight:700; border-radius:7px; cursor:pointer;`)}><svg width={"14"} height={"14"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg>Map</button><button onClick={onReviewMapCsvThis} title={"Download this plan as CSV"} style={css(`display:inline-flex; align-items:center; gap:6px; height:30px; padding:0 12px; border:1px solid #E6EBF2; background:#fff; color:${reviewMapAccent}; font-family:inherit; font-size:12px; font-weight:700; border-radius:7px; cursor:pointer;`)}><svg width={"14"} height={"14"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M12 4v12M7 11l5 5 5-5M5 20h14"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg>CSV</button>{(reviewMapStage === 'decide') ? (<><button onClick={onReviewMapSimOpen} disabled={!reviewMapCanSimulate} title={reviewMapCanSimulate ? "Simulate: plan output vs your decisions, with maps" : "Make at least one decision to simulate"} style={css(`display:inline-flex; align-items:center; gap:6px; height:30px; padding:0 12px; border:1px solid ${reviewMapCanSimulate ? reviewMapAccent : '#E6EBF2'}; background:#fff; color:${reviewMapCanSimulate ? reviewMapAccent : '#A5ABB5'}; font-family:inherit; font-size:12px; font-weight:700; border-radius:7px; cursor:${reviewMapCanSimulate ? 'pointer' : 'not-allowed'};`)}><svg width={"14"} height={"14"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M3 17l6-6 4 4 8-8M14 7h7v7"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg>Simulate</button></>) : null}<span style={css(`padding:3px 10px; border-radius:999px; font-size:10.5px; font-weight:600; background:${reviewMapOpenCard.statusBg}; color:${reviewMapOpenCard.statusFg};`)}>{reviewMapOpenCard.statusLabel}</span></span>
 </div>
+<div title={reviewMapOpenCard.dagId} style={css(`font-size:11px; color:#8E96A3; margin-bottom:4px; font-family:ui-monospace, SFMono-Regular, Menlo, monospace;`)}>{reviewMapOpenCard.dagId}</div>
 <div style={css(`font-size:12px; color:#5A5E66; margin-bottom:16px;`)}>{reviewMapOpenCard.scCount} SCs · {reviewMapOpenCard.dcCount} DCs · {reviewMapOpenCard.volume} vol · ρ {reviewMapOpenCard.rho} · New Addition {reviewMapOpenCard.newAdditionLabel} · Ideal &lt;&gt; Actual Δ {reviewMapOpenCard.toleranceLabel}</div>
 <div style={css(`display:grid; grid-template-columns:repeat(5,1fr); gap:14px; padding-top:14px; border-top:1px solid #EEF1F6;`)}>
 <div>
@@ -4279,11 +4284,11 @@ NLH cycle: {schedNlhMonthLabel}
 </div>
 <div>
 <div style={css(`font-size:15px; font-weight:700; color:#14171F; margin-top:4px;`)}>{reviewMapDist.avgPre} {"→"} {reviewMapDist.avgPlan}</div>
-<div style={css(`font-size:11px; color:#8E96A3;`)}>Avg SC → DC distance (current → plan)</div>
+<div style={css(`font-size:11px; color:#8E96A3;`)}>Avg SC → DC distance (current → {reviewMapDist.outLabel})</div>
 </div>
 <div>
 <div style={css(`font-size:15px; font-weight:700; color:#14171F; margin-top:4px;`)}>{reviewMapDist.wPre} {"→"} {reviewMapDist.wPlan}</div>
-<div style={css(`font-size:11px; color:#8E96A3;`)}>Volume-weighted distance (current → plan)</div>
+<div style={css(`font-size:11px; color:#8E96A3;`)}>Volume-weighted distance (current → {reviewMapDist.outLabel})</div>
 </div>
 </div>
 </div>
@@ -4316,51 +4321,40 @@ NLH cycle: {schedNlhMonthLabel}
 <span style={css(`font-size:11.5px; color:#D14B4B; font-weight:600;`)}>{"−"}{b.removedCount} removed</span>
 <span style={css(`font-size:11.5px; color:#5A5E66;`)}>{b.unchangedCount} unchanged</span>
 <span style={css(`font-size:11px; color:#5A5E66;`)}>Vol util {b.volPre} {"→"} <span style={css(`color:${b.volPostFg}; font-weight:600;`)}>{b.volPost}</span></span>
+<span style={css(`font-size:11px; color:#5A5E66;`)}>Sort util {b.sortPre} {"→"} <span style={css(`color:${b.sortPostFg}; font-weight:600;`)}>{b.sortPost}</span></span>
 {(b.hasAdded) ? (<><span style={css(`margin-left:auto; display:inline-flex; gap:6px;`)}><button onClick={b.onAcceptSc} style={css(`height:26px; padding:0 10px; border:1px solid #128A3E; background:#fff; color:#128A3E; font-family:inherit; font-size:11px; font-weight:700; border-radius:6px; cursor:pointer;`)}>Accept all added</button><button onClick={b.onRejectSc} style={css(`height:26px; padding:0 10px; border:1px solid #D14B4B; background:#fff; color:#D14B4B; font-family:inherit; font-size:11px; font-weight:700; border-radius:6px; cursor:pointer;`)}>Reject all added</button></span></>) : null}
 </div>
+<div style={css(`display:flex; flex-wrap:wrap; gap:6px 22px; padding:8px 14px; background:#FBFCFE; border-top:1px solid #EEF1F6; font-size:11.5px; color:#5A5E66;`)}>
+<span>Sort Cap <strong style={css(`color:#14171F;`)}>{b.sortCap}</strong> · Max Sort Cap <strong style={css(`color:#14171F;`)}>{b.sortMaxPct}%</strong> · Mapped nodes (proposed) <strong style={css(`color:#14171F;`)}>{b.nodesPost}</strong> · Utilisation <strong style={css(`color:${b.sortPostFg};`)}>{b.sortPost}</strong></span>
+<span>Vol Cap <strong style={css(`color:#14171F;`)}>{b.volCap}</strong> · Min / Max Vol <strong style={css(`color:#14171F;`)}>{b.volMinPct}% / {b.volMaxPct}%</strong> · Mapped vol (proposed) <strong style={css(`color:#14171F;`)}>{b.volPostAbs}</strong> · Utilisation <strong style={css(`color:${b.volPostFg};`)}>{b.volPost}</strong></span>
+</div>
 <NdcDcSection title={"DCs Added"} tone={"add"} count={b.addedCount} open={b.openAdd} onToggle={b.onToggleAdd} hint={"decide here"}>
-<div style={css(`overflow-x:auto; border:1px solid #EEF1F6; border-radius:8px;`)}><div style={css(`min-width:900px;`)}>
-<div style={css(`display:grid; grid-template-columns:110px 130px 70px 90px 90px 100px minmax(140px,1fr) 150px;`)}><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>DC CODE</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>MOVEMENT FLAG</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>NEW SC</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>DIST OLD</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>DIST NEW</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)} title={"New − Old. Negative (green) = shorter; positive (red) = longer"}>DIST DELTA</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>OPTIONAL REMARKS</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>DECISION</div></div>
-{(b.added || []).map((r, __iRga) => (<React.Fragment key={__iRga}>
-<div style={css(`display:grid; grid-template-columns:110px 130px 70px 90px 90px 100px minmax(140px,1fr) 150px; align-items:center; border-top:1px solid #F2F5FA;`)}>
-<div style={css(`padding:7px 10px; font-size:12px; font-weight:600; color:#14171F;`)}>{r.code}</div>
-<div style={css(`padding:7px 10px;`)}><span style={css(`padding:2px 8px; border-radius:999px; font-size:10.5px; font-weight:600; background:${r.flagBg}; color:${r.flagFg}; white-space:nowrap;`)}>{r.flag}</span></div>
-<div style={css(`padding:7px 10px; font-size:12px; font-weight:600; color:#1F6F5C;`)}>{r.newSc}</div>
-<div style={css(`padding:7px 10px; font-size:12px; text-align:right; color:#5A5E66; font-variant-numeric:tabular-nums;`)}>{r.distOld}</div>
-<div style={css(`padding:7px 10px; font-size:12px; text-align:right; color:#14171F; font-variant-numeric:tabular-nums;`)}>{r.distNew}</div>
-<div style={css(`padding:7px 10px; font-size:12px; text-align:right; font-weight:700; color:${r.deltaFg}; font-variant-numeric:tabular-nums;`)}>{r.delta}</div>
-<div style={css(`padding:5px 10px;`)}><input value={r.remark} onInput={r.onRemark} placeholder={"Optional"} aria-label={"Remark for " + r.code} style={css(`width:100%; height:28px; border:1px solid #E6EBF2; border-radius:6px; padding:0 8px; font-family:inherit; font-size:11.5px; box-sizing:border-box;`)} /></div>
-<div style={css(`padding:5px 10px; display:flex; gap:4px;`)}><button onClick={r.onAccept} style={css(`height:28px; padding:0 10px; border:1px solid ${r.aBd}; background:${r.aBg}; color:${r.aFg}; font-family:inherit; font-size:11px; font-weight:700; border-radius:6px; cursor:pointer;`)}>Accept</button><button onClick={r.onReject} style={css(`height:28px; padding:0 10px; border:1px solid ${r.rBd}; background:${r.rBg}; color:${r.rFg}; font-family:inherit; font-size:11px; font-weight:700; border-radius:6px; cursor:pointer;`)}>Reject</button></div>
-</div>
-</React.Fragment>))}
-</div></div>
+<NdcMapDecisionRows rows={b.added} />
 </NdcDcSection>
-<NdcDcSection title={"DCs Removed"} tone={"rem"} count={b.removedCount} open={b.openRem} onToggle={b.onToggleRem} hint={"decided at the gaining SC"}>
-<div style={css(`overflow-x:auto; border:1px solid #EEF1F6; border-radius:8px;`)}><div style={css(`min-width:860px;`)}>
-<div style={css(`display:grid; grid-template-columns:110px 120px 90px 90px 100px 100px minmax(160px,1fr);`)}><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>DC CODE</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>MOVING TO</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>DIST OLD</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>DIST NEW</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>DIST DELTA</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>STATUS</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>NOTE</div></div>
-{(b.removed || []).map((r, __iRgm) => (<React.Fragment key={__iRgm}>
-<div style={css(`display:grid; grid-template-columns:110px 120px 90px 90px 100px 100px minmax(160px,1fr); align-items:center; border-top:1px solid #F2F5FA;`)}>
-<div style={css(`padding:7px 10px; font-size:12px; font-weight:600; color:#14171F;`)}>{r.code}</div>
-<div style={css(`padding:7px 10px; font-size:12px; font-weight:600; color:${r.toFg};`)}>{r.to}</div>
-<div style={css(`padding:7px 10px; font-size:12px; text-align:right; color:#5A5E66;`)}>{r.distOld}</div>
-<div style={css(`padding:7px 10px; font-size:12px; text-align:right; color:#14171F;`)}>{r.distNew}</div>
-<div style={css(`padding:7px 10px; font-size:12px; text-align:right; font-weight:700; color:${r.deltaFg};`)}>{r.delta}</div>
-<div style={css(`padding:7px 10px;`)}><span style={css(`padding:2px 8px; border-radius:999px; font-size:10.5px; font-weight:600; background:${r.statusBg}; color:${r.statusFg};`)}>{r.status}</span></div>
-<div style={css(`padding:5px 10px; font-size:11.5px; color:#5A5E66; display:flex; align-items:center; gap:8px;`)}>{(r.canKeep) ? (<><button onClick={r.onKeep} style={css(`height:26px; padding:0 9px; border:1px solid #1F6F5C; background:#fff; color:#1F6F5C; font-family:inherit; font-size:11px; font-weight:700; border-radius:6px; cursor:pointer; white-space:nowrap;`)}>{r.keepLabel}</button></>) : null}<span>{r.note}</span></div>
-</div>
-</React.Fragment>))}
-</div></div>
+<NdcDcSection title={"DCs Removed"} tone={"rem"} count={b.removedCount} open={b.openRem} onToggle={b.onToggleRem}>
+<NdcMapDecisionRows rows={b.removed} />
 </NdcDcSection>
 <NdcDcSection title={"Unchanged"} tone={"unc"} count={b.unchangedCount} open={b.openUnc} onToggle={b.onToggleUnc}>
-<div style={css(`display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:6px;`)}>{(b.unchanged || []).map((u, __iRgu) => (<React.Fragment key={__iRgu}><div style={css(`display:flex; justify-content:space-between; gap:6px; padding:5px 9px; border:1px solid #EEF1F6; border-radius:6px; font-size:11.5px;`)}><span style={css(`font-weight:600; color:#14171F;`)}>{u.code}</span><span style={css(`color:#8E96A3; font-variant-numeric:tabular-nums;`)}>{u.km}</span></div></React.Fragment>))}</div>
+<NdcMapDecisionRows rows={b.unchanged} />
 </NdcDcSection>
 </div>
 </React.Fragment>))}
-{(reviewMapHasNewUnplaced) ? (<>
+{(reviewMapHasUnmapped) ? (<>
 <div style={css(`border:1px solid #F3D9A0; border-radius:10px; overflow:hidden; background:#fff;`)}>
-<NdcDcSection title={"Unmapped — new DCs not placed"} tone={"unc"} count={reviewMapNewUnplaced.length} open={true} onToggle={() => {}}>
-<div style={css(`display:flex; flex-direction:column; gap:4px;`)}>{(reviewMapNewUnplaced || []).map((u, __iRnu) => (<React.Fragment key={__iRnu}><div style={css(`display:flex; gap:12px; font-size:12px; padding:5px 0;`)}><strong style={css(`min-width:110px;`)}>{u.code}</strong><span style={css(`color:#5A5E66;`)}>{u.reason}</span></div></React.Fragment>))}</div>
-</NdcDcSection>
+<div style={css(`padding:11px 14px; background:#FDF7EC; font-size:13px; font-weight:700; color:#14171F;`)}>Unmapped DCs <span style={css(`padding:1px 8px; border-radius:999px; font-size:11px; background:#FBF1DF; color:#C77B00;`)}>{reviewMapUnmappedRows.length}</span></div>
+<div style={css(`overflow-x:auto;`)}><div style={css(`min-width:860px;`)}>
+<div style={css(`display:grid; grid-template-columns:110px 90px 110px 160px minmax(180px,1fr) 150px;`)}><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>DC CODE</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>OLD SC</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>DIST TO OLD SC</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>IDEAL SC · DIST</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>REASON</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}></div></div>
+{(reviewMapUnmappedRows || []).map((u, __iRum) => (<React.Fragment key={__iRum}>
+<div style={css(`display:grid; grid-template-columns:110px 90px 110px 160px minmax(180px,1fr) 150px; align-items:center; border-top:1px solid #F2F5FA; font-size:12px;`)}>
+<div style={css(`padding:7px 10px; font-weight:600; color:#14171F;`)}>{u.code}</div>
+<div style={css(`padding:7px 10px; color:#14171F;`)}>{u.oldSc}</div>
+<div style={css(`padding:7px 10px; text-align:right; color:#5A5E66;`)}>{u.distOld}</div>
+<div style={css(`padding:7px 10px; color:#14171F;`)}><strong>{u.idealSc}</strong> <span style={css(`color:#5A5E66;`)}>{u.idealKm}</span></div>
+<div style={css(`padding:7px 10px; color:#5A5E66;`)}>{u.reason}</div>
+<div style={css(`padding:5px 10px;`)}>{(u.canAdd) ? (<><button onClick={u.onAdd} style={css(`height:26px; padding:0 10px; border:1px solid #1F6F5C; background:${u.addBg}; color:${u.addFg}; font-family:inherit; font-size:11px; font-weight:700; border-radius:6px; cursor:pointer; white-space:nowrap;`)}>{u.addLabel}</button></>) : null}</div>
+</div>
+</React.Fragment>))}
+</div></div>
 </div>
 </>) : null}
 </div>
@@ -4381,9 +4375,9 @@ NLH cycle: {schedNlhMonthLabel}
 <div style={css(`padding:8px 10px; text-align:right; color:#D14B4B;`)}>{"−"}{p.removed}</div>
 <div style={css(`padding:8px 10px; text-align:right;`)}>{p.volPre} {"→"} <strong>{p.volPost}</strong></div>
 <div style={css(`padding:8px 10px; text-align:right; color:#5A5E66;`)}>{p.volCap}</div>
-<div style={css(`padding:8px 10px; text-align:right;`)}><span style={css(`color:${p.vuPreFg};`)}>{p.vuPre}</span> {"→"} <strong style={css(`color:${p.vuPostFg};`)}>{p.vuPost}</strong></div>
+<div style={css(`padding:8px 10px; text-align:right;`)}><span style={css(`color:${p.vuPreFg};`)}>{p.vuPre}</span> {"→"} <strong style={css(`color:${p.vuPostFg};`)}>{p.vuPost}</strong><div style={css(`font-size:10.5px; color:#8E96A3;`)}>{p.volLimits}</div></div>
 <div style={css(`padding:8px 10px; text-align:right; color:#5A5E66;`)}>{p.sortCap}</div>
-<div style={css(`padding:8px 10px; text-align:right;`)}><span style={css(`color:${p.suPreFg};`)}>{p.suPre}</span> {"→"} <strong style={css(`color:${p.suPostFg};`)}>{p.suPost}</strong></div>
+<div style={css(`padding:8px 10px; text-align:right;`)}><span style={css(`color:${p.suPreFg};`)}>{p.suPre}</span> {"→"} <strong style={css(`color:${p.suPostFg};`)}>{p.suPost}</strong><div style={css(`font-size:10.5px; color:#8E96A3;`)}>{p.sortLimit}</div></div>
 <div style={css(`padding:8px 10px; text-align:right;`)}>{p.avgPre} {"→"} <strong>{p.avgPost}</strong></div>
 <div style={css(`padding:8px 10px; text-align:right;`)}>{p.wPre} {"→"} <strong>{p.wPost}</strong></div>
 </div>
@@ -4398,7 +4392,44 @@ NLH cycle: {schedNlhMonthLabel}
 {/* ===== STAGE 1 — finalise preview ===== */}
 {(reviewMapStage === 'finalise') ? (<>
 <div style={css(`font-size:15px; font-weight:700; color:#14171F; margin-bottom:4px;`)}>Finalise?</div>
-<div style={css(`font-size:12px; color:#5A5E66; margin-bottom:18px;`)}>Final view of each SC and cross-SC movement, based on your decisions. Nothing is written until you commit.</div>
+<div style={css(`font-size:12px; color:#5A5E66; margin-bottom:14px;`)}>The latest version of this plan, based on your decisions. Review the warnings, go back to change anything, or Finalise to lock it.</div>
+{(reviewMapPreview) ? (<>
+<div style={css(`font-size:11px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; margin-bottom:8px;`)}>PLAN OUTPUT VS YOUR DECISIONS</div>
+
+<div style={css(`display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-bottom:16px;`)}>
+{(reviewMapPreview.cards || []).map((c, __iPvc) => (<React.Fragment key={__iPvc}>
+<div style={css(`border:1px solid #E6EBF2; border-radius:10px; padding:12px 14px;`)}>
+<div style={css(`font-size:10.5px; font-weight:700; color:#8E96A3; letter-spacing:0.04em; margin-bottom:6px;`)}>{c.label}</div>
+<div style={css(`display:flex; align-items:baseline; gap:10px; font-variant-numeric:tabular-nums;`)}><span style={css(`font-size:13px; color:#5A5E66;`)}>{c.before}</span><span style={css(`color:#C3C9D4;`)}>{"→"}</span><span style={css(`font-size:17px; font-weight:700; color:#14171F;`)}>{c.after}</span></div>
+<div style={css(`font-size:11.5px; font-weight:700; color:${c.deltaFg}; margin-top:3px;`)}>{c.delta}</div>
+</div>
+</React.Fragment>))}
+</div>
+<div style={css(`display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:10px;`)}>
+<div><div style={css(`font-size:11px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; margin-bottom:6px;`)}>BEFORE — PLAN OUTPUT</div><div style={css(`border:1px solid #E6EBF2; border-radius:10px; overflow:hidden;`)}><NdcSpokeMap m={reviewMapPreview.mapBefore} label={"Before: plan output"} /></div></div>
+<div><div style={css(`font-size:11px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; margin-bottom:6px;`)}>AFTER — YOUR DECISIONS</div><div style={css(`border:1px solid #E6EBF2; border-radius:10px; overflow:hidden;`)}><NdcSpokeMap m={reviewMapPreview.mapAfter} label={"After: your decisions"} /></div></div>
+</div>
+<div style={css(`display:flex; flex-wrap:wrap; gap:8px 16px; font-size:12px; color:#14171F; margin-bottom:14px;`)}>
+{(reviewMapPreview.legend || []).map((lg, __iPvl) => (<React.Fragment key={__iPvl}><span style={css(`display:inline-flex; align-items:center; gap:6px;`)}><span style={css(`width:12px; height:12px; border-radius:50%; border:3px solid ${lg.color}; background:#fff;`)} />{lg.code}</span></React.Fragment>))}
+<span style={css(`color:#5A5E66;`)}>✕ unserved DC · dashed outline = SC span</span>
+</div>
+<div style={css(`border:1px solid #E6EBF2; border-radius:8px; overflow-x:auto;`)}>
+<div style={css(`display:grid; grid-template-columns:80px repeat(4, 1fr); min-width:640px;`)}>
+<div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>SC</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>DCs</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>VOL UTIL</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>SORT UTIL</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>VOL-WTD DISTANCE</div>
+{(reviewMapPreview.rows || []).map((r, __iPvr) => (<React.Fragment key={__iPvr}>
+<div style={css(`padding:8px 10px; font-size:12px; font-weight:700; color:${r.color}; border-top:1px solid #EEF1F6;`)}>{r.code}</div>
+<div style={css(`padding:8px 10px; font-size:12px; text-align:right; border-top:1px solid #EEF1F6;`)}>{r.dcA} {"→"} <strong>{r.dcB}</strong></div>
+<div style={css(`padding:8px 10px; font-size:12px; text-align:right; border-top:1px solid #EEF1F6;`)}><span style={css(`color:${r.vuAFg};`)}>{r.vuA}</span> {"→"} <strong style={css(`color:${r.vuBFg};`)}>{r.vuB}</strong></div>
+<div style={css(`padding:8px 10px; font-size:12px; text-align:right; border-top:1px solid #EEF1F6;`)}><span style={css(`color:${r.suAFg};`)}>{r.suA}</span> {"→"} <strong style={css(`color:${r.suBFg};`)}>{r.suB}</strong></div>
+<div style={css(`padding:8px 10px; font-size:12px; text-align:right; border-top:1px solid #EEF1F6;`)}>{r.wA} {"→"} <strong>{r.wB}</strong></div>
+</React.Fragment>))}
+</div>
+</div>
+<div style={css(`margin:16px 0 20px; border:1px solid ${reviewMapHasPreviewWarnings ? '#EDD9AF' : '#CDE8D6'}; border-radius:10px; padding:12px 14px; background:${reviewMapHasPreviewWarnings ? '#FDF7EC' : '#F1F9F4'};`)}>
+<div style={css(`font-size:12.5px; font-weight:700; color:#14171F; margin-bottom:${reviewMapHasPreviewWarnings ? '6px' : '0'};`)}>{reviewMapHasPreviewWarnings ? (reviewMapPreviewWarnings.length + ' warning' + (reviewMapPreviewWarnings.length === 1 ? '' : 's') + ' to review') : 'No warnings'}</div>
+{(reviewMapPreviewWarnings || []).map((wn, __iPvw) => (<React.Fragment key={__iPvw}><div style={css(`display:flex; gap:10px; font-size:12px; color:#3A3F47; margin-top:4px;`)}><span style={css(`padding:1px 7px; border-radius:999px; font-size:10px; font-weight:700; background:#FBF1DF; color:#C77B00; flex-shrink:0;`)}>Warning</span><strong style={css(`min-width:42px;`)}>{wn.sc}</strong><span>{wn.text}</span></div></React.Fragment>))}
+</div>
+</>) : null}
 <div style={css(`font-size:11px; font-weight:700; color:#5A5E66; letter-spacing:0.04em; margin-bottom:8px;`)}>SC-LEVEL VIEW</div>
 <div style={css(`display:flex; flex-direction:column; gap:12px; margin-bottom:20px;`)}>
 {(reviewMapFinalBlocks || []).map((b, __iRfb) => (<React.Fragment key={__iRfb}>
@@ -4443,13 +4474,13 @@ NLH cycle: {schedNlhMonthLabel}
 </div>
 <div style={css(`display:flex; justify-content:space-between;`)}>
 <button onClick={onReviewMapBackToDecide} style={css(`height:38px; padding:0 18px; border:1px solid #E6EBF2; background:#fff; color:#5A5E66; font-family:inherit; font-size:13px; font-weight:600; border-radius:8px; cursor:pointer;`)}>Back</button>
-<button onClick={onReviewMapCommit} style={css(`height:38px; padding:0 22px; border:none; background:${reviewMapAccent}; color:#fff; font-family:inherit; font-size:13px; font-weight:600; border-radius:8px; cursor:pointer;`)}>Commit</button>
+<button onClick={onReviewMapCommit} style={css(`height:38px; padding:0 22px; border:none; background:${reviewMapAccent}; color:#fff; font-family:inherit; font-size:13px; font-weight:600; border-radius:8px; cursor:pointer;`)}>Finalise</button>
 </div>
 </>) : null}
 {/* ===== STAGE 2 — per-SC plan cards, post-commit ===== */}
 {(reviewMapStage === 'cards') ? (<>
 <div style={css(`font-size:15px; font-weight:700; color:#14171F; margin-bottom:4px;`)}>Committed — {reviewMapRunName}</div>
-<div style={css(`font-size:12px; color:#5A5E66; margin-bottom:18px;`)}>Each SC can be pushed to Ops Alignment independently. Open a section to see the DCs added, removed or left unchanged.</div>
+<div style={css(`font-size:12px; color:#5A5E66; margin-bottom:18px;`)}>Finalised — view only. Open a section to see the DCs added, removed or left unchanged; download the output as CSV for further action.</div>
 <div style={css(`display:flex; flex-direction:column; gap:12px;`)}>
 {(reviewMapFinalBlocks || []).map((b, __iRfb) => (<React.Fragment key={__iRfb}>
 <div style={css(`border:1px solid #E6EBF2; border-radius:10px; overflow:hidden; background:#fff;`)}>
@@ -7835,6 +7866,36 @@ function NdcDcSection(props) {
     {props.open ? (props.count > 0 ? <div style={{ padding: '0 14px 12px' }}>{props.children}</div> : <div style={{ padding: '0 14px 12px 33px', fontSize: 12, color: '#8E96A3' }}>None</div>) : null}
   </div>);
 }
+// NdcMapDecisionRows (2026-11-02, #78) — the DC table under each SC's Added / Removed / Unchanged dropdown:
+// DC Code, Current SC, New SC (proposed), Dist Old / New / Delta, Ideal SC, Decision. Rows come from
+// reviewMapVals' rowFor(); top-level component, so it may use plain props (render-scope rule).
+function NdcMapDecisionRows(props) {
+  const H = { padding: '8px 10px', fontSize: 10, fontWeight: 700, color: '#5A5E66', letterSpacing: '0.03em', background: '#F7F9FC' };
+  const C = { padding: '7px 10px', fontSize: 12 };
+  const cols = '100px 90px 110px 90px 90px 95px 150px minmax(330px,1fr)';
+  const btn = (bd, bg, fg) => ({ height: 26, padding: '0 9px', border: '1px solid ' + bd, background: bg, color: fg, fontFamily: 'inherit', fontSize: 11, fontWeight: 700, borderRadius: 6, cursor: 'pointer', whiteSpace: 'nowrap' });
+  return (<div style={{ overflowX: 'auto', border: '1px solid #EEF1F6', borderRadius: 8 }}><div style={{ minWidth: 1080 }}>
+    <div style={{ display: 'grid', gridTemplateColumns: cols }}>
+      <div style={H}>DC CODE</div><div style={H}>CURRENT SC</div><div style={H}>NEW SC (PROPOSED)</div><div style={Object.assign({}, H, { textAlign: 'right' })}>DIST OLD</div><div style={Object.assign({}, H, { textAlign: 'right' })}>DIST NEW</div><div style={Object.assign({}, H, { textAlign: 'right' })}>DIST DELTA</div><div style={H}>IDEAL SC</div><div style={H}>DECISION</div>
+    </div>
+    {(props.rows || []).map((r, i) => <div key={i} style={{ display: 'grid', gridTemplateColumns: cols, alignItems: 'center', borderTop: '1px solid #F2F5FA' }}>
+      <div style={Object.assign({}, C, { fontWeight: 600, color: '#14171F' })}>{r.code}</div>
+      <div style={Object.assign({}, C, { fontWeight: 600, color: r.curFg })}>{r.cur}</div>
+      <div style={Object.assign({}, C, { fontWeight: 600, color: r.propFg })}>{r.prop}</div>
+      <div style={Object.assign({}, C, { textAlign: 'right', color: '#5A5E66', fontVariantNumeric: 'tabular-nums' })}>{r.distOld}</div>
+      <div style={Object.assign({}, C, { textAlign: 'right', color: '#14171F', fontVariantNumeric: 'tabular-nums' })}>{r.distNew}</div>
+      <div style={Object.assign({}, C, { textAlign: 'right', fontWeight: 700, color: r.deltaFg, fontVariantNumeric: 'tabular-nums' })}>{r.delta}</div>
+      <div style={Object.assign({}, C, { fontSize: 11.5 })}>{r.showIdeal ? <span><strong style={{ color: '#14171F' }}>{r.idealSc}</strong> <span style={{ color: '#5A5E66' }}>{r.idealKm}</span>{r.idealDelta ? <span style={{ marginLeft: 5, padding: '1px 6px', borderRadius: 999, fontSize: 10, fontWeight: 700, background: '#F2F5FA', color: r.idealDeltaFg }}>{r.idealDelta}</span> : null}</span> : <span style={{ color: '#128A3E', fontWeight: 600 }}>{'✓'} Ideal SC</span>}</div>
+      <div style={{ padding: '5px 10px', display: 'flex', alignItems: 'center', gap: 5, flexWrap: 'wrap' }}>
+        {r.canDecide ? <button onClick={r.onAccept} style={btn(r.aBd, r.aBg, r.aFg)}>Accept</button> : null}
+        {r.canDecide ? <button onClick={r.onReject} style={btn(r.rBd, r.rBg, r.rFg)}>Reject</button> : null}
+        {(!r.canDecide || r.status.indexOf('Mapped to') === 0) ? <span style={{ padding: '2px 8px', borderRadius: 999, fontSize: 10.5, fontWeight: 600, background: r.statusBg, color: r.statusFg }}>{r.status}</span> : null}
+        {r.canMapIdeal ? <button onClick={r.onMapIdeal} title={'Map ' + r.code + ' to its ideal SC, ' + r.idealSc} style={btn('#2F4FC6', '#fff', '#2F4FC6')}>Map to Ideal SC</button> : null}
+        {r.canAlt ? <select value={r.altValue} onChange={r.onAlt} aria-label={'Map ' + r.code + ' to an alternative SC'} style={{ height: 26, border: '1px solid #E6EBF2', borderRadius: 6, fontFamily: 'inherit', fontSize: 11, color: '#14171F', background: '#fff', maxWidth: 150 }}><option value="">Map to SC…</option>{r.altOptions.map((o, k) => <option key={k} value={o.value}>{o.label}</option>)}</select> : null}
+      </div>
+    </div>)}
+  </div></div>);
+}
 function NdcSpokeMap(props) {
   const m = props.m || { w: 940, h: 560 };
   // hover card (2026-10-30): SC / DC parameters when an item carries `info` lines
@@ -7863,13 +7924,16 @@ function NdcSpokeMap(props) {
 // that can't drift from the other.
 function deriveMigrationPipelineEntries(dcRows, decisions, runId, lmdcs) {
   const out = [];
-  dcRows.filter(r => r.needsDecision && !r.isUnserved && r.newSc).forEach(r => {
+  // 2026-11-02 (#78): a 'MapTo' decision is a move to the chosen SC (any row with a current SC, incl. unchanged).
+  dcRows.filter(r => (r.needsDecision && !r.isUnserved && r.newSc) || ((decisions[r.code] || {}).decision === 'MapTo' && r.oldSc)).forEach(r => {
     const d0 = decisions[r.code];
     if (!d0 || !d0.decision) return;
     const dc = (lmdcs || []).find(l => l.code === r.code);
-    const isAccept = d0.decision === 'Accept';
+    const mapTo = d0.decision === 'MapTo' && d0.sc && d0.sc !== r.oldSc;
+    if (d0.decision === 'MapTo' && !mapTo && !r.needsDecision) return;
+    const isAccept = d0.decision === 'Accept' || mapTo;
     out.push({
-      dc: r.code, name: dc ? dc.code : r.code, from: r.oldSc || null, to: r.newSc, zone: dc ? (dc.zone || '') : '',
+      dc: r.code, name: dc ? dc.code : r.code, from: r.oldSc || null, to: mapTo ? d0.sc : r.newSc, zone: dc ? (dc.zone || '') : '',
       status: isAccept ? 'PendingAlignment' : 'RejectedByPlanner',
       runId, remark: d0.remark || '', decidedAt: new Date().toLocaleString(),
     });
@@ -12336,6 +12400,16 @@ class NDCApp extends React.Component {
   // mapRunViews(run) — V4.0 2026-10-27. One place for a run's geography, distances and the four
   // assignment views: current (old SC), plan (solver output), after (decisions, undecided = proposed)
   // and final (committed semantics: Accept → new SC, anything else stays / is kept).
+  // mapRunDagId(run) (2026-11-02) — the run's DAG ID; seeded runs (no stored one) derive it from the run id.
+  // Shared by the Run Queue and the Design Review plan cards.
+  mapRunDagId(r) { return r.dagId || ('scdc_mapping__' + String(r.id).toLowerCase().replace(/[^a-z0-9]+/g, '_')); }
+  // mapRunDistSummary(run) (2026-11-02) — average and volume-weighted SC → DC km for the run's current
+  // mapping vs its output (plan output; for a committed run, the final decisions). Same sums as the L2 recap.
+  mapRunDistSummary(run) {
+    const v = this.mapRunViews(run), rows = (run.results && run.results.dcRows) || [];
+    const m = (fn) => { let n = 0, sd = 0, sv = 0, svd = 0; rows.forEach(r => { const sc = fn(r); if (!sc) return; const km = v.kmRow(r, sc); if (km == null) return; n++; sd += km; sv += r.volume || 0; svd += (r.volume || 0) * km; }); return { avg: n ? sd / n : null, wavg: sv ? svd / sv : null }; };
+    return { cur: m(v.effPre), out: m(run.status === 'Committed' ? v.effFinal : v.effPlan) };
+  }
   mapRunViews(run) {
     const d = this.state.data, dec = (this.state.mapDcDecisions || {})[run.id] || {};
     const scByCode = {}; (d.scs || []).forEach(s => { scByCode[s.code] = s; });
@@ -12344,8 +12418,9 @@ class NDCApp extends React.Component {
     const kmRow = (r, sc) => { if (!sc) return null; if (sc === r.oldSc && r.distOld != null) return r.distOld; if (sc === r.newSc && r.distNew != null) return r.distNew; return mapKmPure(geoOf(r.code), scByCode[sc]); };
     const effPre = (r) => r.oldSc || null;
     const effPlan = (r) => r.isUnserved ? null : r.newSc;
-    const effAfter = (r) => { const d0 = dec[r.code]; if (d0 && d0.decision === 'Accept') return r.newSc; if (d0 && (d0.decision === 'Reject' || d0.decision === 'KeepOldSc')) return r.oldSc || null; return r.isUnserved ? null : r.newSc; };
-    const effFinal = (r) => { if (r.isUnchanged) return r.oldSc; const d0 = dec[r.code]; if (d0 && d0.decision === 'Accept' && !r.isUnserved) return r.newSc; return r.oldSc || null; };
+    // 2026-11-02 (#78): 'MapTo' = the planner sent the DC to a chosen SC (Map to Ideal SC / alternative SC).
+    const effAfter = (r) => { const d0 = dec[r.code]; if (d0 && d0.decision === 'MapTo' && d0.sc) return d0.sc; if (d0 && d0.decision === 'Accept') return r.newSc; if (d0 && (d0.decision === 'Reject' || d0.decision === 'KeepOldSc')) return r.oldSc || null; return r.isUnserved ? null : r.newSc; };
+    const effFinal = (r) => { const d0 = dec[r.code]; if (d0 && d0.decision === 'MapTo' && d0.sc) return d0.sc; if (r.isUnchanged) return r.oldSc; if (d0 && d0.decision === 'Accept' && !r.isUnserved) return r.newSc; return r.oldSc || null; };
     return { dec, scByCode, dcByCode, geoOf, kmRow, effPre, effPlan, effAfter, effFinal };
   }
   // mapDownloadRunCsv(runId) — plan-card CSV (V4.0 2026-10-27). SC-wise in run order: Added, then
@@ -12390,6 +12465,16 @@ class NDCApp extends React.Component {
     this.setState({ mapDcDecisions: Object.assign({}, this.state.mapDcDecisions, { [runId]: Object.assign({}, cur, { [dcCode]: { decision, remark: remark != null ? remark : (existing.remark || '') } }) }) });
   }
 
+  // mapMapDcTo(runId, dc, sc) (2026-11-02, #78) — Map to Ideal SC / an alternative SC. Sending a DC to its
+  // proposed SC is an Accept; back to its current SC (a flagged DC) is a Reject; anything else is 'MapTo'.
+  mapMapDcTo(runId, dcCode, sc) {
+    const run = (this.state.data.mappingRuns || []).find(r => r.id === runId); if (!run || !run.results || !sc) return;
+    const r = run.results.dcRows.find(x => x.code === dcCode); if (!r || !r.oldSc) return;
+    const cur = this.state.mapDcDecisions[runId] || {}, remark = (cur[dcCode] || {}).remark || '';
+    const val = (sc === r.newSc && !r.isUnchanged) ? { decision: 'Accept', remark } : (sc === r.oldSc ? (r.needsDecision ? { decision: 'Reject', remark } : null) : { decision: 'MapTo', sc, remark });
+    const next = Object.assign({}, cur); if (val) next[dcCode] = val; else delete next[dcCode];
+    this.setState({ mapDcDecisions: Object.assign({}, this.state.mapDcDecisions, { [runId]: next }) });
+  }
   mapOpenResults(runId) { this.setState({ mapActiveRunId: runId, mapSection: 'results', mapResultsTab: 'changes', mapReviewStage: 'decide' }); }
 
   mapToggleExpand(key) {
@@ -19537,7 +19622,7 @@ class NDCApp extends React.Component {
     const mapRunQueueRows = (d.mappingRuns || []).slice().reverse().map(r => {
       const q = qBy[r.id]; const s = q ? q.status : (r.status === 'Running' ? 'In Progress' : (r.status === 'Failed' ? 'Failed' : 'Completed'));
       const col = s === 'Completed' ? ['#E7F4EC', '#128A3E'] : (s === 'Failed' ? ['#FBEAEA', '#D14B4B'] : ['#EAF1FB', '#1E6FB8']);
-      return { dagId: r.dagId || ('scdc_mapping__' + String(r.id).toLowerCase().replace(/[^a-z0-9]+/g, '_')), name: r.name || r.id, id: r.id,
+      return { dagId: this.mapRunDagId(r), name: r.name || r.id, id: r.id,
         scs: (r.scCodes || []).length, dcs: fmtInt((r.dcCodes || []).length), at: r.createdAt || '—', status: s, statusBg: col[0], statusFg: col[1],
         isDone: s === 'Completed', isFailed: s === 'Failed', isRunning: s === 'In Progress', error: r.error || (q && q.error) || '',
         onView: () => this.setState({ view: 'review', reviewTier: 'Node Mapping', reviewMapStageFilter: r.status === 'Committed' ? 'finalised' : 'toReview', reviewMapRunId: r.id, mapReviewStage: r.status === 'Committed' ? 'cards' : 'decide', mapResultsTab: 'changes' }) };
@@ -19715,7 +19800,15 @@ class NDCApp extends React.Component {
       const scParams = r.scParams || {};
       const toleranceVals = (r.params || {}).tolerance != null ? [r.params.tolerance] : (r.scCodes || []).map(c => (scParams[c] || {}).tolerance).filter(v => v != null);
       const toleranceLabel = toleranceVals.length ? (Math.min.apply(null, toleranceVals) === Math.max.apply(null, toleranceVals) ? (toleranceVals[0] + ' km') : (Math.min.apply(null, toleranceVals) + '–' + Math.max.apply(null, toleranceVals) + ' km')) : '50 km';
+      // 2026-11-02: DAG ID + distance outputs (current → output) on the card.
+      const dist = r.results ? this.mapRunDistSummary(r) : { cur: {}, out: {} };
+      const kmT = (a, b) => (a == null || b == null) ? '—' : (Math.round(a * 10) / 10).toLocaleString('en-IN') + ' → ' + (Math.round(b * 10) / 10).toLocaleString('en-IN') + ' km';
+      const dlt = (a, b) => (a == null || b == null) ? null : Math.round((b - a) * 10) / 10;
+      const dAvg = dlt(dist.cur.avg, dist.out.avg), dW = dlt(dist.cur.wavg, dist.out.wavg);
+      const dCol = (x) => x == null || x === 0 ? '#5A5E66' : (x < 0 ? '#128A3E' : '#D14B4B');
       return {
+        dagId: this.mapRunDagId(r), avgDistLabel: kmT(dist.cur.avg, dist.out.avg), wavgDistLabel: kmT(dist.cur.wavg, dist.out.wavg),
+        avgDistDelta: dAvg, wavgDistDelta: dW, avgDistFg: dCol(dAvg), wavgDistFg: dCol(dW),
         id: r.id, name: r.name, statusLabel: r.status,
         statusBg: r.status === 'Committed' ? '#EAF3EF' : '#EAF1FB', statusFg: r.status === 'Committed' ? ACCENT : '#1E6FB8',
         scCount, dcCount, volume: r.results ? fmtInt(r.results.totalVolume) : '—',
@@ -19884,7 +19977,7 @@ class NDCApp extends React.Component {
     const kmRow = (r, sc) => { if (!sc) return null; if (sc === r.oldSc && r.distOld != null) return r.distOld; if (sc === r.newSc && r.distNew != null) return r.distNew; return mapKmPure(geoOf(r.code), scByCode[sc]); };
     const effPre = (r) => r.oldSc || null;
     const effPlan = (r) => r.isUnserved ? null : r.newSc;
-    const effAfter = (r) => { const d0 = dec[r.code]; if (d0 && d0.decision === 'Accept') return r.newSc; if (d0 && (d0.decision === 'Reject' || d0.decision === 'KeepOldSc')) return r.oldSc || null; return r.isUnserved ? null : r.newSc; };
+    const effAfter = (r) => { const d0 = dec[r.code]; if (d0 && d0.decision === 'MapTo' && d0.sc) return d0.sc; if (d0 && d0.decision === 'Accept') return r.newSc; if (d0 && (d0.decision === 'Reject' || d0.decision === 'KeepOldSc')) return r.oldSc || null; return r.isUnserved ? null : r.newSc; };
     const fmtKm = (v) => v == null ? '—' : (Math.round(v * 10) / 10).toLocaleString('en-IN') + ' km';
     const metricsFor = (fn) => {
       const rows = results ? results.dcRows : []; let n = 0, sd = 0, sv = 0, svd = 0, moved = 0, unserved = 0; const per = {};
@@ -19908,6 +20001,28 @@ class NDCApp extends React.Component {
         remark: d0.remark || '', onRemark: (e) => this.mapDecideDc(run.id, r.code, d0.decision || null, e.target.value),
         aBg: accept.bg, aFg: accept.fg, aBd: accept.bd, rBg: reject.bg, rFg: reject.fg, rBd: reject.bd,
         onAccept: () => this.mapDecideDc(run.id, r.code, 'Accept', d0.remark), onReject: () => this.mapDecideDc(run.id, r.code, 'Reject', d0.remark) };
+    };
+    // rowFor(r) (2026-11-02, #78) — one row shape for Added / Removed / Unchanged: current SC, proposed SC,
+    // distances, ideal SC (shown when the DC isn't proposed to it), decision, Map to Ideal SC / alternative SC.
+    const scParamsOf = (code) => Object.assign({}, this.mapScParamDefaults(), (run && run.scParams || {})[code]);
+    const rowFor = (r) => {
+      const d0 = dec[r.code] || {}; const dd = dlt(r.distOld, r.distNew);
+      const canDecide = r.needsDecision && !r.isUnserved, canRemap = !!r.oldSc && !r.isUnserved;
+      const prop = r.isUnserved ? null : (r.isUnchanged ? r.oldSc : r.newSc), eff = effAfter(r);
+      const showIdeal = !!r.idealSc && r.idealSc !== prop; const idealKm = showIdeal ? kmRow(r, r.idealSc) : null, propKm = prop ? kmRow(r, prop) : null;
+      const idd = (showIdeal && idealKm != null && propKm != null) ? Math.round((idealKm - propKm) * 10) / 10 : null;
+      const accept = DEC_BTN(d0.decision === 'Accept', 'Accept'), reject = DEC_BTN(d0.decision === 'Reject', 'Reject');
+      const alts = canRemap ? (run.scCodes || []).filter(c => c !== r.oldSc && c !== r.newSc) : [];
+      const s0 = statusOf(r);
+      return { code: r.code, cur: r.oldSc || 'New DC', curFg: r.oldSc ? '#14171F' : '#128A3E', prop: prop || 'Not placed', propFg: prop ? '#1F6F5C' : '#9A5E00',
+        distOld: fmtKm(r.distOld), distNew: fmtKm(r.distNew), delta: dd.label, deltaFg: dd.fg,
+        showIdeal, idealSc: r.idealSc || '', idealKm: fmtKm(idealKm), idealDelta: idd == null ? '' : (idd > 0 ? '+' : '') + idd.toLocaleString('en-IN') + ' km', idealDeltaFg: idd == null ? '#8E96A3' : (idd < 0 ? '#128A3E' : (idd > 0 ? '#D14B4B' : '#5A5E66')),
+        canDecide, aBg: accept.bg, aFg: accept.fg, aBd: accept.bd, rBg: reject.bg, rFg: reject.fg, rBd: reject.bd,
+        onAccept: () => this.mapDecideDc(run.id, r.code, 'Accept', d0.remark), onReject: () => this.mapDecideDc(run.id, r.code, 'Reject', d0.remark),
+        status: canDecide || d0.decision === 'MapTo' ? s0.label : 'No change', statusFg: canDecide || d0.decision === 'MapTo' ? s0.fg : '#8E96A3', statusBg: canDecide || d0.decision === 'MapTo' ? s0.bg : '#F2F5FA',
+        canMapIdeal: canRemap && showIdeal && eff !== r.idealSc, onMapIdeal: () => this.mapMapDcTo(run.id, r.code, r.idealSc),
+        canAlt: alts.length > 0, altOptions: alts.map(c => ({ value: c, label: c + (kmRow(r, c) != null ? ' · ' + Math.round(kmRow(r, c)) + ' km' : '') })),
+        altValue: d0.decision === 'MapTo' && alts.indexOf(d0.sc) >= 0 ? d0.sc : '', onAlt: (e) => { if (e.target.value) this.mapMapDcTo(run.id, r.code, e.target.value); } };
     };
     const reviewMapGainSections = (results && run && !isCommitted) ? run.scCodes.map(code => {
       const rows = results.dcRows.filter(r => r.needsDecision && !r.isUnserved && r.newSc === code);
@@ -19938,7 +20053,8 @@ class NDCApp extends React.Component {
         volPre: fmtInt(Math.round(pre.vol || 0)), volPost: fmtInt(Math.round(post.vol || 0)), volCap: s.volCap ? fmtInt(s.volCap) : '—',
         vuPre: vp.label, vuPreFg: vp.fg, vuPost: vq.label, vuPostFg: vq.fg, sortCap: s.sortCap ? fmtInt(s.sortCap) : '—',
         suPre: sp.label, suPreFg: sp.fg, suPost: sq.label, suPostFg: sq.fg,
-        avgPre: fmtKm(pre.avg), avgPost: fmtKm(post.avg), wPre: fmtKm(pre.wavg), wPost: fmtKm(post.wavg) };
+        avgPre: fmtKm(pre.avg), avgPost: fmtKm(post.avg), wPre: fmtKm(pre.wavg), wPost: fmtKm(post.wavg),
+        volLimits: 'Min ' + scParamsOf(code).volUtilMin + '% · Max ' + scParamsOf(code).volUtilMax + '%', sortLimit: 'Max ' + scParamsOf(code).sortCapUtilMax + '%' };
     }) : [];
     const deltaCard = (label, a, b, lowerBetter, fmt) => {
       const dv = (a != null && b != null) ? b - a : null; const good = dv == null || dv === 0 ? null : (lowerBetter ? dv < 0 : dv > 0);
@@ -19947,8 +20063,10 @@ class NDCApp extends React.Component {
     };
     const maxUtil = (m, k) => { const v = Object.values(m.per).map(p => p[k]).filter(x => x != null); return v.length ? Math.max.apply(null, v) : null; };
     const simOpen = !!st.reviewMapSimOpen && !!run && !!results && reviewMapDecidedCount > 0;
+    // 2026-11-02 (#79): the Finalise preview replicates Simulate on the latest decisions.
+    const previewOn = stage === 'finalise' && !!run && !!results && !isCommitted;
     let reviewMapSim = null;
-    if (simOpen) {
+    if (simOpen || previewOn) {
       const PAL = ['#1F6F5C', '#2F4FC6', '#B8387A', '#C77B00', '#1E6FB8', '#7A4FC6', '#128A3E', '#D14B4B'];
       const colorOf = {}; run.scCodes.forEach((c, k) => { colorOf[c] = PAL[k % PAL.length]; });
       const scList = run.scCodes.map(c => scByCode[c]).filter(Boolean).map(s => ({ code: s.code, name: s.name, lat: s.lat, lng: s.lng, color: colorOf[s.code] }));
@@ -19961,8 +20079,7 @@ class NDCApp extends React.Component {
       const pct = (v) => v == null ? '—' : v + '%', km = (v) => v == null ? '—' : (Math.round(v * 10) / 10).toLocaleString('en-IN') + ' km', n = (v) => v == null ? '—' : String(v);
       reviewMapSim = {
         cards: [deltaCard('Avg SC → DC distance', mPlan.avg, mAfter.avg, true, km), deltaCard('Volume-weighted distance', mPlan.wavg, mAfter.wavg, true, km),
-          deltaCard('DCs changing SC', mPlan.moved, mAfter.moved, null, n), deltaCard('Unserved DCs', mPlan.unserved, mAfter.unserved, true, n),
-          deltaCard('Highest volume utilisation', maxUtil(mPlan, 'volUtil'), maxUtil(mAfter, 'volUtil'), true, pct), deltaCard('Highest sort utilisation', maxUtil(mPlan, 'sortUtil'), maxUtil(mAfter, 'sortUtil'), true, pct)],
+          deltaCard('DCs changing SC', mPlan.moved, mAfter.moved, null, n), deltaCard('Unserved DCs', mPlan.unserved, mAfter.unserved, true, n)], // 2026-11-02: the story's four cards
         rows: run.scCodes.map(c => { const a = mPlan.per[c] || {}, b = mAfter.per[c] || {}; const va = utilChip(a.volUtil), vb = utilChip(b.volUtil), sa = utilChip(a.sortUtil), sb = utilChip(b.sortUtil);
           return { code: c, color: colorOf[c], dcA: a.n || 0, dcB: b.n || 0, vuA: va.label, vuAFg: va.fg, vuB: vb.label, vuBFg: vb.fg, suA: sa.label, suAFg: sa.fg, suB: sb.label, suBFg: sb.fg, wA: km(a.wavg), wB: km(b.wavg) }; }),
         mapBefore: build(effPlan), mapAfter: build(effAfter),
@@ -19973,23 +20090,35 @@ class NDCApp extends React.Component {
     // ---- L2 SC blocks (2026-10-27): per SC, Added / Removed / Unchanged dropdowns ----
     const sec = (key, dflt) => { const c = st.reviewMapExpanded || {}; return c[key] === undefined ? dflt : !!c[key]; };
     const tgl = (key, dflt) => () => this.mapToggleSection(key, dflt);
-    const statusOf = (r) => { const d0 = dec[r.code] || {}; return d0.decision === 'Accept' ? { label: 'Accepted', fg: '#128A3E', bg: '#E7F4EC' } : (d0.decision === 'Reject' ? { label: 'Rejected', fg: '#D14B4B', bg: '#FBEAEA' } : (d0.decision === 'KeepOldSc' ? { label: 'Kept', fg: '#1F6F5C', bg: '#EAF3EF' } : { label: 'Pending', fg: '#8E96A3', bg: '#F2F5FA' })); };
+    const statusOf = (r) => { const d0 = dec[r.code] || {}; if (d0.decision === 'MapTo' && d0.sc) return { label: 'Mapped to ' + d0.sc, fg: '#2F4FC6', bg: '#EAEEFB' }; return d0.decision === 'Accept' ? { label: 'Accepted', fg: '#128A3E', bg: '#E7F4EC' } : (d0.decision === 'Reject' ? { label: 'Rejected', fg: '#D14B4B', bg: '#FBEAEA' } : (d0.decision === 'KeepOldSc' ? { label: 'Kept', fg: '#1F6F5C', bg: '#EAF3EF' } : { label: 'Pending', fg: '#8E96A3', bg: '#F2F5FA' })); };
     const dlt = (a, b) => { if (a == null || b == null) return { label: '—', fg: '#8E96A3' }; const v = Math.round((b - a) * 10) / 10; return { label: (v > 0 ? '+' : '') + v.toLocaleString('en-IN') + ' km', fg: v < 0 ? '#128A3E' : (v > 0 ? '#D14B4B' : '#5A5E66') }; };
     const reviewMapScBlocks = (results && run && !isCommitted) ? run.scCodes.map(code => {
-      const added = results.dcRows.filter(r => r.needsDecision && !r.isUnserved && r.newSc === code).map(decRow);
-      const removed = results.dcRows.filter(r => r.needsDecision && r.oldSc === code).map(r => { const s0 = statusOf(r), dd = dlt(r.distOld, r.distNew), d0 = dec[r.code] || {};
-        return { code: r.code, to: r.isUnserved ? 'Not placed' : r.newSc, toFg: r.isUnserved ? '#9A5E00' : '#1F6F5C', distOld: fmtKm(r.distOld), distNew: fmtKm(r.distNew), delta: dd.label, deltaFg: dd.fg,
-          status: s0.label, statusFg: s0.fg, statusBg: s0.bg, note: r.isUnserved ? (r.unservedReason || '') : 'Decided under ' + r.newSc,
-          canKeep: r.isUnserved, keepLabel: 'Keep on ' + code, onKeep: () => this.mapDecideDc(run.id, r.code, 'KeepOldSc', d0.remark) }; });
-      const unchanged = results.dcRows.filter(r => r.isUnchanged && r.oldSc === code).map(r => ({ code: r.code, km: fmtKm(r.distOld) }));
-      const pre = mPre.per[code] || {}, post = mAfter.per[code] || {};
+      // 2026-11-02 (#78): every list uses rowFor(); header carries caps, the run's % limits and utilisation.
+      const added = results.dcRows.filter(r => r.needsDecision && !r.isUnserved && r.newSc === code).map(rowFor);
+      const removed = results.dcRows.filter(r => r.needsDecision && r.oldSc === code).map(rowFor);
+      const unchanged = results.dcRows.filter(r => r.isUnchanged && r.oldSc === code).map(rowFor);
+      const pre = mPre.per[code] || {}, post = mAfter.per[code] || {}, s = scByCode[code] || {}, lim = scParamsOf(code);
+      const vp = utilChip(pre.volUtil), vq = utilChip(post.volUtil), sp = utilChip(pre.sortUtil), sq = utilChip(post.sortUtil);
       return { code, addedCount: added.length, removedCount: removed.length, unchangedCount: unchanged.length, added, removed, unchanged,
         openAdd: sec('a:' + code, true), openRem: sec('r:' + code, false), openUnc: sec('u:' + code, false),
         onToggleAdd: tgl('a:' + code, true), onToggleRem: tgl('r:' + code, false), onToggleUnc: tgl('u:' + code, false),
-        volPre: utilChip(pre.volUtil).label, volPost: utilChip(post.volUtil).label, volPostFg: utilChip(post.volUtil).fg,
+        volPre: vp.label, volPost: vq.label, volPostFg: vq.fg, sortPre: sp.label, sortPost: sq.label, sortPostFg: sq.fg,
+        sortCap: s.sortCap ? fmtInt(s.sortCap) : '—', sortMaxPct: lim.sortCapUtilMax, nodesPost: fmtInt(post.n || 0),
+        volCap: s.volCap ? fmtInt(s.volCap) : '—', volMinPct: lim.volUtilMin, volMaxPct: lim.volUtilMax, volPostAbs: fmtInt(Math.round(post.vol || 0)),
         hasAdded: added.length > 0, onAcceptSc: () => this.mapDecideAll(run.id, 'Accept', code), onRejectSc: () => this.mapDecideAll(run.id, 'Reject', code) };
     }) : [];
-    const finalEff = (r) => { if (r.isUnchanged) return r.oldSc; const d0 = dec[r.code]; if (d0 && d0.decision === 'Accept' && !r.isUnserved) return r.newSc; return r.oldSc || null; };
+    // Unmapped DCs (2026-11-02, #78): every DC the plan leaves unplaced — Old SC, distance, Ideal SC, reason;
+    // "Add to Old SC" for those that had one.
+    const reviewMapUnmappedRows = (results && run && !isCommitted) ? results.dcRows.filter(r => r.isUnserved).map(r => {
+      // Ideal SC = the nearest SC in the run (the solver leaves idealSc empty for DCs it couldn't place).
+      const d0 = dec[r.code] || {}, kept = d0.decision === 'KeepOldSc';
+      let ideal = r.idealSc || null; if (!ideal) { let best = null; (run.scCodes || []).forEach(c => { const k = kmRow(r, c); if (k != null && (best == null || k < best)) { best = k; ideal = c; } }); }
+      const ik = ideal ? kmRow(r, ideal) : null;
+      return { code: r.code, oldSc: r.oldSc || '—', distOld: fmtKm(r.distOld), idealSc: ideal || '—', idealKm: fmtKm(ik), reason: r.unservedReason || '—',
+        canAdd: !!r.oldSc, added: kept, addLabel: kept ? 'Added to ' + r.oldSc : 'Add to Old SC', addBg: kept ? '#1F6F5C' : '#fff', addFg: kept ? '#fff' : '#1F6F5C',
+        onAdd: () => this.mapDecideDc(run.id, r.code, 'KeepOldSc', d0.remark) };
+    }) : [];
+    const finalEff = (r) => { const d0 = dec[r.code]; if (d0 && d0.decision === 'MapTo' && d0.sc) return d0.sc; if (r.isUnchanged) return r.oldSc; if (d0 && d0.decision === 'Accept' && !r.isUnserved) return r.newSc; return r.oldSc || null; };
     const reviewMapFinalBlocks = (results && run && (isCommitted || stage === 'finalise')) ? run.scCodes.map(code => {
       const added = results.dcRows.filter(r => finalEff(r) === code && r.oldSc !== code).map(r => { const dd = dlt(r.distOld, kmRow(r, code)); return { code: r.code, other: r.oldSc || 'New DC', distOld: fmtKm(r.distOld), distNew: fmtKm(kmRow(r, code)), delta: dd.label, deltaFg: dd.fg }; });
       const removed = results.dcRows.filter(r => r.oldSc === code && finalEff(r) !== code).map(r => { const to = finalEff(r); const dd = dlt(r.distOld, kmRow(r, to)); return { code: r.code, other: to || 'Not placed', distOld: fmtKm(r.distOld), distNew: fmtKm(kmRow(r, to)), delta: dd.label, deltaFg: dd.fg }; });
@@ -19998,7 +20127,7 @@ class NDCApp extends React.Component {
       return { code, added, removed, unchanged, addedCount: added.length, removedCount: removed.length, unchangedCount: unchanged.length,
         openAdd: sec(p + 'a:' + code, true), openRem: sec(p + 'r:' + code, true), openUnc: sec(p + 'u:' + code, false),
         onToggleAdd: tgl(p + 'a:' + code, true), onToggleRem: tgl(p + 'r:' + code, true), onToggleUnc: tgl(p + 'u:' + code, false),
-        showPush: isCommitted, isPushed: !!pushInfo, pushedAt: pushInfo ? pushInfo.pushedAt : '', onPush: () => this.mapPushScToAlignment(run.id, code) };
+        showPush: false /* 2026-11-02 (#79): Finalised is view-only + CSV — no Push to Alignment */, isPushed: !!pushInfo, pushedAt: pushInfo ? pushInfo.pushedAt : '', onPush: () => this.mapPushScToAlignment(run.id, code) };
     }) : [];
     const newUnplaced = results ? results.dcRows.filter(r => !r.oldSc && r.isUnserved).map(r => ({ code: r.code, reason: r.unservedReason || '' })) : [];
     // ---- per-card map modal ----
@@ -20014,8 +20143,13 @@ class NDCApp extends React.Component {
       const scList = mmRun.scCodes.map(c => v.scByCode[c]).filter(Boolean).map(s => ({ code: s.code, name: s.name, lat: s.lat, lng: s.lng, color: colorOf[s.code] }));
       const dcs = [], dropped = []; let moved = 0;
       mmRun.results.dcRows.forEach(r => { const g = v.geoOf(r.code); if (!g) return; const s = fn(r);
-        if (s) { dcs.push(Object.assign({ code: r.code, sc: s, title: r.code + ' ← ' + s }, g)); if (r.oldSc && s !== r.oldSc) moved++; }
-        else dropped.push(Object.assign({ code: r.code, title: r.code + ' · not placed' }, g)); });
+        // 2026-11-02: hover cards, as on Design Creation's map — DC = its SC in this view + distance (or not
+        // placed), location, volume; SC = location, volume vs Vol cap, DCs vs Sort cap.
+        const loc = 'Location: ' + g.lat.toFixed(4) + ', ' + g.lng.toFixed(4), vol = 'Volume: ' + (r.volume || 0).toLocaleString('en-IN');
+        if (s) { const km = v.kmRow(r, s); dcs.push(Object.assign({ code: r.code, sc: s, title: r.code + ' ← ' + s, info: [r.code, 'Mapped to ' + s + (km != null ? ' · ' + Math.round(km) + ' km' : '') + (r.oldSc && r.oldSc !== s ? ' (today ' + r.oldSc + ')' : ''), loc, vol] }, g)); if (r.oldSc && s !== r.oldSc) moved++; }
+        else dropped.push(Object.assign({ code: r.code, title: r.code + ' · not placed', info: [r.code, 'Not placed' + (r.oldSc ? ' (today ' + r.oldSc + ')' : ' (new DC)'), loc, vol] }, g)); });
+      scList.forEach(s => { const sc = v.scByCode[s.code] || {}; const mine = mmRun.results.dcRows.filter(r => fn(r) === s.code); const vol = mine.reduce((a, r) => a + (r.volume || 0), 0);
+        s.info = [s.code + (s.name ? ' — ' + s.name : ''), 'Location: ' + Number(s.lat).toFixed(4) + ', ' + Number(s.lng).toFixed(4), 'Volume: ' + vol.toLocaleString('en-IN') + ' · Vol cap ' + (sc.volCap || 0).toLocaleString('en-IN'), 'Sort cap: ' + (sc.sortCap || 0).toLocaleString('en-IN') + ' · mapped DCs ' + mine.length]; });
       reviewMapCardMap = { name: mmRun.name, m: ndcSpokeMapPure({ w: 940, h: 560, scs: scList, dcs, dropped }),
         modes: MODES.map(x => ({ label: x[1], active: x[0] === mode, onClick: () => this.setState({ reviewMapMapMode: x[0] }) })),
         legend: scList.map(s => ({ code: s.code, color: s.color, n: dcs.filter(x => x.sc === s.code).length })),
@@ -20023,16 +20157,29 @@ class NDCApp extends React.Component {
     }
     return {
       reviewMapScBlocks, reviewMapFinalBlocks, reviewMapNewUnplaced: newUnplaced, reviewMapHasNewUnplaced: newUnplaced.length > 0,
+      reviewMapUnmappedRows, reviewMapHasUnmapped: reviewMapUnmappedRows.length > 0,
       reviewMapCanSimulate: reviewMapDecidedCount > 0,
       reviewMapCardMap, onReviewMapCardMapClose: () => this.setState({ reviewMapMapRunId: null }),
       onReviewMapBackToList: () => this.setState({ reviewMapRunId: null }),
       onReviewMapOpenMapThis: () => run && this.setState({ reviewMapMapRunId: run.id, reviewMapMapMode: isCommitted ? 'final' : 'plan' }),
       onReviewMapCsvThis: () => run && this.mapDownloadRunCsv(run.id),
       reviewMapGainSections, reviewMapDropRows, reviewMapHasDrops: reviewMapDropRows.length > 0, reviewMapDecidedCount, reviewMapNeedCount, reviewMapPivot2,
-      reviewMapDist: run ? { avgPre: fmtKm(mPre.avg), avgPlan: fmtKm(mPlan.avg), wPre: fmtKm(mPre.wavg), wPlan: fmtKm(mPlan.wavg) } : null,
+      reviewMapDist: run ? (() => { const mOut = isCommitted ? metricsFor(finalEff) : mPlan; // 2026-11-02: finalised = current → final
+        return { avgPre: fmtKm(mPre.avg), avgPlan: fmtKm(mOut.avg), wPre: fmtKm(mPre.wavg), wPlan: fmtKm(mOut.wavg), outLabel: isCommitted ? 'final' : 'plan' }; })() : null,
       onReviewMapAcceptAll: () => run && this.mapDecideAll(run.id, 'Accept'), onReviewMapRejectAll: () => run && this.mapDecideAll(run.id, 'Reject'),
       onReviewMapReset: () => run && this.mapResetDecisions(run.id),
-      reviewMapSimOpen: simOpen, reviewMapSim, onReviewMapSimOpen: () => this.setState({ reviewMapSimOpen: true }), onReviewMapSimClose: () => this.setState({ reviewMapSimOpen: false }),
+      reviewMapSimOpen: simOpen, reviewMapSim,
+      reviewMapPreview: previewOn ? reviewMapSim : null,
+      ...(() => { // preview warnings (2026-11-02, #79): per SC vs the run's limits, and DCs left unplaced. Review only — not blocking.
+        if (!previewOn) return { reviewMapPreviewWarnings: [], reviewMapHasPreviewWarnings: false };
+        const w = [];
+        run.scCodes.forEach(c => { const p = mAfter.per[c] || {}, lim = scParamsOf(c);
+          if (p.volUtil != null && p.volUtil < lim.volUtilMin) w.push({ sc: c, text: 'Volume utilisation ' + p.volUtil + '% — below Min Vol ' + lim.volUtilMin + '%' });
+          if (p.volUtil != null && p.volUtil > lim.volUtilMax) w.push({ sc: c, text: 'Volume utilisation ' + p.volUtil + '% — above Max Vol ' + lim.volUtilMax + '%' });
+          if (p.sortUtil != null && p.sortUtil > lim.sortCapUtilMax) w.push({ sc: c, text: 'Sort utilisation ' + p.sortUtil + '% — above Max Sort Cap ' + lim.sortCapUtilMax + '%' }); });
+        const un = results.dcRows.filter(r => !effAfter(r)).map(r => r.code);
+        if (un.length) w.push({ sc: 'Run', text: un.length + ' DC' + (un.length === 1 ? '' : 's') + ' left unmapped: ' + un.slice(0, 8).join(', ') + (un.length > 8 ? ' +' + (un.length - 8) + ' more' : '') });
+        return { reviewMapPreviewWarnings: w, reviewMapHasPreviewWarnings: w.length > 0 }; })(), onReviewMapSimOpen: () => this.setState({ reviewMapSimOpen: true }), onReviewMapSimClose: () => this.setState({ reviewMapSimOpen: false }),
       reviewMapAccent: ACCENT,
       reviewMapRunList, reviewMapHasRuns: allRuns.length > 0,
       reviewMapStageFilter, onReviewMapStageFilter, reviewMapToReviewCount: toReviewRuns.length, reviewMapFinalisedCount: finalisedRuns.length,

@@ -4729,3 +4729,90 @@ RNG-based approximation. Read the method's own comment block first; the short ve
     global was removed from `s10.js`.
   - **Test note**: `s4` and `s8` need more than 90 s — run them alone (250 s+).
   - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
+- **2026-11-02 — User-story verification, theme 9: Design Review › Node Mapping › SC-DC Mapping (L1 plan cards).**
+  - **Verified as already matching**: Node Mapping tab in Design Review with the SC-DC Mapping sub-tab; To
+    Review (Completed runs) and Finalised (Committed runs) sections of run cards; status pill; Map, CSV and
+    Open → on each card (Open also by clicking the card); card Map opens on the run's output (Plan output;
+    Finalised: Final), with Current / Your decisions views kept as before.
+  - **Changed**:
+    1. **Card header** shows the **DAG ID** under the Run Name (was the internal run id). `mapRunDagId()` is
+       shared with the Run Queue, so both show the same DAG ID (seeded runs derive one from the run id).
+    2. **INPUTS** row: SCs, DCs, volume, ρ, New Node, Δ (volume / ρ / New Node / Δ were computed but not
+       shown).
+    3. **OUTPUTS**: movements, unmapped, % DCs changed (was computed, not shown), and **Avg distance** and
+       **Vol-weighted distance**, current → output in km (green shorter, red longer). `mapRunDistSummary()`
+       uses `mapRunViews()` with the same sums as the L2 recap tiles (output = plan output; committed runs =
+       final decisions).
+    4. **Card Map hover cards**, as on Design Creation's map: DC = mapped SC in that view + km (and today's SC
+       if different) or "Not placed", location, volume; SC = location, volume vs Vol cap, Sort cap and mapped
+       DCs in that view.
+  - **Verification**: theme suite `s11.js` **19/19** (tab / sub-tab / sections; Completed vs Committed pills;
+    DAG ID on the card, rendered, same as the Run Queue; inputs and outputs rendered; avg distance equals the
+    L2 recap; vol-weighted label; colour rule; CSV; Map opens on Plan output / Final; DC and SC hover-card
+    content; SC counts add up; Open → detail). All other suites pass: `s1` 26, `s2` 17, `s3` 23, `s4` 23,
+    `s5` 24, `s6` 18, `s7` 27, `s8` 12, `s9` 11, `s10` 21, `r2` 18; 0 runtime errors; 0 JSX `\u`; no new
+    buttons.
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
+- **2026-11-02 — User-story verification, theme 10: Design Review › SC-DC Mapping plan details (L2).**
+  - **Verified as already matching**: plan summary with the card's inputs / outputs and Map / CSV / Simulate;
+    DC-Level Changes and SC Pivot sub-sections; SC-wise Added / Removed / Unchanged dropdowns with counts; Dist
+    Old / New / Delta (green shorter, red longer); Accept / Reject per DC, Accept all / Reject all (plus existing
+    Reset and per-SC Accept / Reject all added); Simulate enabled after ≥ 1 decision, plan output vs decisions
+    with before / after maps and a per-SC table (DCs, Vol Util, Sort Util, vol-weighted distance); Pivot rows
+    (DCs current → post, Added, Removed, volume vs Vol Cap, Vol / Sort Util, Sort Cap, both distances; ≥ 90%
+    amber, > 100% red); undecided DCs counted as proposed; Finalise gated until every flagged DC is decided.
+  - **Changed (decision #78 — planners can send a DC to its ideal or an alternative SC)**:
+    1. **Decision 'MapTo'** (`mapMapDcTo(runId, dc, sc)`): "Map to Ideal SC" and "Map to SC…" (the run's SCs other
+       than the DC's current and proposed SC) on any row with a current SC — Added, Removed and Unchanged. Sending a
+       DC to its proposed SC is stored as Accept, back to its current SC (flagged DC) as Reject. Followed by
+       `mapRunViews` (after / final), the L2 builder, Pivot, Simulate, card Map, CSV and commit —
+       `deriveMigrationPipelineEntries` writes PendingAlignment to the chosen SC. New DCs (no current SC): Accept /
+       Reject only. Status "Mapped to <SC>".
+    2. **One row shape** (`rowFor`, rendered by the new top-level `NdcMapDecisionRows`) for Added / Removed /
+       Unchanged: DC Code, Current SC, New SC (proposed), Dist Old, Dist New, Dist Delta, **Ideal SC** (code + km +
+       a small delta flag vs the proposed SC when the DC isn't proposed to it; else "✓ Ideal SC"), Decision.
+       "Optional Remarks" column removed (user); "Movement flag" replaced by Current SC. Removed rows show the same
+       decision controls (one decision per DC); Unchanged rows show "No change" plus the map options.
+    3. **SC header**: Vol util and **Sort util** current → post, plus a line with Sort Cap · Max Sort Cap % ·
+       Mapped nodes (proposed) · Utilisation and Vol Cap · Min / Max Vol % · Mapped vol (proposed) · Utilisation
+       (limits from the run's `scParams`).
+    4. **Unmapped DCs** section (replaces the "new DCs not placed" block; the previously built drop list was never
+       rendered): DC Code, Old SC, Dist to Old SC, Ideal SC · Dist, Reason; **"Add to Old SC"** (→ "Added to
+       <SC>") for DCs that had one. Ideal SC = the run's nearest SC when the solver left it empty (unplaced DCs).
+    5. **Simulate**: the story's four delta cards only (Avg SC → DC distance, Volume-weighted distance, DCs
+       changing SC, Unserved DCs) — "Highest volume / sort utilisation" removed (user).
+    6. **Pivot** shows the user's limits under the utilisation cells ("Min 0% · Max 100%", "Max 100%").
+    7. Plan header shows the **DAG ID**.
+  - **Verification**: theme suite `s12.js` **39/39** (header, outputs, sub-sections; DELS counts, sort / volume
+    header values + render; story columns, remarks gone; current / proposed / distances; green / red; Removed and
+    Unchanged rows; ideal SC shown for exactly the 18 DCs not proposed to it, km + delta flag, ✓ otherwise;
+    Accept / Reject; Map to Ideal SC → MapTo, pivot +1, status; alternative options exclude old / new, chosen;
+    new DCs Accept / Reject only; unmapped columns + "Add to Old SC"; Simulate gating, four cards, per-SC table,
+    maps; pivot limits; > 100% red, ≥ 90% amber; reset = all proposed; Finalise gate; CSV and commit follow
+    MapTo). `r2` updated to expect 4 Simulate cards (was 6) — 18/18. All suites: `s1` 26, `s2` 17, `s3` 23,
+    `s4` 23, `s5` 24, `s6` 18, `s7` 27, `s8` 12, `s9` 11, `s10` 21, `s11` 19, `s12` 39, `r2` 18; 0 runtime
+    errors; 0 JSX `\u`.
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
+- **2026-11-02 — User-story verification, theme 11: Finalise preview → Finalised.**
+  - **Verified as already matching**: "Proceed to Finalise" opens a preview with Back; the final action locks the
+    run (status Committed) and moves it to the Finalised section; the Finalised view is read-only (no decision
+    controls); CSV download works there (header CSV and card CSV).
+  - **Changed (decision #79 — Finalise preview = Simulate on the latest decisions; Finalised is view-only + CSV)**:
+    1. **Preview** replicates Simulate on the latest decisions (same builder, `reviewMapPreview`): the four delta
+       cards, before / after maps and the per-SC table, under "PLAN OUTPUT VS YOUR DECISIONS". The existing
+       SC-level read-only lists and the SC × SC matrix stay below it (user).
+    2. **Preview warnings** (review only, not blocking): per SC, volume utilisation below Min Vol % or above Max
+       Vol %, sort utilisation above Max Sort Cap % (the run's `scParams`), and DCs left unmapped. "No warnings"
+       when clean. Back returns to the decisions.
+    3. Button **"Finalise"** (was "Commit"); copy: "The latest version of this plan, based on your decisions.
+       Review the warnings, go back to change anything, or Finalise to lock it."
+    4. **Finalised is view-only + CSV**: "Push to Alignment" per SC removed (`showPush: false`; it only set a
+       flag); copy "Finalised — view only. … download the output as CSV for further action."
+    5. Plan header distances read **current → final** for a finalised run (were current → plan), matching its card.
+  - **Verification**: theme suite `s13.js` **18/18** (no preview before Proceed; preview opens with the four
+    cards, maps and per-SC table without opening the Simulate modal; reflects the latest decisions; DELS sort
+    warning shown; SC-level lists kept; Finalise label, no Commit; Back; fix → "No warnings"; Finalise → Committed
+    → Finalised section; view-only, no Push, no decision controls; CSV; header current → final matches the card).
+    All suites: `s1` 26, `s2` 17, `s3` 23, `s4` 23, `s5` 24, `s6` 18, `s7` 27, `s8` 12, `s9` 11, `s10` 21,
+    `s11` 19, `s12` 39, `s13` 18, `r2` 18 — all passing, 0 runtime errors, 0 JSX `\u`, no new buttons.
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
