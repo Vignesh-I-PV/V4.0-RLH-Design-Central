@@ -4873,3 +4873,35 @@ RNG-based approximation. Read the method's own comment block first; the short ve
   - **Environment note**: the sandbox reset before this round; restored from the `deploy` and `tests` output
     folders, baseline `r2` 18/18 before any change.
   - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
+- **2026-11-02 — SC-DC Design Review follow-ups (after #81).**
+  1. **Colour in the download**: a CSV can't carry colour, so the "Mapped To" column (Nearest / Second Nearest /
+     Other, added with #81) is the file's equivalent. The DC-Level Changes bar now has a legend using the same words
+     ("Mapped SC: Nearest · Second Nearest · Other — same as the CSV's 'Mapped To' column"); the Mapped SC chip's
+     tooltip carries the same word.
+  2. **Run cards are full-width rows**: one card per row across the panel, four sections side by side (name / DAG
+     ID · Inputs · Outputs + distances · Map / CSV / Open), wrapping on narrow screens. Was a 280 px card grid capped
+     at 1240 px.
+  3. **Card "unmapped" = the details' Unmapped DCs list**: every DC the plan leaves unplaced (was new DCs only, so a
+     previously-mapped DC left unplaced — e.g. AGRS-301, zero capacity — showed "0 unmapped" on the card).
+  4. **Five more seeded runs** (same solver, replicated into every seeded month): MAP-SEED-3 "South cluster —
+     re-optimise" (4 SCs); MAP-SEED-4 "East cluster — tight capacity (Δ 20 km, 75% caps)" (2 SCs — the only free East
+     SCs; 42 DCs unplaced because the nearest SC is full and the next is beyond Δ); MAP-SEED-5 "West cluster — new DCs
+     only" (New Node On, + the unmapped new DCs); MAP-SEED-6 "Network-wide — all eligible SCs" and MAP-SEED-7
+     "Network-wide — new DCs only" — all 36 SCs eligible for RLH mapping (of 86: 44 don't dispatch RLH, 3 are MDC
+     nodes, BBSS / DHNS / GHYS are the deliberate missing-details SCs), ~5.8k DCs. Load cost negligible (boot / cycle
+     switch within noise of the previous build).
+  5. **Unplaced when the nearest SC is full and the next is beyond Δ — confirmed, no change**: the solver places a
+     DC on the nearest SC with room whose distance is within Δ (the run's Ideal <> Actual SC Delta, default 50 km) of
+     the nearest SC's distance; otherwise it is unserved with "Ideal SC <X> is full and no other SC with room is
+     within <Δ> km of it" (#60). MAP-SEED-4 demonstrates it.
+  - **Performance (network-wide runs)**: `mapNearestScs` cached per run (top 2 only); the SC × SC matrix and the
+    Finalise sections are computed only where shown (neither is shown since #81); `genDcRows()` reuses one LMDC index
+    per data snapshot (`lmdcIndex()`) instead of rebuilding a 12.6k-entry map per Route Planner plan per render. In
+    jsdom: network run re-render 2.6 s → 0.5 s, card map 2.1 s → 0.9 s; first open ~4 s (one-off ranking).
+  - **Verification**: suite `s16.js` **11/11** (7 runs listed; 2 network-wide runs over every eligible SC, both
+    modes; card unmapped = details list for every run; tight run unplaced reasons at Δ 20; every placed DC within Δ of
+    its nearest; wide card layout; legend; chip tooltip; network run opens with 36 blocks / pivot rows). `r2` and `s15`
+    updated for 7 seeded runs. All active suites pass: `s1` 26, `s2` 17, `s3` 23, `s4` 23, `s5` 25, `s6` 18, `s7` 27,
+    `s8` 12, `s9` 11, `s10` 21, `s11` 19, `s14` 6, `s15` 19, `s16` 11, `r2` 17; 0 runtime errors; 0 JSX `\u`; no new
+    buttons.
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.

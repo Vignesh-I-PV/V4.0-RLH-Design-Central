@@ -4227,20 +4227,26 @@ NLH cycle: {schedNlhMonthLabel}
 <div style={css(`flex:1; overflow-y:auto; padding:20px 32px; min-width:0;`)}>
 {(!reviewMapOpenCard) ? (<>
 <div style={css(`font-size:12px; color:#5A5E66; margin-bottom:14px;`)}>Executed runs · <strong style={css(`color:#14171F;`)}>{(reviewMapPlanCards || []).length}</strong></div>
-<div style={css(`display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:12px; margin-bottom:20px; max-width:1240px;`)}>
+<div style={css(`display:flex; flex-direction:column; gap:10px; margin-bottom:20px;`)}>
 {(reviewMapPlanCards || []).map((c, __iRpc) => (<React.Fragment key={__iRpc}>
-<div role={"button"} tabIndex={0} onClick={c.onClick} style={css(`text-align:left; padding:14px 16px; border:1px solid #E6EBF2; background:#fff; border-radius:10px; cursor:pointer;`)}>
+<div role={"button"} tabIndex={0} onClick={c.onClick} style={css(`text-align:left; padding:14px 18px; display:flex; flex-wrap:wrap; align-items:center; gap:14px 28px; border:1px solid #E6EBF2; background:#fff; border-radius:10px; cursor:pointer;`)}>
+<div style={css(`flex:1 1 230px; min-width:0;`)}>
 <div style={css(`display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:3px;`)}>
 <span style={css(`font-size:13px; font-weight:700; color:#14171F; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;`)}>{c.name}</span>
 <span style={css(`padding:2px 8px; border-radius:999px; font-size:9.5px; font-weight:600; background:${c.statusBg}; color:${c.statusFg}; flex-shrink:0;`)}>{c.statusLabel}</span>
 </div>
-<div title={c.dagId} style={css(`font-size:10.5px; color:#8E96A3; margin-bottom:10px; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;`)}>{c.dagId}</div>
+<div title={c.dagId} style={css(`font-size:10.5px; color:#8E96A3; margin-bottom:0; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;`)}>{c.dagId}</div>
+</div>
+<div style={css(`flex:1 1 260px; min-width:0;`)}>
 <div style={css(`font-size:9.5px; font-weight:700; color:#8E96A3; letter-spacing:0.05em; margin-bottom:4px;`)}>INPUTS</div>
-<div style={css(`display:flex; flex-wrap:wrap; gap:4px 12px; font-size:11.5px; color:#5A5E66; margin-bottom:9px;`)}><span><strong style={css(`color:#14171F;`)}>{c.scCount}</strong> SCs</span><span><strong style={css(`color:#14171F;`)}>{c.dcCount}</strong> DCs</span><span><strong style={css(`color:#14171F;`)}>{c.volume}</strong> vol</span><span>ρ <strong style={css(`color:#14171F;`)}>{c.rho}</strong></span><span>New Node <strong style={css(`color:#14171F;`)}>{c.newAdditionLabel}</strong></span><span>Δ <strong style={css(`color:#14171F;`)}>{c.toleranceLabel}</strong></span></div>
+<div style={css(`display:flex; flex-wrap:wrap; gap:4px 12px; font-size:11.5px; color:#5A5E66; margin-bottom:0;`)}><span><strong style={css(`color:#14171F;`)}>{c.scCount}</strong> SCs</span><span><strong style={css(`color:#14171F;`)}>{c.dcCount}</strong> DCs</span><span><strong style={css(`color:#14171F;`)}>{c.volume}</strong> vol</span><span>ρ <strong style={css(`color:#14171F;`)}>{c.rho}</strong></span><span>New Node <strong style={css(`color:#14171F;`)}>{c.newAdditionLabel}</strong></span><span>Δ <strong style={css(`color:#14171F;`)}>{c.toleranceLabel}</strong></span></div>
+</div>
+<div style={css(`flex:1.4 1 320px; min-width:0;`)}>
 <div style={css(`font-size:9.5px; font-weight:700; color:#8E96A3; letter-spacing:0.05em; margin-bottom:4px;`)}>OUTPUTS</div>
-<div style={css(`display:flex; flex-wrap:wrap; gap:4px 12px; font-size:11.5px; color:#5A5E66; margin-bottom:6px;`)}><span style={css(`color:${c.movements > 0 ? '#C77B00' : '#5A5E66'};`)}><strong>{c.movements}</strong> movements</span><span style={css(`color:${c.unmapped > 0 ? '#D14B4B' : '#5A5E66'};`)}><strong>{c.unmapped}</strong> unmapped</span><span><strong style={css(`color:#14171F;`)}>{c.pctChanged}%</strong> DCs changed</span></div>
-<div style={css(`display:flex; flex-direction:column; gap:2px; font-size:11.5px; color:#5A5E66; margin-bottom:12px;`)}><span>Avg distance <strong style={css(`color:${c.avgDistFg};`)}>{c.avgDistLabel}</strong></span><span>Vol-weighted distance <strong style={css(`color:${c.wavgDistFg};`)}>{c.wavgDistLabel}</strong></span></div>
-<div style={css(`display:flex; gap:6px; padding-top:10px; border-top:1px solid #EEF1F6;`)}>
+<div style={css(`display:flex; flex-wrap:wrap; gap:4px 12px; font-size:11.5px; color:#5A5E66; margin-bottom:4px;`)}><span style={css(`color:${c.movements > 0 ? '#C77B00' : '#5A5E66'};`)}><strong>{c.movements}</strong> movements</span><span style={css(`color:${c.unmapped > 0 ? '#D14B4B' : '#5A5E66'};`)}><strong>{c.unmapped}</strong> unmapped</span><span><strong style={css(`color:#14171F;`)}>{c.pctChanged}%</strong> DCs changed</span></div>
+<div style={css(`display:flex; flex-direction:column; gap:2px; font-size:11.5px; color:#5A5E66; margin-bottom:0;`)}><span>Avg distance <strong style={css(`color:${c.avgDistFg};`)}>{c.avgDistLabel}</strong></span><span>Vol-weighted distance <strong style={css(`color:${c.wavgDistFg};`)}>{c.wavgDistLabel}</strong></span></div>
+</div>
+<div style={css(`display:flex; gap:6px; flex:0 0 auto; align-items:center; margin-left:auto;`)}>
 <button onClick={c.onMapClick} title={"Map of this plan"} style={css(`display:inline-flex; align-items:center; gap:5px; height:26px; padding:0 9px; border:1px solid #E6EBF2; background:#fff; color:#1F6F5C; font-family:inherit; font-size:11px; font-weight:700; border-radius:6px; cursor:pointer;`)}><svg width={"12"} height={"12"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg>Map</button>
 <button onClick={c.onCsvClick} title={"Download this plan as CSV"} style={css(`display:inline-flex; align-items:center; gap:5px; height:26px; padding:0 9px; border:1px solid #E6EBF2; background:#fff; color:#1F6F5C; font-family:inherit; font-size:11px; font-weight:700; border-radius:6px; cursor:pointer;`)}><svg width={"12"} height={"12"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M12 4v12M7 11l5 5 5-5M5 20h14"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg>CSV</button>
 <span style={css(`margin-left:auto; font-size:11.5px; font-weight:700; color:#1F6F5C; align-self:center;`)}>Open {"→"}</span>
@@ -4299,7 +4305,7 @@ NLH cycle: {schedNlhMonthLabel}
 {(reviewMapTab === 'changes') ? (<>
 <div style={css(`display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px;`)}>
 
-<span style={css(`font-size:11.5px; color:#8E96A3;`)}>Grouped by the SC gaining each DC</span>
+<span style={css(`font-size:12px; color:#5A5E66; display:inline-flex; align-items:center; gap:8px; flex-wrap:wrap;`)}>Mapped SC: <span style={css(`padding:1px 8px; border-radius:999px; font-weight:700; background:#E7F4EC; color:#128A3E;`)}>Nearest</span><span style={css(`padding:1px 8px; border-radius:999px; font-weight:700; background:#FBF1DF; color:#C77B00;`)}>Second Nearest</span><span style={css(`padding:1px 8px; border-radius:999px; font-weight:700; color:#14171F; border:1px solid #E6EBF2;`)}>Other</span><span style={css(`color:#8E96A3;`)}>· same as the CSV's “Mapped To” column</span></span>
 <span style={css(`margin-left:auto; display:inline-flex; gap:6px;`)}>
 
 
@@ -9155,6 +9161,28 @@ class NDCApp extends React.Component {
     };
     seedRun(1, 3, 0, 'Undecided', 0, false);
     seedRun(2, 3, 3, 'Committed', 0.8, true);
+    // 2026-11-02 (#81 follow-up) — more completed runs to explore, each a different scenario, plus one
+    // over every eligible SC. Same solver as live runs; replicated into every seeded month like the two above.
+    const unmappedAdds = lmdcs.filter(l => !l.lmscCode && nodeAdditions.some(a => a.dc === l.code) && !nodeClosures.some(c => c.dc === l.code)).map(l => l.code);
+    const zoneCluster = (zone, n) => { const used = {}; mappingRuns.forEach(m => { if (!m._network) m.scCodes.forEach(c => { used[c] = true; }); });
+      const free = seedEligibleScs.filter(s => s.zone === zone && !used[s.code]); const a = free[0]; if (!a) return [];
+      return [a].concat(free.filter(s => s.code !== a.code).sort((x, y) => NDC_haversineKm(a.lat, a.lng, x.lat, x.lng) - NDC_haversineKm(a.lat, a.lng, y.lat, y.lng)).slice(0, n - 1)).map(s => s.code); };
+    const seedRunOn = (idOffset, scCodes, name, params, limitPct, withNew, network) => {
+      if (scCodes.length < 2) return;
+      const dcCodes = lmdcs.filter(l => scCodes.indexOf(l.lmscCode) >= 0 && !nodeClosures.some(c => c.dc === l.code)).map(l => l.code).concat(withNew ? unmappedAdds : []);
+      const scParams = {}; if (limitPct) scCodes.forEach(c => { scParams[c] = { volUtilMin: 0, volUtilMax: limitPct, sortCapUtilMax: limitPct }; });
+      const run = { id: 'MAP-SEED-' + idOffset, name, status: 'Running', scCodes, dcCodes, volFileName: seedVolFile, scParams,
+        params: Object.assign({ rho: 0.2, newNodeAddition: false, singlePinSingleSc: true, refRunId: null, spanCostOn: true, tolerance: 50 }, params),
+        createdAt: 'Seed', committedAt: null, results: null, pushedScs: {}, cycleMonth: this.activeCycleMonth.rlh, _network: !!network };
+      run.results = computeMappingResultPure({ scs, lmdcs }, run);
+      run.status = 'Completed'; mappingRuns.push(run);
+    };
+    seedRunOn(3, zoneCluster('South', 4), 'South cluster — re-optimise', {});
+    seedRunOn(4, zoneCluster('East', 3), 'East cluster — tight capacity (Δ 20 km, 75% caps)', { tolerance: 20 }, 75);
+    seedRunOn(5, zoneCluster('West', 4), 'West cluster — new DCs only', { newNodeAddition: true }, null, true);
+    seedRunOn(6, seedEligibleScs.map(s => s.code), 'Network-wide — all eligible SCs', {}, null, true, true);
+    seedRunOn(7, seedEligibleScs.map(s => s.code), 'Network-wide — new DCs only', { newNodeAddition: true }, null, true, true);
+    mappingRuns.forEach(m => { delete m._network; });
 
 
     return { scs, runs, plans, schedulerPlans, autodml, autodmlDetails, autodmlNodes, volumeFiles, nodeAdditions, nodeClosures, migrations, nodeChangesUnified, scVehAvail, VEH, lmdcs, mappingRuns, seedMapDecisions,
@@ -12419,7 +12447,13 @@ class NDCApp extends React.Component {
   // both equal the plan output (see the return below).
   // mapNearestScs(run, v, r) (2026-11-02, #81) — the run's SCs ordered by distance to the DC (nearest first;
   // ties by SC code). Nearest / Second Nearest SC come from SCs selected in that run only.
-  mapNearestScs(run, v, r) { return (run.scCodes || []).map(c => ({ sc: c, km: v.kmRow(r, c) })).filter(x => x.km != null).sort((a, b) => a.km - b.km || (a.sc < b.sc ? -1 : 1)); }
+  mapNearestScs(run, v, r) {
+    // cached per run object (results never change after a run completes) — the network-wide runs rank ~36 SCs for ~5.8k DCs
+    this._mapNearCache = this._mapNearCache || new WeakMap();
+    let c = this._mapNearCache.get(run); if (!c) { c = {}; this._mapNearCache.set(run, c); }
+    if (!c[r.code]) c[r.code] = (run.scCodes || []).map(sc => ({ sc, km: v.kmRow(r, sc) })).filter(x => x.km != null).sort((a, b) => a.km - b.km || (a.sc < b.sc ? -1 : 1)).slice(0, 2);
+    return c[r.code];
+  }
   mapRunViews(run) {
     const d = this.state.data, dec = {};
     const scByCode = {}; (d.scs || []).forEach(s => { scByCode[s.code] = s; });
@@ -16132,6 +16166,9 @@ class NDCApp extends React.Component {
 
   // LMDC cluster view — generate deterministic DC breakdown rows for a route.
   // No Math.random / Date.now: all values derived from indices and char codes.
+  // lmdcIndex() (2026-11-02) — one LMDC code → row map per data snapshot, shared by genDcRows() (which runs for
+  // every Route Planner plan on each render and used to rebuild a 12.6k-entry map per call).
+  lmdcIndex() { const ls = this.state.data.lmdcs || []; if (this._lmdcIdx && this._lmdcIdx.src === ls) return this._lmdcIdx.map; const m = {}; ls.forEach(l => { m[l.code] = l; }); this._lmdcIdx = { src: ls, map: m }; return m; }
   genDcRows(r) {
     // Co-Loading lane rows (2026-08-19) — real DC identities/coordinates from the pool (carried on
     // r.laneDcInfo at generation time), not the usual jitter-from-origin synthesis, since these are
@@ -16146,8 +16183,8 @@ class NDCApp extends React.Component {
     // synthesis. isLocal in particular has to be the real, persistent DC-level attribute — a coin
     // flip here would silently disagree with what LMDC Master and Route Scheduler both read.
     const d = this.state.data;
-    const lmdcByCode = {};
-    (d.lmdcs || []).forEach(l => { lmdcByCode[l.code] = l; });
+    const lmdcByCode = this.lmdcIndex();
+    
     const dcArr = r.dcs; // array of dc-code strings e.g. ["BDQ234","BDQ567"]
     const n = dcArr.length || 1;
     const baseVol = Math.floor(r.volume / n);
@@ -16248,8 +16285,8 @@ class NDCApp extends React.Component {
     // as before. E.g. SC-level 10:00 with two DCs overridden to 09:00 and 11:00: those two DCs are
     // judged against 09:00 and 11:00 respectively; every other DC on the plan still uses 10:00.
     const lmdcEditsOverlay = st.lmdcEdits || {};
-    const lmdcByCode = {};
-    (d.lmdcs || []).forEach(l => { lmdcByCode[l.code] = l; });
+    const lmdcByCode = this.lmdcIndex();
+    
     const resolveDcCutoffMin = (code) => {
       const base = lmdcByCode[code];
       const patch = lmdcEditsOverlay[code];
@@ -19810,7 +19847,7 @@ class NDCApp extends React.Component {
       // effectiveSc defaults back to oldSc — which made a freshly-triggered run with a real
       // proposed move look like it proposed nothing at all.
       const movements = rows.filter(row => row.needsDecision && !row.isUnserved).length;
-      const unmapped = rows.filter(row => row.isUnserved && !row.oldSc).length;
+      const unmapped = rows.filter(row => row.isUnserved).length; // 2026-11-02: same set as the details' Unmapped DCs list (was new DCs only)
       const dcCount = (r.dcCodes || []).length;
       const pctChanged = dcCount > 0 ? Math.round((movements / dcCount) * 100) : 0;
       const scCount = (r.scCodes || []).length;
@@ -19948,7 +19985,7 @@ class NDCApp extends React.Component {
 
     // ===== Finalise preview — SC-level (reuses the pivot) + SC x SC movement matrix =====
     const reviewMapMatrixScs = run ? run.scCodes.slice() : [];
-    const reviewMapMatrixRows = results ? reviewMapMatrixScs.map(fromCode => ({
+    const reviewMapMatrixRows = (results && stage === 'finalise') ? reviewMapMatrixScs.map(fromCode => ({ // 2026-11-02: only where shown (no longer shown since #81)
       fromCode,
       cells: reviewMapMatrixScs.map(toCode => {
         if (fromCode === toCode) return { toCode, count: null, isDiagonal: true };
@@ -19973,7 +20010,7 @@ class NDCApp extends React.Component {
       };
     }) : []);
 
-    const reviewMapFinaliseSections = (results && run && !isCommitted) ? buildFinalSections().map(s => {
+    const reviewMapFinaliseSections = (results && run && !isCommitted && stage === 'finalise') ? buildFinalSections().map(s => { // 2026-11-02: only where shown
       const expandKey = 'final:nochange:' + s.code;
       return Object.assign({}, s, { expanded: !!st.reviewMapExpanded[expandKey], onToggleNoChange: () => this.mapToggleExpand(expandKey) });
     }) : [];
