@@ -4838,3 +4838,38 @@ RNG-based approximation. Read the method's own comment block first; the short ve
     `s4` 23, `s5` 25, `s6` 18, `s7` 27, `s8` 12, `s9` 11, `s10` 21, `s11` 19, `s12` 39, `s13` 18, `s14` 12,
     `r2` 18 — all passing, 0 runtime errors, 0 JSX `\u`, no new buttons.
   - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.
+- **2026-11-02 — Decision #81: SC-DC Design Review is a read-only output (no planner decisions).**
+  User decision after the KRD reconciliation. The run's plan output is shown as is; the CSV is the actionable
+  output (actioned offline via LMDC Master / Migrations upload).
+  1. **Removed**: Accept / Reject, Accept all / Reject all, Reset, per-SC bulk Accept / Reject, Map to Ideal SC and
+     Map to SC (#78), "Add to Old SC" on unmapped DCs, Simulate, Proceed to Finalise, the Finalise preview /
+     Finalise / Committed stage (#79), the decided counter, and the To Review / Finalised tabs. Design Review ›
+     Node Mapping lists every executed run once ("Executed runs · N"), each with a "Completed" pill (the seeded
+     run that was Committed shows the same way). Card Map views: Current / Plan output.
+  2. **No decisions anywhere**: `mapRunViews()` returns `effAfter = effFinal = effPlan` (dec `{}`), and
+     `reviewMapVals()` uses `dec = {}`, `isCommitted = false`, stage `'decide'`. Stored `mapDcDecisions` from
+     earlier sessions are ignored. Pivot / distances / CSV = plan output. (#41 Commit ≠ effective, #78, #79 retired;
+     the Simulate / Finalise / commit code paths remain in the file but are unreachable.)
+  3. **DC rows** (`rowFor` → `NdcMapDecisionRows`, now read-only): DC Code, Current SC, Dist Old, **Mapped SC**
+     (plan output), Dist New, Dist Delta, **Nearest SC** + km, **2nd Nearest SC** + km. Mapped SC chip: green when it
+     is the nearest, amber when the second nearest, neutral otherwise ("Not placed" for unserved). "Ideal SC"
+     column retired (Nearest SC = the old ideal). `mapNearestScs(run, v, r)`: the **run's SCs only**, nearest first,
+     ties by SC code.
+  4. **Unmapped DCs**: DC Code, Old SC, Dist to Old SC, Nearest SC · dist, 2nd Nearest SC · dist, Reason. No action.
+  5. **CSV** (`<run>-output.csv`): plan output, plus Nearest SC, Distance Nearest SC (km), Second Nearest SC,
+     Distance Second Nearest SC (km), Mapped To (Nearest / Second Nearest / Other).
+  6. **Route Planner Step 1 "Include pipeline DCs" toggle removed** — nothing writes the migration pipeline any
+     more; `rpRunDcs()` / Step 1 counts ignore pipeline DCs even if old state has the toggle on.
+  - **Verification**: new suite `s15.js` **19/19** (one list, both runs Completed; no stage tabs; former Committed
+    run opens in the same detail view; no decision / map / add controls; no Simulate / Finalise / bulk / counter;
+    new columns, no Ideal / Decision; nearest + second from the run's SCs, distances, nearest ≤ second; colour rule
+    green 667 / amber 58 / neutral 18 on the seeded run; Unchanged mapped = current; pivot = plan output; stored
+    decisions ignored; unmapped nearest / second, no action; CSV header + Mapped To; card map modes; Route Planner
+    toggle gone, pipeline DCs never added). Suites updated: `r2` (review section now checks read-only output — 17
+    checks), `s11` (one list, former Committed run as Completed), `s3` (toggle retired), `s14` (Step 1 gate only — 6
+    checks). Retired: `s12` (decisions) and `s13` (Finalise) → `tests/retired/`. All active suites: `s1` 26, `s2`
+    17, `s3` 23, `s4` 23, `s5` 25, `s6` 18, `s7` 27, `s8` 12, `s9` 11, `s10` 21, `s11` 19, `s14` 6, `s15` 19, `r2`
+    17 — all passing, 0 runtime errors, 0 JSX `\u`. 14 buttons removed, none added.
+  - **Environment note**: the sandbox reset before this round; restored from the `deploy` and `tests` output
+    folders, baseline `r2` 18/18 before any change.
+  - **Files changed**: `v4.0-rlh-design-base.jsx`, `context.md`.

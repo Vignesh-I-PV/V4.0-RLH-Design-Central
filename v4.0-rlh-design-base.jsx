@@ -2140,10 +2140,6 @@ All modules
     any Aligned migration overlay (real); this toggle additionally folds in not-yet-aligned
     migration-pipeline DCs (Pending + Rejected) proposed to land at that SC, so a planner can see
     the impact of in-flight mapping proposals before they're actually aligned. Off by default. */}
-<div style={css(`display:flex; align-items:center; justify-content:space-between; gap:12px; padding:11px 14px; margin-bottom:14px; background:#F7F8FB; border:1px solid #E6EBF2; border-radius:8px;`)}>
-<div><div style={css(`font-size:12.5px; font-weight:600; color:#14171F;`)}>Include pipeline DCs in this plan list</div><div style={css(`font-size:11px; color:#8E96A3;`)}>Pulls in SC-DC Mapping's not-yet-aligned proposals (pending or rejected) as provisional DCs, per SC below.</div></div>
-<button onClick={onRpIncludePipelineToggle} style={css(`width:42px; height:24px; border-radius:999px; border:none; background:${rpIncludePipeline ? '#003F98' : '#D0D5DD'}; position:relative; cursor:pointer; flex-shrink:0;`)}><div style={css(`width:18px; height:18px; border-radius:999px; background:#fff; position:absolute; top:3px; left:${rpIncludePipeline ? '21px' : '3px'}; transition:left 120ms;`)} /></button>
-</div>
 {/* D. Overall missing / zero-volume callout — blocks Trigger downstream */}
 {(volGapHasGap) ? (<>
 <div style={css(`display:flex; align-items:flex-start; gap:13px; padding:14px 16px; margin-bottom:14px; background:#FAFBFD; border:1px solid #E6EBF2; border-left:3px solid #D14B4B; border-radius:8px;`)}>
@@ -4230,10 +4226,7 @@ NLH cycle: {schedNlhMonthLabel}
 {/* V4.0 2026-10-22 — no side rail: To Review / Finalised tabs, then that tab's runs as cards. */}
 <div style={css(`flex:1; overflow-y:auto; padding:20px 32px; min-width:0;`)}>
 {(!reviewMapOpenCard) ? (<>
-<div style={css(`display:inline-flex; gap:4px; padding:4px; background:#F2F5FA; border-radius:10px; margin-bottom:14px;`)}>
-<button onClick={() => onReviewMapStageFilter('toReview')} style={css(`height:32px; padding:0 16px; border:none; border-radius:7px; background:${reviewMapStageFilter === 'toReview' ? '#fff' : 'transparent'}; box-shadow:${reviewMapStageFilter === 'toReview' ? '0 1px 3px rgba(20,23,31,0.12)' : 'none'}; color:${reviewMapStageFilter === 'toReview' ? reviewMapAccent : '#5A5E66'}; font-family:inherit; font-size:12.5px; font-weight:700; cursor:pointer;`)}>To Review ({reviewMapToReviewCount})</button>
-<button onClick={() => onReviewMapStageFilter('finalised')} style={css(`height:32px; padding:0 16px; border:none; border-radius:7px; background:${reviewMapStageFilter === 'finalised' ? '#fff' : 'transparent'}; box-shadow:${reviewMapStageFilter === 'finalised' ? '0 1px 3px rgba(20,23,31,0.12)' : 'none'}; color:${reviewMapStageFilter === 'finalised' ? reviewMapAccent : '#5A5E66'}; font-family:inherit; font-size:12.5px; font-weight:700; cursor:pointer;`)}>Finalised ({reviewMapFinalisedCount})</button>
-</div>
+<div style={css(`font-size:12px; color:#5A5E66; margin-bottom:14px;`)}>Executed runs · <strong style={css(`color:#14171F;`)}>{(reviewMapPlanCards || []).length}</strong></div>
 <div style={css(`display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:12px; margin-bottom:20px; max-width:1240px;`)}>
 {(reviewMapPlanCards || []).map((c, __iRpc) => (<React.Fragment key={__iRpc}>
 <div role={"button"} tabIndex={0} onClick={c.onClick} style={css(`text-align:left; padding:14px 16px; border:1px solid #E6EBF2; background:#fff; border-radius:10px; cursor:pointer;`)}>
@@ -4266,7 +4259,7 @@ NLH cycle: {schedNlhMonthLabel}
 <div style={css(`background:#fff; border:1px solid #E6EBF2; border-radius:10px; padding:18px 20px; margin-bottom:20px;`)}>
 <div style={css(`display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px;`)}>
 <span style={css(`font-size:16px; font-weight:700; color:#14171F;`)}>{reviewMapOpenCard.name}</span>
-<span style={css(`display:inline-flex; align-items:center; gap:8px;`)}><button onClick={onReviewMapOpenMapThis} title={"Map of this plan"} style={css(`display:inline-flex; align-items:center; gap:6px; height:30px; padding:0 12px; border:1px solid #E6EBF2; background:#fff; color:${reviewMapAccent}; font-family:inherit; font-size:12px; font-weight:700; border-radius:7px; cursor:pointer;`)}><svg width={"14"} height={"14"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg>Map</button><button onClick={onReviewMapCsvThis} title={"Download this plan as CSV"} style={css(`display:inline-flex; align-items:center; gap:6px; height:30px; padding:0 12px; border:1px solid #E6EBF2; background:#fff; color:${reviewMapAccent}; font-family:inherit; font-size:12px; font-weight:700; border-radius:7px; cursor:pointer;`)}><svg width={"14"} height={"14"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M12 4v12M7 11l5 5 5-5M5 20h14"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg>CSV</button>{(reviewMapStage === 'decide') ? (<><button onClick={onReviewMapSimOpen} disabled={!reviewMapCanSimulate} title={reviewMapCanSimulate ? "Simulate: plan output vs your decisions, with maps" : "Make at least one decision to simulate"} style={css(`display:inline-flex; align-items:center; gap:6px; height:30px; padding:0 12px; border:1px solid ${reviewMapCanSimulate ? reviewMapAccent : '#E6EBF2'}; background:#fff; color:${reviewMapCanSimulate ? reviewMapAccent : '#A5ABB5'}; font-family:inherit; font-size:12px; font-weight:700; border-radius:7px; cursor:${reviewMapCanSimulate ? 'pointer' : 'not-allowed'};`)}><svg width={"14"} height={"14"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M3 17l6-6 4 4 8-8M14 7h7v7"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg>Simulate</button></>) : null}<span style={css(`padding:3px 10px; border-radius:999px; font-size:10.5px; font-weight:600; background:${reviewMapOpenCard.statusBg}; color:${reviewMapOpenCard.statusFg};`)}>{reviewMapOpenCard.statusLabel}</span></span>
+<span style={css(`display:inline-flex; align-items:center; gap:8px;`)}><button onClick={onReviewMapOpenMapThis} title={"Map of this plan"} style={css(`display:inline-flex; align-items:center; gap:6px; height:30px; padding:0 12px; border:1px solid #E6EBF2; background:#fff; color:${reviewMapAccent}; font-family:inherit; font-size:12px; font-weight:700; border-radius:7px; cursor:pointer;`)}><svg width={"14"} height={"14"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg>Map</button><button onClick={onReviewMapCsvThis} title={"Download this plan as CSV"} style={css(`display:inline-flex; align-items:center; gap:6px; height:30px; padding:0 12px; border:1px solid #E6EBF2; background:#fff; color:${reviewMapAccent}; font-family:inherit; font-size:12px; font-weight:700; border-radius:7px; cursor:pointer;`)}><svg width={"14"} height={"14"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"}><path d={"M12 4v12M7 11l5 5 5-5M5 20h14"} strokeLinecap={"round"} strokeLinejoin={"round"} /></svg>CSV</button>{(reviewMapStage === 'decide') ? (<></>) : null}<span style={css(`padding:3px 10px; border-radius:999px; font-size:10.5px; font-weight:600; background:${reviewMapOpenCard.statusBg}; color:${reviewMapOpenCard.statusFg};`)}>{reviewMapOpenCard.statusLabel}</span></span>
 </div>
 <div title={reviewMapOpenCard.dagId} style={css(`font-size:11px; color:#8E96A3; margin-bottom:4px; font-family:ui-monospace, SFMono-Regular, Menlo, monospace;`)}>{reviewMapOpenCard.dagId}</div>
 <div style={css(`font-size:12px; color:#5A5E66; margin-bottom:16px;`)}>{reviewMapOpenCard.scCount} SCs · {reviewMapOpenCard.dcCount} DCs · {reviewMapOpenCard.volume} vol · ρ {reviewMapOpenCard.rho} · New Addition {reviewMapOpenCard.newAdditionLabel} · Ideal &lt;&gt; Actual Δ {reviewMapOpenCard.toleranceLabel}</div>
@@ -4305,12 +4298,12 @@ NLH cycle: {schedNlhMonthLabel}
     section below, since they don't belong to any SC group. */}
 {(reviewMapTab === 'changes') ? (<>
 <div style={css(`display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px;`)}>
-<span style={css(`font-size:12.5px; color:#14171F;`)}><strong>{reviewMapDecidedCount}</strong> of <strong>{reviewMapNeedCount}</strong> decided</span>
+
 <span style={css(`font-size:11.5px; color:#8E96A3;`)}>Grouped by the SC gaining each DC</span>
 <span style={css(`margin-left:auto; display:inline-flex; gap:6px;`)}>
-<button onClick={onReviewMapAcceptAll} style={css(`height:30px; padding:0 12px; border:1px solid #128A3E; background:#fff; color:#128A3E; font-family:inherit; font-size:12px; font-weight:700; border-radius:7px; cursor:pointer;`)}>Accept all</button>
-<button onClick={onReviewMapRejectAll} style={css(`height:30px; padding:0 12px; border:1px solid #D14B4B; background:#fff; color:#D14B4B; font-family:inherit; font-size:12px; font-weight:700; border-radius:7px; cursor:pointer;`)}>Reject all</button>
-<button onClick={onReviewMapReset} style={css(`height:30px; padding:0 12px; border:1px solid #E6EBF2; background:#fff; color:#5A5E66; font-family:inherit; font-size:12px; font-weight:600; border-radius:7px; cursor:pointer;`)}>Reset</button>
+
+
+
 </span>
 </div>
 <div style={css(`display:flex; flex-direction:column; gap:14px;`)}>
@@ -4323,7 +4316,7 @@ NLH cycle: {schedNlhMonthLabel}
 <span style={css(`font-size:11.5px; color:#5A5E66;`)}>{b.unchangedCount} unchanged</span>
 <span style={css(`font-size:11px; color:#5A5E66;`)}>Vol util {b.volPre} {"→"} <span style={css(`color:${b.volPostFg}; font-weight:600;`)}>{b.volPost}</span></span>
 <span style={css(`font-size:11px; color:#5A5E66;`)}>Sort util {b.sortPre} {"→"} <span style={css(`color:${b.sortPostFg}; font-weight:600;`)}>{b.sortPost}</span></span>
-{(b.hasAdded) ? (<><span style={css(`margin-left:auto; display:inline-flex; gap:6px;`)}><button onClick={b.onAcceptSc} style={css(`height:26px; padding:0 10px; border:1px solid #128A3E; background:#fff; color:#128A3E; font-family:inherit; font-size:11px; font-weight:700; border-radius:6px; cursor:pointer;`)}>Accept all added</button><button onClick={b.onRejectSc} style={css(`height:26px; padding:0 10px; border:1px solid #D14B4B; background:#fff; color:#D14B4B; font-family:inherit; font-size:11px; font-weight:700; border-radius:6px; cursor:pointer;`)}>Reject all added</button></span></>) : null}
+
 </div>
 <div style={css(`display:flex; flex-wrap:wrap; gap:6px 22px; padding:8px 14px; background:#FBFCFE; border-top:1px solid #EEF1F6; font-size:11.5px; color:#5A5E66;`)}>
 <span>Sort Cap <strong style={css(`color:#14171F;`)}>{b.sortCap}</strong> · Max Sort Cap <strong style={css(`color:#14171F;`)}>{b.sortMaxPct}%</strong> · Mapped nodes (proposed) <strong style={css(`color:#14171F;`)}>{b.nodesPost}</strong> · Utilisation <strong style={css(`color:${b.sortPostFg};`)}>{b.sortPost}</strong></span>
@@ -4344,15 +4337,15 @@ NLH cycle: {schedNlhMonthLabel}
 <div style={css(`border:1px solid #F3D9A0; border-radius:10px; overflow:hidden; background:#fff;`)}>
 <div style={css(`padding:11px 14px; background:#FDF7EC; font-size:13px; font-weight:700; color:#14171F;`)}>Unmapped DCs <span style={css(`padding:1px 8px; border-radius:999px; font-size:11px; background:#FBF1DF; color:#C77B00;`)}>{reviewMapUnmappedRows.length}</span></div>
 <div style={css(`overflow-x:auto;`)}><div style={css(`min-width:860px;`)}>
-<div style={css(`display:grid; grid-template-columns:110px 90px 110px 160px minmax(180px,1fr) 150px;`)}><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>DC CODE</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>OLD SC</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>DIST TO OLD SC</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>IDEAL SC · DIST</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>REASON</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}></div></div>
+<div style={css(`display:grid; grid-template-columns:110px 90px 110px 160px 160px minmax(180px,1fr);`)}><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>DC CODE</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>OLD SC</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC; text-align:right;`)}>DIST TO OLD SC</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>NEAREST SC · DIST</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>2ND NEAREST SC · DIST</div><div style={css(`padding:8px 10px; font-size:10px; font-weight:700; color:#5A5E66; letter-spacing:0.03em; background:#F7F9FC;`)}>REASON</div></div>
 {(reviewMapUnmappedRows || []).map((u, __iRum) => (<React.Fragment key={__iRum}>
-<div style={css(`display:grid; grid-template-columns:110px 90px 110px 160px minmax(180px,1fr) 150px; align-items:center; border-top:1px solid #F2F5FA; font-size:12px;`)}>
+<div style={css(`display:grid; grid-template-columns:110px 90px 110px 160px 160px minmax(180px,1fr); align-items:center; border-top:1px solid #F2F5FA; font-size:12px;`)}>
 <div style={css(`padding:7px 10px; font-weight:600; color:#14171F;`)}>{u.code}</div>
 <div style={css(`padding:7px 10px; color:#14171F;`)}>{u.oldSc}</div>
 <div style={css(`padding:7px 10px; text-align:right; color:#5A5E66;`)}>{u.distOld}</div>
-<div style={css(`padding:7px 10px; color:#14171F;`)}><strong>{u.idealSc}</strong> <span style={css(`color:#5A5E66;`)}>{u.idealKm}</span></div>
+<div style={css(`padding:7px 10px; color:#14171F;`)}><strong>{u.nearest}</strong> <span style={css(`color:#5A5E66;`)}>{u.nearestKm}</span></div>
+<div style={css(`padding:7px 10px; color:#14171F;`)}><strong>{u.second}</strong> <span style={css(`color:#5A5E66;`)}>{u.secondKm}</span></div>
 <div style={css(`padding:7px 10px; color:#5A5E66;`)}>{u.reason}</div>
-<div style={css(`padding:5px 10px;`)}>{(u.canAdd) ? (<><button onClick={u.onAdd} style={css(`height:26px; padding:0 10px; border:1px solid #1F6F5C; background:${u.addBg}; color:${u.addFg}; font-family:inherit; font-size:11px; font-weight:700; border-radius:6px; cursor:pointer; white-space:nowrap;`)}>{u.addLabel}</button></>) : null}</div>
 </div>
 </React.Fragment>))}
 </div></div>
@@ -4386,9 +4379,6 @@ NLH cycle: {schedNlhMonthLabel}
 </div>
 </div>
 </>) : null}
-<div style={css(`display:flex; justify-content:flex-end; margin-top:20px;`)}>
-<button onClick={onReviewMapGoFinalise} disabled={!reviewMapAllDecided} style={css(`height:38px; padding:0 20px; border:none; background:${reviewMapAllDecided ? reviewMapAccent : '#C3C9D4'}; color:#fff; font-family:inherit; font-size:13px; font-weight:600; border-radius:8px; cursor:${reviewMapAllDecided ? 'pointer' : 'not-allowed'};`)}>{reviewMapAllDecided ? 'Proceed to Finalise' : 'Decide every flagged DC to continue'}</button>
-</div>
 </>) : null}
 {/* ===== STAGE 1 — finalise preview ===== */}
 {(reviewMapStage === 'finalise') ? (<>
@@ -7883,33 +7873,27 @@ function NdcDcSection(props) {
     {props.open ? (props.count > 0 ? <div style={{ padding: '0 14px 12px' }}>{props.children}</div> : <div style={{ padding: '0 14px 12px 33px', fontSize: 12, color: '#8E96A3' }}>None</div>) : null}
   </div>);
 }
-// NdcMapDecisionRows (2026-11-02, #78) — the DC table under each SC's Added / Removed / Unchanged dropdown:
-// DC Code, Current SC, New SC (proposed), Dist Old / New / Delta, Ideal SC, Decision. Rows come from
-// reviewMapVals' rowFor(); top-level component, so it may use plain props (render-scope rule).
+// NdcMapDecisionRows (2026-11-02, #81 — read-only output) — the DC table under each SC's Added / Removed /
+// Unchanged dropdown: DC Code, Current SC, Dist Old, Mapped SC (plan output), Dist New, Dist Delta, Nearest SC,
+// Second Nearest SC (both from the run's SCs, with km). Mapped SC green = nearest, amber = second nearest.
 function NdcMapDecisionRows(props) {
   const H = { padding: '8px 10px', fontSize: 10, fontWeight: 700, color: '#5A5E66', letterSpacing: '0.03em', background: '#F7F9FC' };
   const C = { padding: '7px 10px', fontSize: 12 };
-  const cols = '100px 90px 110px 90px 90px 95px 150px minmax(330px,1fr)';
-  const btn = (bd, bg, fg) => ({ height: 26, padding: '0 9px', border: '1px solid ' + bd, background: bg, color: fg, fontFamily: 'inherit', fontSize: 11, fontWeight: 700, borderRadius: 6, cursor: 'pointer', whiteSpace: 'nowrap' });
-  return (<div style={{ overflowX: 'auto', border: '1px solid #EEF1F6', borderRadius: 8 }}><div style={{ minWidth: 1080 }}>
+  const R = Object.assign({}, C, { textAlign: 'right', fontVariantNumeric: 'tabular-nums' });
+  const cols = '100px 100px 90px 150px 90px 95px 150px 150px';
+  return (<div style={{ overflowX: 'auto', border: '1px solid #EEF1F6', borderRadius: 8 }}><div style={{ minWidth: 960 }}>
     <div style={{ display: 'grid', gridTemplateColumns: cols }}>
-      <div style={H}>DC CODE</div><div style={H}>CURRENT SC</div><div style={H}>NEW SC (PROPOSED)</div><div style={Object.assign({}, H, { textAlign: 'right' })}>DIST OLD</div><div style={Object.assign({}, H, { textAlign: 'right' })}>DIST NEW</div><div style={Object.assign({}, H, { textAlign: 'right' })}>DIST DELTA</div><div style={H}>IDEAL SC</div><div style={H}>DECISION</div>
+      <div style={H}>DC CODE</div><div style={H}>CURRENT SC</div><div style={Object.assign({}, H, { textAlign: 'right' })}>DIST OLD</div><div style={H}>MAPPED SC</div><div style={Object.assign({}, H, { textAlign: 'right' })}>DIST NEW</div><div style={Object.assign({}, H, { textAlign: 'right' })}>DIST DELTA</div><div style={H}>NEAREST SC</div><div style={H}>2ND NEAREST SC</div>
     </div>
     {(props.rows || []).map((r, i) => <div key={i} style={{ display: 'grid', gridTemplateColumns: cols, alignItems: 'center', borderTop: '1px solid #F2F5FA' }}>
       <div style={Object.assign({}, C, { fontWeight: 600, color: '#14171F' })}>{r.code}</div>
       <div style={Object.assign({}, C, { fontWeight: 600, color: r.curFg })}>{r.cur}</div>
-      <div style={Object.assign({}, C, { fontWeight: 600, color: r.propFg })}>{r.prop}</div>
-      <div style={Object.assign({}, C, { textAlign: 'right', color: '#5A5E66', fontVariantNumeric: 'tabular-nums' })}>{r.distOld}</div>
-      <div style={Object.assign({}, C, { textAlign: 'right', color: '#14171F', fontVariantNumeric: 'tabular-nums' })}>{r.distNew}</div>
-      <div style={Object.assign({}, C, { textAlign: 'right', fontWeight: 700, color: r.deltaFg, fontVariantNumeric: 'tabular-nums' })}>{r.delta}</div>
-      <div style={Object.assign({}, C, { fontSize: 11.5 })}>{r.showIdeal ? <span><strong style={{ color: '#14171F' }}>{r.idealSc}</strong> <span style={{ color: '#5A5E66' }}>{r.idealKm}</span>{r.idealDelta ? <span style={{ marginLeft: 5, padding: '1px 6px', borderRadius: 999, fontSize: 10, fontWeight: 700, background: '#F2F5FA', color: r.idealDeltaFg }}>{r.idealDelta}</span> : null}</span> : <span style={{ color: '#128A3E', fontWeight: 600 }}>{'✓'} Ideal SC</span>}</div>
-      <div style={{ padding: '5px 10px', display: 'flex', alignItems: 'center', gap: 5, flexWrap: 'wrap' }}>
-        {r.canDecide ? <button onClick={r.onAccept} style={btn(r.aBd, r.aBg, r.aFg)}>Accept</button> : null}
-        {r.canDecide ? <button onClick={r.onReject} style={btn(r.rBd, r.rBg, r.rFg)}>Reject</button> : null}
-        {(!r.canDecide || r.status.indexOf('Mapped to') === 0) ? <span style={{ padding: '2px 8px', borderRadius: 999, fontSize: 10.5, fontWeight: 600, background: r.statusBg, color: r.statusFg }}>{r.status}</span> : null}
-        {r.canMapIdeal ? <button onClick={r.onMapIdeal} title={'Map ' + r.code + ' to its ideal SC, ' + r.idealSc} style={btn('#2F4FC6', '#fff', '#2F4FC6')}>Map to Ideal SC</button> : null}
-        {r.canAlt ? <select value={r.altValue} onChange={r.onAlt} aria-label={'Map ' + r.code + ' to an alternative SC'} style={{ height: 26, border: '1px solid #E6EBF2', borderRadius: 6, fontFamily: 'inherit', fontSize: 11, color: '#14171F', background: '#fff', maxWidth: 150 }}><option value="">Map to SC…</option>{r.altOptions.map((o, k) => <option key={k} value={o.value}>{o.label}</option>)}</select> : null}
-      </div>
+      <div style={Object.assign({}, R, { color: '#5A5E66' })}>{r.distOld}</div>
+      <div style={C}><span title={r.mappedRank} style={{ padding: '2px 8px', borderRadius: 999, fontWeight: 700, background: r.mappedBg, color: r.mappedFg }}>{r.mapped}</span></div>
+      <div style={Object.assign({}, R, { color: '#14171F' })}>{r.distNew}</div>
+      <div style={Object.assign({}, R, { fontWeight: 700, color: r.deltaFg })}>{r.delta}</div>
+      <div style={Object.assign({}, C, { fontSize: 11.5 })}><strong style={{ color: '#14171F' }}>{r.nearest}</strong> <span style={{ color: '#5A5E66' }}>{r.nearestKm}</span></div>
+      <div style={Object.assign({}, C, { fontSize: 11.5 })}><strong style={{ color: '#14171F' }}>{r.second}</strong> <span style={{ color: '#5A5E66' }}>{r.secondKm}</span></div>
     </div>)}
   </div></div>);
 }
@@ -12020,7 +12004,7 @@ class NDCApp extends React.Component {
   }
   rpRunDcs(scCode) {
     const st = this.state, drops = (st.droppedDcBySC || {})[scCode] || [], vf = st.creationVolume;
-    return this.rpScDcList(scCode, !!st.rpIncludePipeline).filter(x => drops.indexOf(x.l.code) < 0).map(x => {
+    return this.rpScDcList(scCode, false).filter(x => drops.indexOf(x.l.code) < 0).map(x => {
       const v = vf ? this.mapVolumeInfoForDc(x.l.code, vf, x.l.capacity) : { hasVolume: true, volumePlanned: null };
       return { l: x.l, pipeline: x.pipeline, hasVolume: v.hasVolume, vol: v.volumePlanned };
     });
@@ -12429,10 +12413,15 @@ class NDCApp extends React.Component {
   mapRunDistSummary(run) {
     const v = this.mapRunViews(run), rows = (run.results && run.results.dcRows) || [];
     const m = (fn) => { let n = 0, sd = 0, sv = 0, svd = 0; rows.forEach(r => { const sc = fn(r); if (!sc) return; const km = v.kmRow(r, sc); if (km == null) return; n++; sd += km; sv += r.volume || 0; svd += (r.volume || 0) * km; }); return { avg: n ? sd / n : null, wavg: sv ? svd / sv : null }; };
-    return { cur: m(v.effPre), out: m(run.status === 'Committed' ? v.effFinal : v.effPlan) };
+    return { cur: m(v.effPre), out: m(v.effPlan) };
   }
+  // 2026-11-02 (#81): Design Review is a read-only output — no planner decisions, so "after" and "final"
+  // both equal the plan output (see the return below).
+  // mapNearestScs(run, v, r) (2026-11-02, #81) — the run's SCs ordered by distance to the DC (nearest first;
+  // ties by SC code). Nearest / Second Nearest SC come from SCs selected in that run only.
+  mapNearestScs(run, v, r) { return (run.scCodes || []).map(c => ({ sc: c, km: v.kmRow(r, c) })).filter(x => x.km != null).sort((a, b) => a.km - b.km || (a.sc < b.sc ? -1 : 1)); }
   mapRunViews(run) {
-    const d = this.state.data, dec = (this.state.mapDcDecisions || {})[run.id] || {};
+    const d = this.state.data, dec = {};
     const scByCode = {}; (d.scs || []).forEach(s => { scByCode[s.code] = s; });
     const dcByCode = {}; (d.lmdcs || []).forEach(l => { dcByCode[l.code] = l; });
     const geoBy = {}; const geoOf = (code) => { if (!(code in geoBy)) geoBy[code] = mapDcGeoPure(dcByCode[code], scByCode); return geoBy[code]; };
@@ -12442,24 +12431,27 @@ class NDCApp extends React.Component {
     // 2026-11-02 (#78): 'MapTo' = the planner sent the DC to a chosen SC (Map to Ideal SC / alternative SC).
     const effAfter = (r) => { const d0 = dec[r.code]; if (d0 && d0.decision === 'MapTo' && d0.sc) return d0.sc; if (d0 && d0.decision === 'Accept') return r.newSc; if (d0 && (d0.decision === 'Reject' || d0.decision === 'KeepOldSc')) return r.oldSc || null; return r.isUnserved ? null : r.newSc; };
     const effFinal = (r) => { const d0 = dec[r.code]; if (d0 && d0.decision === 'MapTo' && d0.sc) return d0.sc; if (r.isUnchanged) return r.oldSc; if (d0 && d0.decision === 'Accept' && !r.isUnserved) return r.newSc; return r.oldSc || null; };
-    return { dec, scByCode, dcByCode, geoOf, kmRow, effPre, effPlan, effAfter, effFinal };
+    return { dec, scByCode, dcByCode, geoOf, kmRow, effPre, effPlan, effAfter: effPlan, effFinal: effPlan };
   }
   // mapDownloadRunCsv(runId) — plan-card CSV (V4.0 2026-10-27). SC-wise in run order: Added, then
   // Removed, then Unchanged; a DC that moves appears under both SCs. Unmapped (no SC either side)
   // last, SC fields empty. To Review = your decisions (undecided as proposed); Finalised = committed.
   mapDownloadRunCsv(runId) {
     const run = (this.state.data.mappingRuns || []).find(r => r.id === runId); if (!run || !run.results) return;
-    const v = this.mapRunViews(run), eff = run.status === 'Committed' ? v.effFinal : v.effAfter, rows = run.results.dcRows;
+    const v = this.mapRunViews(run), eff = v.effPlan, rows = run.results.dcRows;
     const km = (r, sc) => { const x = v.kmRow(r, sc); return x == null ? '' : (Math.round(x * 10) / 10); };
     const q = (s) => { s = String(s == null ? '' : s); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
-    const out = [['DC Code', 'Movement Flag', 'Current SC', 'New SC', 'Distance Old SC (km)', 'Distance New SC (km)', 'Volume']];
+    // 2026-11-02 (#81): + Nearest / Second Nearest SC (run's SCs) with km, and which one the DC is mapped to.
+    const near = (r) => { const n = this.mapNearestScs(run, v, r); const ms = eff(r);
+      return [n[0] ? n[0].sc : '', n[0] ? Math.round(n[0].km * 10) / 10 : '', n[1] ? n[1].sc : '', n[1] ? Math.round(n[1].km * 10) / 10 : '', !ms ? '' : (n[0] && ms === n[0].sc ? 'Nearest' : (n[1] && ms === n[1].sc ? 'Second Nearest' : 'Other'))]; };
+    const out = [['DC Code', 'Movement Flag', 'Current SC', 'New SC', 'Distance Old SC (km)', 'Distance New SC (km)', 'Volume', 'Nearest SC', 'Distance Nearest SC (km)', 'Second Nearest SC', 'Distance Second Nearest SC (km)', 'Mapped To']];
     run.scCodes.forEach(code => {
-      rows.filter(r => eff(r) === code && r.oldSc !== code).forEach(r => out.push([r.code, 'Added', r.oldSc || '', code, km(r, r.oldSc), km(r, code), r.volume]));
-      rows.filter(r => r.oldSc === code && eff(r) !== code).forEach(r => out.push([r.code, 'Removed', code, eff(r) || '', km(r, code), km(r, eff(r)), r.volume]));
-      rows.filter(r => r.oldSc === code && eff(r) === code).forEach(r => out.push([r.code, 'Unchanged', code, code, km(r, code), km(r, code), r.volume]));
+      rows.filter(r => eff(r) === code && r.oldSc !== code).forEach(r => out.push([r.code, 'Added', r.oldSc || '', code, km(r, r.oldSc), km(r, code), r.volume].concat(near(r))));
+      rows.filter(r => r.oldSc === code && eff(r) !== code).forEach(r => out.push([r.code, 'Removed', code, eff(r) || '', km(r, code), km(r, eff(r)), r.volume].concat(near(r))));
+      rows.filter(r => r.oldSc === code && eff(r) === code).forEach(r => out.push([r.code, 'Unchanged', code, code, km(r, code), km(r, code), r.volume].concat(near(r))));
     });
-    rows.filter(r => !r.oldSc && !eff(r)).forEach(r => out.push([r.code, 'Unmapped', '', '', '', '', r.volume]));
-    this.downloadText((run.id + '-' + (run.status === 'Committed' ? 'finalised' : 'review')).toLowerCase() + '.csv', out.map(a => a.map(q).join(',')).join('\n') + '\n');
+    rows.filter(r => !r.oldSc && !eff(r)).forEach(r => out.push([r.code, 'Unmapped', '', '', '', '', r.volume].concat(near(r))));
+    this.downloadText((run.id + '-output').toLowerCase() + '.csv', out.map(a => a.map(q).join(',')).join('\n') + '\n');
     this.showToast('CSV downloaded · ' + (out.length - 1) + ' rows', '#128A3E');
   }
   mapToggleSection(key, defaultOpen) {
@@ -14134,7 +14126,7 @@ class NDCApp extends React.Component {
     // below also includes not-yet-aligned migration-pipeline DCs (Pending + Rejected) proposed to
     // land there, alongside the real AutoDML/Aligned-migration count. Off by default — these
     // aren't real yet.
-    const rpIncludePipeline = !!st.rpIncludePipeline;
+    const rpIncludePipeline = false; // 2026-11-02 (#81): toggle retired — no commits feed the pipeline any more
     const onRpIncludePipelineToggle = () => this.setState({ rpIncludePipeline: !rpIncludePipeline });
     const scDcCounts = this.buildScDcCounts(rpIncludePipeline);
     // 2026-08-26 fix (#5 cascade) — Route Planner's own SC selection now filters to
@@ -19735,7 +19727,7 @@ class NDCApp extends React.Component {
     const reviewMapStageFilter = st.reviewMapStageFilter === 'finalised' ? 'finalised' : 'toReview';
     const toReviewRuns = allRuns.filter(r => r.status !== 'Committed');
     const finalisedRuns = allRuns.filter(r => r.status === 'Committed');
-    const runs = reviewMapStageFilter === 'finalised' ? finalisedRuns : toReviewRuns;
+    const runs = allRuns; // 2026-11-02 (#81): one list of completed runs — no To Review / Finalised split
     const onReviewMapStageFilter = (f) => this.setState({ reviewMapStageFilter: f, reviewMapRunId: null });
 
     // 2026-09-16 — two-pane redesign (point 1): a persistent left rail (stage tabs + run list)
@@ -19748,9 +19740,9 @@ class NDCApp extends React.Component {
     const selectedRunId = st.reviewMapRunId || null;
     const run = runs.find(r => r.id === selectedRunId) || null; // V4.0 2026-10-27: L1 = cards only; a run opens on click (L2)
     const results = run ? run.results : null;
-    const dec = run ? (st.mapDcDecisions[run.id] || {}) : {};
-    const isCommitted = !!(run && run.status === 'Committed');
-    const stage = isCommitted ? 'cards' : (st.mapReviewStage || 'decide');
+    const dec = {}; // 2026-11-02 (#81): no planner decisions — the output is read-only
+    const isCommitted = false;
+    const stage = 'decide';
 
     // ===== distKm(dcCode, scCode) — shared distance lookup for the per-DC pre/post columns
     // (point 3.4) and, later, any aggregate that wants it. Rounded to the nearest km — this app's
@@ -19834,8 +19826,8 @@ class NDCApp extends React.Component {
       return {
         dagId: this.mapRunDagId(r), avgDistLabel: kmT(dist.cur.avg, dist.out.avg), wavgDistLabel: kmT(dist.cur.wavg, dist.out.wavg),
         avgDistDelta: dAvg, wavgDistDelta: dW, avgDistFg: dCol(dAvg), wavgDistFg: dCol(dW),
-        id: r.id, name: r.name, statusLabel: r.status,
-        statusBg: r.status === 'Committed' ? '#EAF3EF' : '#EAF1FB', statusFg: r.status === 'Committed' ? ACCENT : '#1E6FB8',
+        id: r.id, name: r.name, statusLabel: 'Completed', // 2026-11-02 (#81): one state for every executed run
+        statusBg: '#EAF1FB', statusFg: '#1E6FB8',
         scCount, dcCount, volume: r.results ? fmtInt(r.results.totalVolume) : '—',
         rho: (r.params || {}).rho != null ? r.params.rho.toFixed(2) : '—', newAdditionLabel: (r.params || {}).newNodeAddition !== false ? 'On' : 'Off', toleranceLabel,
         movements, unmapped, pctChanged,
@@ -20030,24 +20022,17 @@ class NDCApp extends React.Component {
     // rowFor(r) (2026-11-02, #78) — one row shape for Added / Removed / Unchanged: current SC, proposed SC,
     // distances, ideal SC (shown when the DC isn't proposed to it), decision, Map to Ideal SC / alternative SC.
     const scParamsOf = (code) => Object.assign({}, this.mapScParamDefaults(), (run && run.scParams || {})[code]);
+    // rowFor(r) (2026-11-02, #81) — read-only output row: current SC + km, mapped SC (plan output) + km, delta,
+    // Nearest / Second Nearest SC (run's SCs) + km. Mapped SC green = nearest, amber = second nearest, else neutral.
     const rowFor = (r) => {
-      const d0 = dec[r.code] || {}; const dd = dlt(r.distOld, r.distNew);
-      const canDecide = r.needsDecision && !r.isUnserved, canRemap = !!r.oldSc && !r.isUnserved;
-      const prop = r.isUnserved ? null : (r.isUnchanged ? r.oldSc : r.newSc), eff = effAfter(r);
-      const showIdeal = !!r.idealSc && r.idealSc !== prop; const idealKm = showIdeal ? kmRow(r, r.idealSc) : null, propKm = prop ? kmRow(r, prop) : null;
-      const idd = (showIdeal && idealKm != null && propKm != null) ? Math.round((idealKm - propKm) * 10) / 10 : null;
-      const accept = DEC_BTN(d0.decision === 'Accept', 'Accept'), reject = DEC_BTN(d0.decision === 'Reject', 'Reject');
-      const alts = canRemap ? (run.scCodes || []).filter(c => c !== r.oldSc && c !== r.newSc) : [];
-      const s0 = statusOf(r);
-      return { code: r.code, cur: r.oldSc || 'New DC', curFg: r.oldSc ? '#14171F' : '#128A3E', prop: prop || 'Not placed', propFg: prop ? '#1F6F5C' : '#9A5E00',
-        distOld: fmtKm(r.distOld), distNew: fmtKm(r.distNew), delta: dd.label, deltaFg: dd.fg,
-        showIdeal, idealSc: r.idealSc || '', idealKm: fmtKm(idealKm), idealDelta: idd == null ? '' : (idd > 0 ? '+' : '') + idd.toLocaleString('en-IN') + ' km', idealDeltaFg: idd == null ? '#8E96A3' : (idd < 0 ? '#128A3E' : (idd > 0 ? '#D14B4B' : '#5A5E66')),
-        canDecide, aBg: accept.bg, aFg: accept.fg, aBd: accept.bd, rBg: reject.bg, rFg: reject.fg, rBd: reject.bd,
-        onAccept: () => this.mapDecideDc(run.id, r.code, 'Accept', d0.remark), onReject: () => this.mapDecideDc(run.id, r.code, 'Reject', d0.remark),
-        status: canDecide || d0.decision === 'MapTo' ? s0.label : 'No change', statusFg: canDecide || d0.decision === 'MapTo' ? s0.fg : '#8E96A3', statusBg: canDecide || d0.decision === 'MapTo' ? s0.bg : '#F2F5FA',
-        canMapIdeal: canRemap && showIdeal && eff !== r.idealSc, onMapIdeal: () => this.mapMapDcTo(run.id, r.code, r.idealSc),
-        canAlt: alts.length > 0, altOptions: alts.map(c => ({ value: c, label: c + (kmRow(r, c) != null ? ' · ' + Math.round(kmRow(r, c)) + ' km' : '') })),
-        altValue: d0.decision === 'MapTo' && alts.indexOf(d0.sc) >= 0 ? d0.sc : '', onAlt: (e) => { if (e.target.value) this.mapMapDcTo(run.id, r.code, e.target.value); } };
+      const dd = dlt(r.distOld, r.distNew); const mapped = r.isUnserved ? null : (r.isUnchanged ? r.oldSc : r.newSc);
+      const n = this.mapNearestScs(run, { kmRow }, r); const n1 = n[0] || null, n2 = n[1] || null;
+      const rank = !mapped ? 0 : (n1 && mapped === n1.sc ? 1 : (n2 && mapped === n2.sc ? 2 : 0));
+      return { code: r.code, cur: r.oldSc || 'New DC', curFg: r.oldSc ? '#14171F' : '#128A3E', distOld: fmtKm(r.distOld),
+        mapped: mapped || 'Not placed', mappedFg: rank === 1 ? '#128A3E' : rank === 2 ? '#C77B00' : (mapped ? '#14171F' : '#9A5E00'), mappedBg: rank === 1 ? '#E7F4EC' : rank === 2 ? '#FBF1DF' : 'transparent',
+        mappedRank: rank === 1 ? 'Nearest' : rank === 2 ? 'Second Nearest' : (mapped ? 'Other' : ''),
+        distNew: fmtKm(r.distNew), delta: dd.label, deltaFg: dd.fg,
+        nearest: n1 ? n1.sc : '—', nearestKm: n1 ? fmtKm(n1.km) : '—', second: n2 ? n2.sc : '—', secondKm: n2 ? fmtKm(n2.km) : '—' };
     };
     const reviewMapGainSections = (results && run && !isCommitted) ? run.scCodes.map(code => {
       const rows = results.dcRows.filter(r => r.needsDecision && !r.isUnserved && r.newSc === code);
@@ -20135,13 +20120,9 @@ class NDCApp extends React.Component {
     // Unmapped DCs (2026-11-02, #78): every DC the plan leaves unplaced — Old SC, distance, Ideal SC, reason;
     // "Add to Old SC" for those that had one.
     const reviewMapUnmappedRows = (results && run && !isCommitted) ? results.dcRows.filter(r => r.isUnserved).map(r => {
-      // Ideal SC = the nearest SC in the run (the solver leaves idealSc empty for DCs it couldn't place).
-      const d0 = dec[r.code] || {}, kept = d0.decision === 'KeepOldSc';
-      let ideal = r.idealSc || null; if (!ideal) { let best = null; (run.scCodes || []).forEach(c => { const k = kmRow(r, c); if (k != null && (best == null || k < best)) { best = k; ideal = c; } }); }
-      const ik = ideal ? kmRow(r, ideal) : null;
-      return { code: r.code, oldSc: r.oldSc || '—', distOld: fmtKm(r.distOld), idealSc: ideal || '—', idealKm: fmtKm(ik), reason: r.unservedReason || '—',
-        canAdd: !!r.oldSc, added: kept, addLabel: kept ? 'Added to ' + r.oldSc : 'Add to Old SC', addBg: kept ? '#1F6F5C' : '#fff', addFg: kept ? '#fff' : '#1F6F5C',
-        onAdd: () => this.mapDecideDc(run.id, r.code, 'KeepOldSc', d0.remark) };
+      const n = this.mapNearestScs(run, { kmRow }, r); // 2026-11-02 (#81): Nearest / Second Nearest, no "Add to Old SC"
+      return { code: r.code, oldSc: r.oldSc || '—', distOld: fmtKm(r.distOld), nearest: n[0] ? n[0].sc : '—', nearestKm: n[0] ? fmtKm(n[0].km) : '—', second: n[1] ? n[1].sc : '—', secondKm: n[1] ? fmtKm(n[1].km) : '—', reason: r.unservedReason || '—',
+        };
     }) : [];
     const finalEff = (r) => { const d0 = dec[r.code]; if (d0 && d0.decision === 'MapTo' && d0.sc) return d0.sc; if (r.isUnchanged) return r.oldSc; if (d0 && d0.decision === 'Accept' && !r.isUnserved) return r.newSc; return r.oldSc || null; };
     const reviewMapFinalBlocks = (results && run && (isCommitted || stage === 'finalise')) ? run.scCodes.map(code => {
@@ -20159,8 +20140,8 @@ class NDCApp extends React.Component {
     const mmRun = st.reviewMapMapRunId ? (d.mappingRuns || []).find(r => r.id === st.reviewMapMapRunId) : null;
     let reviewMapCardMap = null;
     if (mmRun && mmRun.results) {
-      const v = this.mapRunViews(mmRun), committed = mmRun.status === 'Committed';
-      const MODES = committed ? [['current', 'Current'], ['final', 'Final']] : [['current', 'Current'], ['plan', 'Plan output'], ['after', 'Your decisions']];
+      const v = this.mapRunViews(mmRun);
+      const MODES = [['current', 'Current'], ['plan', 'Plan output']]; // 2026-11-02 (#81)
       const mode = MODES.some(x => x[0] === st.reviewMapMapMode) ? st.reviewMapMapMode : MODES[1][0];
       const fn = { current: v.effPre, plan: v.effPlan, after: v.effAfter, final: v.effFinal }[mode];
       const PAL = ['#1F6F5C', '#2F4FC6', '#B8387A', '#C77B00', '#1E6FB8', '#7A4FC6', '#128A3E', '#D14B4B'];
